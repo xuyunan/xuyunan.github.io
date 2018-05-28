@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    
+    <meta name="description" content="A new Hugo site.">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:domain" content="xuyunan.github.io/">
+    
+    <meta name="twitter:image" content="/tn.png">
+    <meta name="twitter:title" property="og:title" itemprop="title name" content="Call me Tommy">
+    <meta name="twitter:description" property="og:description" itemprop="description" content="A new Hugo site.">
+    <meta name="og:type" content="website">
+    <meta name="og:url" content="xuyunan.github.io/">
+    <meta name="og:image" itemprop="image primaryImageOfPage" content="/tn.png">
+    
+    <title>Call me Tommy</title>
+    <link rel="shortcut icon" href="/sam.ico" id="favicon">
+    <link rel="stylesheet" href="xuyunan.github.io/css/style.css">
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Didact+Gothic">
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+    
+    
+
+</head>
+
+</html>
+<body><div class="wrap"><div class="section" id="title">多CONFIG配置</div><div class="section" id="content">Sat Apr 01, 2017 &#183; 26 words
+
+<hr/>
+
+<p>点击 <code>Project -&gt; Info -&gt; Configurations</code> 下面的加号, 可以复制一个同样的配置.</p>
+
+<p><img src="../../../assets/post/add_configuration.png" alt="add_configuration" /></p>
+
+<p>点击 <code>Targets -&gt; Build Settings</code> 里的加号, 可以在配置里属性. 添加之后会在最下方看到，然后就可以对不同的配置修改不同的属性值.</p>
+
+<p><img src="../../../assets/post/add_config_property.png" alt="add_config_property" /></p>
+
+<h2 id="获取配置中的属性值">获取配置中的属性值</h2>
+
+<p>在<code>Info.plist</code>中添加一个别名, 如<code>CFBundleName</code>, 值为配置中的属性名, 如<code>$(BUNDLE_NAME)</code></p>
+
+<p>tips
+&gt; 如果出现断点调试变量值都为nil，将Build Settings中Optimization Level设置成None即可。</p>
+</div><div class="section bottom-menu"><hr/><p><a href="/xuyunan.github.io/posts">back</a>
+ &#183;
+<a href="/posts">writing</a>
+
+
+&#183; <a href="/projects">projects</a>
+&#183; <a href="/about">who is tommy?</a>
+
+&#183; <a href="xuyunan.github.io/">main</a></p></div><div class="section footer">Call me Tommy, a developer.</div></div></body>

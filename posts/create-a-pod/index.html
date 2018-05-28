@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    
+    <meta name="description" content="A new Hugo site.">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:domain" content="xuyunan.github.io/">
+    
+    <meta name="twitter:image" content="/tn.png">
+    <meta name="twitter:title" property="og:title" itemprop="title name" content="Call me Tommy">
+    <meta name="twitter:description" property="og:description" itemprop="description" content="A new Hugo site.">
+    <meta name="og:type" content="website">
+    <meta name="og:url" content="xuyunan.github.io/">
+    <meta name="og:image" itemprop="image primaryImageOfPage" content="/tn.png">
+    
+    <title>Call me Tommy</title>
+    <link rel="shortcut icon" href="/sam.ico" id="favicon">
+    <link rel="stylesheet" href="xuyunan.github.io/css/style.css">
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Didact+Gothic">
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+    
+    
+
+</head>
+
+</html>
+<body><div class="wrap"><div class="section" id="title">创建Pod</div><div class="section" id="content">Sun Apr 02, 2017 &#183; 102 words
+
+<hr/>
+
+<h2 id="首先-要有需要分享的项目">首先，要有需要分享的项目</h2>
+
+<p>这里我使用<code>YNWebViewController</code>，一开始目录结构是这样的</p>
+
+<pre><code>├── Demo
+├── LICENSE
+├── README.md
+└── YNWebViewController
+</code></pre>
+
+<p>要分享的代码和资源文件都在YNWebViewController文件夹里了, 项目源代码在<a href="https://github.com/xuyunan/YNWebViewController">Github</a>上。</p>
+
+<p>先给项目打个tag，后面要用到</p>
+
+<pre><code>git tag 0.1.5
+git push --tags
+</code></pre>
+
+<h2 id="pod描述文件">Pod描述文件</h2>
+
+<ol>
+<li><code>pod spec create YNWebViewController</code> create后面跟的是项目名，在项目主目录下执行该命令后，系统会自动在该目录下创建一个名为<code>YNWebViewController.podspec</code>的描述文件，用于记录项目信息。</li>
+<li>在podspec文件里，写入相关的项目信息，如：作者，项目地址，要包含的源文件和资源文件路径，开源协议等，具体还是要看里面的注释。<a href="https://guides.cocoapods.org/syntax/podspec.html">Podspec Syntax Reference</a></li>
+<li><code>pod spec lint YNWebViewController.podspec</code> 然后我们该命令来验证这个描述文件有没有错误， 没问题的话，就把这个文件也push到项目git。</li>
+</ol>
+
+<h2 id="上传描述文件">上传描述文件</h2>
+
+<ol>
+<li><code>pod trunk register xu_yunan@163.com 'tommy xu' --description='macbook pro'</code> 首先在你电脑上注册信息, 注册好之后可以用 <code>pod trunk me</code> 查看个人信息。</li>
+<li><code>pod trunk push YNWebViewController.podspec</code> 接下来使用这个命令，将pod描述文件推至cocoapods库。</li>
+<li>成功之后就可以在cocoapods网站上看到你的库了<a href="https://cocoapods.org/pods/YNWebViewController">YNWebViewController</a></li>
+</ol>
+
+<p>经过以上几个步骤，一般情况下，别人就已经可以使用你的开源库了。如果在执行命令的时候总提示timeout，那就挂个梯子吧。</p>
+
+<h2 id="遇到的问题">遇到的问题</h2>
+
+<p>以下是我在创建的过程遇到的几个问题及解决方法，希望对你有用:</p>
+
+<ul>
+<li>明明已经提示上传好了，却还搜不到，这时就需要把本地缓存删掉</li>
+</ul>
+
+<pre><code>rm ~/Library/Caches/CocoaPods/search_index.json
+</code></pre>
+
+<ul>
+<li>搜到之后，在使用的过程中报错 Cannot call value of non-function type &lsquo;module<YNWebViewController>&lsquo;</li>
+</ul>
+
+<pre><code>将class和需要开放出来的方法和属性声明为public
+</code></pre>
+
+<ul>
+<li>方法，属性都能正常使用了，但是图片资源加载不出来，此时需要更换图片加载方式 <a href="(http://stackoverflow.com/questions/33983209/swift-pod-images-not-loading-not-found-returns-nil)">Pod images not loading</a></li>
+</ul>
+
+<pre><code>let bundle = Bundle(for: YNWebViewController.self)
+let backImage = UIImage(named: &quot;YNWebViewControllerBack.png&quot;, in: bundle, compatibleWith: nil)
+</code></pre>
+
+<hr />
+
+<p><a href="https://cocoapods.org/pods/YNWebViewController">项目地址</a><br />
+<a href="https://github.com/xuyunan/YNPodDemo">测试项目地址</a></p>
+
+<p>参考:</p>
+
+<p><a href="https://cocoapods.org/">CREATE A POD</a><br />
+<a href="https://guides.cocoapods.org/making/getting-setup-with-trunk.html">Getting setup with Trunk</a><br />
+<a href="http://stackoverflow.com/questions/5480258/how-to-delete-a-git-remote-tag">Delete a tag</a></p>
+</div><div class="section bottom-menu"><hr/><p><a href="/xuyunan.github.io/posts">back</a>
+ &#183;
+<a href="/posts">writing</a>
+
+
+&#183; <a href="/projects">projects</a>
+&#183; <a href="/about">who is tommy?</a>
+
+&#183; <a href="xuyunan.github.io/">main</a></p></div><div class="section footer">Call me Tommy, a developer.</div></div></body>

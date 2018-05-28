@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    
+    <meta name="description" content="A new Hugo site.">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:domain" content="xuyunan.github.io/">
+    
+    <meta name="twitter:image" content="/tn.png">
+    <meta name="twitter:title" property="og:title" itemprop="title name" content="Call me Tommy">
+    <meta name="twitter:description" property="og:description" itemprop="description" content="A new Hugo site.">
+    <meta name="og:type" content="website">
+    <meta name="og:url" content="xuyunan.github.io/">
+    <meta name="og:image" itemprop="image primaryImageOfPage" content="/tn.png">
+    
+    <title>Call me Tommy</title>
+    <link rel="shortcut icon" href="/sam.ico" id="favicon">
+    <link rel="stylesheet" href="xuyunan.github.io/css/style.css">
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Didact+Gothic">
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+    
+    
+
+</head>
+
+</html>
+<body><div class="wrap"><div class="section" id="title">如何使用cocoapods</div><div class="section" id="content">Sun Apr 02, 2017 &#183; 203 words
+
+<hr/>
+
+<h2 id="简介">简介</h2>
+
+<p>它
+可以说是一个平台，因为它保存了无数的开源库。
+可以说是一个工具，一个帮你管理第三方库的工具。</p>
+
+<h2 id="安装">安装</h2>
+
+<ul>
+<li><code>pod</code> 检查是否已经安装，如果出现pod COMMAND，说明你已经安装过了。</li>
+<li><code>sudo gem install cocoapods</code> 安装或者更新</li>
+<li><code>pod search Alamofire</code> 搜索</li>
+</ul>
+
+<h2 id="使用">使用</h2>
+
+<ol>
+<li>首先我创建了个项目<code>YNPodDemo</code></li>
+<li>切到项目主目录，执行<code>pod init</code>，系统就会自动帮你创建一个名为Podfile的文件</li>
+<li>将你要使用的库写进去 <code>pod 'Alamofire', '~&gt;4.3.0'</code></li>
+<li>执行<code>pod install</code>，将使用的库安装到本地</li>
+<li>之后就会在工程文件夹下多出一个类似<code>YNPodDemo.xcworkspace</code>这样的工程文件，以后用这个打开项目就可以了，不要在使用<code>YNPodDemo.xcodeproj</code></li>
+<li>导入&amp;使用</li>
+</ol>
+
+<blockquote>
+<p>在使用库时，如果有错误提示 Cannot load underlying module for &lsquo;Alamofire&rsquo;, clean然后build。<a href="https://github.com/Alamofire/Alamofire/issues/441">issues441</a></p>
+</blockquote>
+
+<h2 id="卸载">卸载</h2>
+
+<p><code>sudo gem uninstall cocoapods</code> 一般也用不到</p>
+
+<ul>
+<li><a href="https://cocoapods.org/">cocoapods.org</a></li>
+<li><a href="https://www.raywenderlich.com/97014/use-cocoapods-with-swift">How to Use CocoaPods with Swift</a></li>
+<li><a href="https://github.com/Alamofire/Alamofire">Alamofire</a></li>
+</ul>
+
+<hr />
+
+<p>下面的可以不用看了，只是一些栗子:</p>
+
+<p>Podfile示例</p>
+
+<pre><code># Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'YNPodDemo' do
+  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for YNPodDemo
+  pod 'Alamofire', '~&gt;4.3.0'
+
+  target 'YNPodDemoTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'YNPodDemoUITests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
+</code></pre>
+
+<p>使用示例</p>
+
+<pre><code>import UIKit
+import Alamofire
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+        
+        Alamofire.request(&quot;https://httpbin.org/get&quot;).responseJSON { response in
+            print(response.request ?? &quot;&quot;)  // original URL request
+            print(response.response ?? &quot;&quot;) // HTTP URL response
+            print(response.data ?? &quot;&quot;)     // server data
+            print(response.result)   // result of response serialization
+            
+            if let JSON = response.result.value {
+                print(&quot;JSON: \(JSON)&quot;)
+            }
+        }
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+}
+</code></pre>
+</div><div class="section bottom-menu"><hr/><p><a href="/xuyunan.github.io/posts">back</a>
+ &#183;
+<a href="/posts">writing</a>
+
+
+&#183; <a href="/projects">projects</a>
+&#183; <a href="/about">who is tommy?</a>
+
+&#183; <a href="xuyunan.github.io/">main</a></p></div><div class="section footer">Call me Tommy, a developer.</div></div></body>

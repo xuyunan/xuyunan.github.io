@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    
+    <meta name="description" content="A new Hugo site.">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:domain" content="xuyunan.github.io/">
+    
+    <meta name="twitter:image" content="/tn.png">
+    <meta name="twitter:title" property="og:title" itemprop="title name" content="Call me Tommy">
+    <meta name="twitter:description" property="og:description" itemprop="description" content="A new Hugo site.">
+    <meta name="og:type" content="website">
+    <meta name="og:url" content="xuyunan.github.io/">
+    <meta name="og:image" itemprop="image primaryImageOfPage" content="/tn.png">
+    
+    <title>Call me Tommy</title>
+    <link rel="shortcut icon" href="/sam.ico" id="favicon">
+    <link rel="stylesheet" href="xuyunan.github.io/css/style.css">
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Didact+Gothic">
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+    
+    
+
+</head>
+
+</html>
+<body><div class="wrap"><div class="section" id="title">Swift和OC混用</div><div class="section" id="content">Wed Jun 07, 2017 &#183; 54 words
+
+<hr/>
+
+<h2 id="前言">前言</h2>
+
+<p>你有一个使用Objective-c语言写的项目，想要混用部分Swift代码，于是你创建了一个Swift文件，就在此时，Xcode提示会生成一个跟你项目名称相关联的桥接文件ProductModuleName-Bridging-Header.h, 我们暂且叫它<strong>OC桥接文件</strong>, 其实Xcode还创建了另外一个桥接文件，叫ProductModuleName-Swift.h, 这个文件在列表里看不到而已, 我们暂且把它叫做<strong>Swift桥接文件</strong>。</p>
+
+<h2 id="swift使用oc代码">Swift使用OC代码</h2>
+
+<p>想要在Swift中使用OC代码，我们只需要做两件事情</p>
+
+<p>1、将要使用的OC文件, 在<strong>OC桥接文件</strong>导入</p>
+
+<pre><code>#import &quot;XYZCustomCell.h&quot;
+#import &quot;XYZCustomView.h&quot;
+#import &quot;XYZCustomViewController.h”
+</code></pre>
+
+<p>2、确保Build Settings里, Objective-C Bridging Header这个选项里有正确的桥接文件相对地址, 一般系统都帮你填好了, 类似ProductModuleName/ProductModuleName-Bridging-Header.h</p>
+
+<p>同一个target下不需要导入任何代码即可使用, 不用target, 要导入模块名.</p>
+
+<h2 id="oc使用swift代码">OC使用Swift代码</h2>
+
+<p>1、<strong>Swift桥接文件</strong>是Xcode自动处理的，我们只需要在写Swift代码的时候稍微主要下就可以了，那么具体要注意什么?</p>
+
+<p>使用public或者open标记的代码，将会无条件的引入到桥接文件中; 关于被internal标记的代码，只有在项目中有<strong>OC桥接文件</strong>的情况下，才会被引入到<strong>Swift桥接文件</strong>中，之后暴露给OC代码; private和fileprivate标记的代码是不会被OC代码所看到的。</p>
+
+<blockquote>
+<p>如果被private和fileprivate标记的代码块里含有@IBAction, @IBOutlet, or @objc, 那么这些代码也将会暴露给OC。</p>
+</blockquote>
+
+<p>2、如果不再一个模块里，需要确保Build Settings里, Defines Module这个选项的值为YES, 才能混用</p>
+
+<p>使用Swift代码时, 需要导入<strong>Swift桥接文件</strong></p>
+
+<pre><code>#import &quot;ProductModuleName-Swift.h&quot;
+</code></pre>
+
+<h2 id="如果不在一个模块-怎么办">如果不在一个模块，怎么办?</h2>
+
+<p>如果混用时不再一个模块, 需要导入模块名</p>
+
+<p>1、将模块引入Swift代码中</p>
+
+<pre><code>import FrameworkName
+</code></pre>
+
+<p>2、将模块引入OC代码中</p>
+
+<pre><code>@import FrameworkName;
+</code></pre>
+</div><div class="section bottom-menu"><hr/><p><a href="/xuyunan.github.io/posts">back</a>
+ &#183;
+<a href="/posts">writing</a>
+
+
+&#183; <a href="/projects">projects</a>
+&#183; <a href="/about">who is tommy?</a>
+
+&#183; <a href="xuyunan.github.io/">main</a></p></div><div class="section footer">Call me Tommy, a developer.</div></div></body>
