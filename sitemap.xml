@@ -3,62 +3,62 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>xuyunan.github.io/posts/hugo/</loc>
+    <loc>/posts/hugo/</loc>
     <lastmod>2018-05-26T20:06:16+08:00</lastmod>
   </url>
   
   <url>
-    <loc>xuyunan.github.io/posts/swift-oc-mix-and-match/</loc>
+    <loc>/posts/swift-oc-mix-and-match/</loc>
     <lastmod>2017-06-07T22:00:00+08:00</lastmod>
   </url>
   
   <url>
-    <loc>xuyunan.github.io/posts/create-a-private-pod/</loc>
+    <loc>/posts/create-a-private-pod/</loc>
     <lastmod>2017-04-02T22:00:00+08:00</lastmod>
   </url>
   
   <url>
-    <loc>xuyunan.github.io/posts/create-a-pod/</loc>
+    <loc>/posts/create-a-pod/</loc>
     <lastmod>2017-04-02T18:00:00+08:00</lastmod>
   </url>
   
   <url>
-    <loc>xuyunan.github.io/posts/how-to-use-cocoapods/</loc>
+    <loc>/posts/how-to-use-cocoapods/</loc>
     <lastmod>2017-04-02T08:00:00+08:00</lastmod>
   </url>
   
   <url>
-    <loc>xuyunan.github.io/posts/mutiple-configuration/</loc>
+    <loc>/posts/mutiple-configuration/</loc>
     <lastmod>2017-04-01T10:00:00+09:00</lastmod>
   </url>
   
   <url>
-    <loc>xuyunan.github.io/about/</loc>
+    <loc>/about/</loc>
   </url>
   
   <url>
-    <loc>xuyunan.github.io/projects/</loc>
+    <loc>/projects/</loc>
   </url>
   
   <url>
-    <loc>xuyunan.github.io/</loc>
+    <loc>/</loc>
     <lastmod>2018-05-26T20:06:16+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>xuyunan.github.io/categories/</loc>
+    <loc>/categories/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>xuyunan.github.io/posts/</loc>
+    <loc>/posts/</loc>
     <lastmod>2018-05-26T20:06:16+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>xuyunan.github.io/tags/</loc>
+    <loc>/tags/</loc>
     <priority>0</priority>
   </url>
   

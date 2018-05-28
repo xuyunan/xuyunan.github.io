@@ -2,30 +2,30 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Call me Tommy</title>
-    <link>xuyunan.github.io/posts/</link>
+    <link>/posts/</link>
     <description>Recent content in Posts on Call me Tommy</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 26 May 2018 20:06:16 +0800</lastBuildDate>
     
-	<atom:link href="xuyunan.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Hugo</title>
-      <link>xuyunan.github.io/posts/hugo/</link>
+      <link>/posts/hugo/</link>
       <pubDate>Sat, 26 May 2018 20:06:16 +0800</pubDate>
       
-      <guid>xuyunan.github.io/posts/hugo/</guid>
+      <guid>/posts/hugo/</guid>
       <description>hugo 官网: https://gohugo.io/ 主题: http://gohugo.io/themes/ 模板: http://gohugo.io/templates/</description>
     </item>
     
     <item>
       <title>Swift和OC混用</title>
-      <link>xuyunan.github.io/posts/swift-oc-mix-and-match/</link>
+      <link>/posts/swift-oc-mix-and-match/</link>
       <pubDate>Wed, 07 Jun 2017 22:00:00 +0800</pubDate>
       
-      <guid>xuyunan.github.io/posts/swift-oc-mix-and-match/</guid>
+      <guid>/posts/swift-oc-mix-and-match/</guid>
       <description> 前言 你有一个使用Objective-c语言写的项目，想要混用部分Swift代码，于是你创建了一个Swift文件，就在此时，Xcode提示会生成一个跟你项目名称相关联的桥接文件ProductModuleName-Bridging-Header.h, 我们暂且叫它OC桥接文件, 其实Xcode还创建了另外一个桥接文件，叫ProductModuleName-Swift.h, 这个文件在列表里看不到而已, 我们暂且把它叫做Swift桥接文件。
 Swift使用OC代码 想要在Swift中使用OC代码，我们只需要做两件事情
 1、将要使用的OC文件, 在OC桥接文件导入
@@ -44,10 +44,10 @@ import FrameworkName  2、将模块引入OC代码中
     
     <item>
       <title>创建私有Pod</title>
-      <link>xuyunan.github.io/posts/create-a-private-pod/</link>
+      <link>/posts/create-a-private-pod/</link>
       <pubDate>Sun, 02 Apr 2017 22:00:00 +0800</pubDate>
       
-      <guid>xuyunan.github.io/posts/create-a-private-pod/</guid>
+      <guid>/posts/create-a-private-pod/</guid>
       <description>为什么搭建私有库 私有库可以保证代码的安全性，亦可以将复用性强的代码、控件封装成模块，提供给部门或公司的人员用。
 搭建过程 首先需要创建一个私有git仓库，用来存放描述文件，可以使用bitbucket，假设创建了一个名为REPO_NAME的私有仓库。然后创建一个可复用的项目叫HexColors, 是一个swift中使用十六进制颜色的扩展，放到了bitbucket上。并且打了tag，HexColors.podspec文件也已经创建好了，整个过程和创建开源库没有什么区别。
 关联私有库地址
@@ -63,10 +63,10 @@ pod install  YNPodDemo 这个Demo打了三个tag:
     
     <item>
       <title>创建Pod</title>
-      <link>xuyunan.github.io/posts/create-a-pod/</link>
+      <link>/posts/create-a-pod/</link>
       <pubDate>Sun, 02 Apr 2017 18:00:00 +0800</pubDate>
       
-      <guid>xuyunan.github.io/posts/create-a-pod/</guid>
+      <guid>/posts/create-a-pod/</guid>
       <description>首先，要有需要分享的项目 这里我使用YNWebViewController，一开始目录结构是这样的
 ├── Demo ├── LICENSE ├── README.md └── YNWebViewController  要分享的代码和资源文件都在YNWebViewController文件夹里了, 项目源代码在Github上。
 先给项目打个tag，后面要用到
@@ -77,10 +77,10 @@ git tag 0.1.5 git push --tags  Pod描述文件  pod spec create YNWebViewControl
     
     <item>
       <title>如何使用cocoapods</title>
-      <link>xuyunan.github.io/posts/how-to-use-cocoapods/</link>
+      <link>/posts/how-to-use-cocoapods/</link>
       <pubDate>Sun, 02 Apr 2017 08:00:00 +0800</pubDate>
       
-      <guid>xuyunan.github.io/posts/how-to-use-cocoapods/</guid>
+      <guid>/posts/how-to-use-cocoapods/</guid>
       <description>简介 它 可以说是一个平台，因为它保存了无数的开源库。 可以说是一个工具，一个帮你管理第三方库的工具。
 安装  pod 检查是否已经安装，如果出现pod COMMAND，说明你已经安装过了。 sudo gem install cocoapods 安装或者更新 pod search Alamofire 搜索  使用  首先我创建了个项目YNPodDemo 切到项目主目录，执行pod init，系统就会自动帮你创建一个名为Podfile的文件 将你要使用的库写进去 pod &#39;Alamofire&#39;, &#39;~&amp;gt;4.3.0&#39; 执行pod install，将使用的库安装到本地 之后就会在工程文件夹下多出一个类似YNPodDemo.xcworkspace这样的工程文件，以后用这个打开项目就可以了，不要在使用YNPodDemo.xcodeproj 导入&amp;amp;使用   在使用库时，如果有错误提示 Cannot load underlying module for &amp;lsquo;Alamofire&amp;rsquo;, clean然后build。issues441
  卸载 sudo gem uninstall cocoapods 一般也用不到
@@ -91,10 +91,10 @@ Podfile示例
     
     <item>
       <title>多CONFIG配置</title>
-      <link>xuyunan.github.io/posts/mutiple-configuration/</link>
+      <link>/posts/mutiple-configuration/</link>
       <pubDate>Sat, 01 Apr 2017 10:00:00 +0900</pubDate>
       
-      <guid>xuyunan.github.io/posts/mutiple-configuration/</guid>
+      <guid>/posts/mutiple-configuration/</guid>
       <description>点击 Project -&amp;gt; Info -&amp;gt; Configurations 下面的加号, 可以复制一个同样的配置.
 点击 Targets -&amp;gt; Build Settings 里的加号, 可以在配置里属性. 添加之后会在最下方看到，然后就可以对不同的配置修改不同的属性值.
 获取配置中的属性值 在Info.plist中添加一个别名, 如CFBundleName, 值为配置中的属性名, 如$(BUNDLE_NAME)
