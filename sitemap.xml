@@ -41,12 +41,6 @@
   </url>
   
   <url>
-    <loc>/</loc>
-    <lastmod>2018-05-26T20:06:16+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>/categories/</loc>
     <priority>0</priority>
   </url>
@@ -59,6 +53,12 @@
   
   <url>
     <loc>/tags/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2018-05-26T20:06:16+08:00</lastmod>
     <priority>0</priority>
   </url>
   
