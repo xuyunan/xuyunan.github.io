@@ -12,8 +12,8 @@
 <meta itemprop="description" content="简介 UIWebView是我们从iOS2.0就开始使用的web组件, 但是从iOS8.0以后, 苹果建议我们使用WKWebView, 那么他们之间有什么不同呢? WKWebView又怎么使用呢?
 UIWebView是UIKit组件, 由于在项目刚开始构建的时候就已经默认引入了UIKit组件, 所以你可以任何地方声明UIWebView来使用都可以, 包括IB; WKWebView是WebKit组件, 在使用的时候要提前引入import WebKit
 关于scalesPageToFit WKWebView不再包含scalesPageToFit属性, 但是可以通过在header中添加meta属性来控制
-// width=device-width &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1, user-scalable=no&quot; /&gt;  如果HTML文件不是本地文件，我们也可以通过WKUserScript将meta注入进去
-let javaScript = &quot;&quot;&quot; var meta = document.createElement(&#39;meta&#39;); meta.setAttribute(&#39;name&#39;, &#39;viewport&#39;); meta.setAttribute(&#39;content&#39;, &#39;width=device-width&#39;); document.getElementsByTagName(&#39;head&#39;)[0].appendChild(meta); &quot;&quot;&quot; let userScript = WKUserScript(source: javaScript, injectionTime: .atDocumentEnd, forMainFrameOnly: true) let userController = WKUserContentController() userController.addUserScript(userScript) let webConfiguration = WKWebViewConfiguration() webConfiguration.userContentController = userController webView = WKWebView(frame: .zero, configuration: webConfiguration) // let myURL = URL(fileURLWithPath: Bundle.">
+// width=device-width &lt;meta name=&#34;viewport&#34; content=&#34;width=device-width,initial-scale=1, user-scalable=no&#34; /&gt;  如果HTML文件不是本地文件，我们也可以通过WKUserScript将meta注入进去
+let javaScript = &#34;&#34;&#34; var meta = document.createElement(&#39;meta&#39;); meta.setAttribute(&#39;name&#39;, &#39;viewport&#39;); meta.setAttribute(&#39;content&#39;, &#39;width=device-width&#39;); document.getElementsByTagName(&#39;head&#39;)[0].appendChild(meta); &#34;&#34;&#34; let userScript = WKUserScript(source: javaScript, injectionTime: .atDocumentEnd, forMainFrameOnly: true) let userController = WKUserContentController() userController.addUserScript(userScript) let webConfiguration = WKWebViewConfiguration() webConfiguration.userContentController = userController webView = WKWebView(frame: .zero, configuration: webConfiguration) // let myURL = URL(fileURLWithPath: Bundle.">
 
 
 <meta itemprop="datePublished" content="2019-03-26T17:01:25&#43;08:00" />
@@ -27,8 +27,8 @@ let javaScript = &quot;&quot;&quot; var meta = document.createElement(&#39;meta&
 <meta property="og:description" content="简介 UIWebView是我们从iOS2.0就开始使用的web组件, 但是从iOS8.0以后, 苹果建议我们使用WKWebView, 那么他们之间有什么不同呢? WKWebView又怎么使用呢?
 UIWebView是UIKit组件, 由于在项目刚开始构建的时候就已经默认引入了UIKit组件, 所以你可以任何地方声明UIWebView来使用都可以, 包括IB; WKWebView是WebKit组件, 在使用的时候要提前引入import WebKit
 关于scalesPageToFit WKWebView不再包含scalesPageToFit属性, 但是可以通过在header中添加meta属性来控制
-// width=device-width &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1, user-scalable=no&quot; /&gt;  如果HTML文件不是本地文件，我们也可以通过WKUserScript将meta注入进去
-let javaScript = &quot;&quot;&quot; var meta = document.createElement(&#39;meta&#39;); meta.setAttribute(&#39;name&#39;, &#39;viewport&#39;); meta.setAttribute(&#39;content&#39;, &#39;width=device-width&#39;); document.getElementsByTagName(&#39;head&#39;)[0].appendChild(meta); &quot;&quot;&quot; let userScript = WKUserScript(source: javaScript, injectionTime: .atDocumentEnd, forMainFrameOnly: true) let userController = WKUserContentController() userController.addUserScript(userScript) let webConfiguration = WKWebViewConfiguration() webConfiguration.userContentController = userController webView = WKWebView(frame: .zero, configuration: webConfiguration) // let myURL = URL(fileURLWithPath: Bundle." />
+// width=device-width &lt;meta name=&#34;viewport&#34; content=&#34;width=device-width,initial-scale=1, user-scalable=no&#34; /&gt;  如果HTML文件不是本地文件，我们也可以通过WKUserScript将meta注入进去
+let javaScript = &#34;&#34;&#34; var meta = document.createElement(&#39;meta&#39;); meta.setAttribute(&#39;name&#39;, &#39;viewport&#39;); meta.setAttribute(&#39;content&#39;, &#39;width=device-width&#39;); document.getElementsByTagName(&#39;head&#39;)[0].appendChild(meta); &#34;&#34;&#34; let userScript = WKUserScript(source: javaScript, injectionTime: .atDocumentEnd, forMainFrameOnly: true) let userController = WKUserContentController() userController.addUserScript(userScript) let webConfiguration = WKWebViewConfiguration() webConfiguration.userContentController = userController webView = WKWebView(frame: .zero, configuration: webConfiguration) // let myURL = URL(fileURLWithPath: Bundle." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://xuyunan.github.io/posts/wkwebview/" />
 <meta property="article:published_time" content="2019-03-26T17:01:25&#43;08:00"/>
@@ -38,8 +38,8 @@ let javaScript = &quot;&quot;&quot; var meta = document.createElement(&#39;meta&
 <meta name="twitter:description" content="简介 UIWebView是我们从iOS2.0就开始使用的web组件, 但是从iOS8.0以后, 苹果建议我们使用WKWebView, 那么他们之间有什么不同呢? WKWebView又怎么使用呢?
 UIWebView是UIKit组件, 由于在项目刚开始构建的时候就已经默认引入了UIKit组件, 所以你可以任何地方声明UIWebView来使用都可以, 包括IB; WKWebView是WebKit组件, 在使用的时候要提前引入import WebKit
 关于scalesPageToFit WKWebView不再包含scalesPageToFit属性, 但是可以通过在header中添加meta属性来控制
-// width=device-width &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1, user-scalable=no&quot; /&gt;  如果HTML文件不是本地文件，我们也可以通过WKUserScript将meta注入进去
-let javaScript = &quot;&quot;&quot; var meta = document.createElement(&#39;meta&#39;); meta.setAttribute(&#39;name&#39;, &#39;viewport&#39;); meta.setAttribute(&#39;content&#39;, &#39;width=device-width&#39;); document.getElementsByTagName(&#39;head&#39;)[0].appendChild(meta); &quot;&quot;&quot; let userScript = WKUserScript(source: javaScript, injectionTime: .atDocumentEnd, forMainFrameOnly: true) let userController = WKUserContentController() userController.addUserScript(userScript) let webConfiguration = WKWebViewConfiguration() webConfiguration.userContentController = userController webView = WKWebView(frame: .zero, configuration: webConfiguration) // let myURL = URL(fileURLWithPath: Bundle."/>
+// width=device-width &lt;meta name=&#34;viewport&#34; content=&#34;width=device-width,initial-scale=1, user-scalable=no&#34; /&gt;  如果HTML文件不是本地文件，我们也可以通过WKUserScript将meta注入进去
+let javaScript = &#34;&#34;&#34; var meta = document.createElement(&#39;meta&#39;); meta.setAttribute(&#39;name&#39;, &#39;viewport&#39;); meta.setAttribute(&#39;content&#39;, &#39;width=device-width&#39;); document.getElementsByTagName(&#39;head&#39;)[0].appendChild(meta); &#34;&#34;&#34; let userScript = WKUserScript(source: javaScript, injectionTime: .atDocumentEnd, forMainFrameOnly: true) let userController = WKUserContentController() userController.addUserScript(userScript) let webConfiguration = WKWebViewConfiguration() webConfiguration.userContentController = userController webView = WKWebView(frame: .zero, configuration: webConfiguration) // let myURL = URL(fileURLWithPath: Bundle."/>
 
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -97,45 +97,38 @@ let javaScript = &quot;&quot;&quot; var meta = document.createElement(&#39;meta&
 <h2 id="关于scalespagetofit">关于scalesPageToFit<a href="#关于scalespagetofit" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p>WKWebView不再包含scalesPageToFit属性, 但是可以通过在header中添加meta属性来控制</p>
-
-<pre><code>// width=device-width
-&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1, user-scalable=no&quot; /&gt;
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-JavaScript" data-lang="JavaScript"><span class="c1">// width=device-width
+</span><span class="c1"></span><span class="o">&lt;</span><span class="nx">meta</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&#34;viewport&#34;</span> <span class="nx">content</span><span class="o">=</span><span class="s2">&#34;width=device-width,initial-scale=1, user-scalable=no&#34;</span> <span class="err">/&gt;</span>
+</code></pre></div>
 <p>如果HTML文件不是本地文件，我们也可以通过WKUserScript将meta注入进去</p>
+<div class="highlight"><pre class="chroma"><code class="language-JavaScript" data-lang="JavaScript"><span class="kd">let</span> <span class="nx">javaScript</span> <span class="o">=</span> <span class="s2">&#34;&#34;&#34;
+</span><span class="s2">    var meta = document.createElement(&#39;meta&#39;);
+</span><span class="s2">    meta.setAttribute(&#39;name&#39;, &#39;viewport&#39;);
+</span><span class="s2">    meta.setAttribute(&#39;content&#39;, &#39;width=device-width&#39;);
+</span><span class="s2">    document.getElementsByTagName(&#39;head&#39;)[0].appendChild(meta);
+</span><span class="s2">    &#34;&#34;&#34;</span>
+    
+<span class="kd">let</span> <span class="nx">userScript</span> <span class="o">=</span> <span class="nx">WKUserScript</span><span class="p">(</span><span class="nx">source</span><span class="o">:</span> <span class="nx">javaScript</span><span class="p">,</span> <span class="nx">injectionTime</span><span class="o">:</span> <span class="p">.</span><span class="nx">atDocumentEnd</span><span class="p">,</span> <span class="nx">forMainFrameOnly</span><span class="o">:</span> <span class="kc">true</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nx">userController</span> <span class="o">=</span> <span class="nx">WKUserContentController</span><span class="p">()</span>
+<span class="nx">userController</span><span class="p">.</span><span class="nx">addUserScript</span><span class="p">(</span><span class="nx">userScript</span><span class="p">)</span>
+    
+<span class="kd">let</span> <span class="nx">webConfiguration</span> <span class="o">=</span> <span class="nx">WKWebViewConfiguration</span><span class="p">()</span>
+<span class="nx">webConfiguration</span><span class="p">.</span><span class="nx">userContentController</span> <span class="o">=</span> <span class="nx">userController</span>
 
-<pre><code>let javaScript = &quot;&quot;&quot;
-    var meta = document.createElement('meta');
-    meta.setAttribute('name', 'viewport');
-    meta.setAttribute('content', 'width=device-width');
-    document.getElementsByTagName('head')[0].appendChild(meta);
-    &quot;&quot;&quot;
+<span class="nx">webView</span> <span class="o">=</span> <span class="nx">WKWebView</span><span class="p">(</span><span class="nx">frame</span><span class="o">:</span> <span class="p">.</span><span class="nx">zero</span><span class="p">,</span> <span class="nx">configuration</span><span class="o">:</span> <span class="nx">webConfiguration</span><span class="p">)</span>
     
-let userScript = WKUserScript(source: javaScript, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
-let userController = WKUserContentController()
-userController.addUserScript(userScript)
+<span class="c1">// let myURL = URL(fileURLWithPath: Bundle.main.path(forResource: &#34;h5/index&#34;, ofType: &#34;html&#34;)!)
+</span><span class="c1"></span><span class="kd">let</span> <span class="nx">myURL</span> <span class="o">=</span> <span class="nx">URL</span><span class="p">(</span><span class="nx">string</span><span class="o">:</span> <span class="s2">&#34;https://github.com&#34;</span><span class="p">)</span><span class="o">!</span>
+<span class="kd">let</span> <span class="nx">myRequest</span> <span class="o">=</span> <span class="nx">URLRequest</span><span class="p">(</span><span class="nx">url</span><span class="o">:</span> <span class="nx">myURL</span><span class="p">)</span>
+<span class="nx">webView</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="nx">myRequest</span><span class="p">)</span>
     
-let webConfiguration = WKWebViewConfiguration()
-webConfiguration.userContentController = userController
-
-webView = WKWebView(frame: .zero, configuration: webConfiguration)
-    
-// let myURL = URL(fileURLWithPath: Bundle.main.path(forResource: &quot;h5/index&quot;, ofType: &quot;html&quot;)!)
-let myURL = URL(string: &quot;https://github.com&quot;)!
-let myRequest = URLRequest(url: myURL)
-webView.load(myRequest)
-    
-view = webView
-</code></pre>
-
+<span class="nx">view</span> <span class="o">=</span> <span class="nx">webView</span>
+</code></pre></div>
 <h2 id="白屏问题">白屏问题<a href="#白屏问题" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p>UIWebView内存过大，会导致app crash, 由于WKWebView是运行在另一个进程里，内存过大不会导致整个app crash, 但是会导致页面白屏, 庆幸的时候我们可以通过WKNavigationDelegate的回调方法来处理白屏事件，收到事件后, 我们可以弹框提示, 或者及时刷新页面.</p>
-
-<pre><code>@available(iOS 9.0, *)
-optional public func webViewWebContentProcessDidTerminate(_ webView: WKWebView)
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-Swift" data-lang="Swift"><span class="p">@</span><span class="n">available</span><span class="p">(</span><span class="n">iOS</span> <span class="mf">9.0</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span>
+<span class="kr">optional</span> <span class="kd">public</span> <span class="kd">func</span> <span class="nf">webViewWebContentProcessDidTerminate</span><span class="p">(</span><span class="kc">_</span> <span class="n">webView</span><span class="p">:</span> <span class="n">WKWebView</span><span class="p">)</span></code></pre></div>
 <h2 id="cookies问题">Cookies问题<a href="#cookies问题" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p>网上流传一种说法: WKWebView加载网页得到的Cookie会同步到NSHTTPCookieStorage中, 但接下来的请求不会自动携带Cookie. 但是目前测试下来，cookie是会带上的，WKWebView中登录github.com，然后杀掉进程，再次进入，依然是登录状态，通过safari的develop菜单，可以看到cookie的信息. 如果说真的不自动携带cookie, 我们也可以通过setValue:forHTTPHeaderField:和WKUserScript注入的形式，将cookie写入进去.</p>
@@ -176,7 +169,7 @@ optional public func webViewWebContentProcessDidTerminate(_ webView: WKWebView)
             return;
         }
         var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "xuyunan0113" + '.disqus.com/embed.js';
+        s.src = '//' + "https-xuyunan-github-io-1" + '.disqus.com/embed.js';
         s.setAttribute('data-timestamp', +new Date());
         (d.head || d.body).appendChild(s);
     })();

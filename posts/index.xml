@@ -20,7 +20,7 @@
 1、纯原生开发 Objective-C、Swift、Java、Kotlin 2、原生+跨平台混合开发 ReactNative、Flutter 3、原生+H5混合开发
 更是随着科技的发展，5G的到来，网速越来越快，H5页面在移动应用上表现的越来越优秀，很多时候我们不得不选择原生+H5的混合开发方案，以便能够快速适应产品需求。接下来我们就看看iOS最新的web组件WKWebView如何与原生交互共存的。
 下面的场景需要我们加载一个简单的本地html文件来测试
-let filePath = Bundle.main.path(forResource: &amp;quot;h5/index&amp;quot;, ofType: &amp;quot;html&amp;quot;)! let myURL = URL(fileURLWithPath: filePath) let myRequest = URLRequest(url: myURL) webView.load(myRequest)   当加载远程不安全的链接(http)时，需要在info.plist文件添加App Transport Security Settings-Allow Arbitrary Loads为YES
+let filePath = Bundle.main.path(forResource: &amp;#34;h5/index&amp;#34;, ofType: &amp;#34;html&amp;#34;)! let myURL = URL(fileURLWithPath: filePath) let myRequest = URLRequest(url: myURL) webView.load(myRequest)  当加载远程不安全的链接(http)时，需要在info.plist文件添加App Transport Security Settings-Allow Arbitrary Loads为YES
  嵌入JavaScript代码 通过WKUserScript注入JavaScript代码
 let contentController = WKUserContentController() let scriptSource = &amp;#34;document.body.style.backgroundColor = `red`;&amp;#34; let script = WKUserScript(source: scriptSource, injectionTime: .atDocumentEnd, forMainFrameOnly: true) contentController.addUserScript(script) let config = WKWebViewConfiguration() config.userContentController = contentController 初始化是有个三个参数
  source: JavaScript代码字符串 injectionTime: 注入的时机，.</description>
@@ -37,13 +37,10 @@ let contentController = WKUserContentController() let scriptSource = &amp;#34;do
 <p>更是随着科技的发展，5G的到来，网速越来越快，H5页面在移动应用上表现的越来越优秀，很多时候我们不得不选择原生+H5的混合开发方案，以便能够快速适应产品需求。接下来我们就看看iOS最新的web组件WKWebView如何与原生交互共存的。</p>
 
 <p>下面的场景需要我们加载一个简单的本地html文件来测试</p>
-
-<pre><code>let filePath = Bundle.main.path(forResource: &quot;h5/index&quot;, ofType: &quot;html&quot;)!
-let myURL = URL(fileURLWithPath: filePath)
-let myRequest = URLRequest(url: myURL)
-webView.load(myRequest)
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-Swift" data-lang="Swift"><span class="kd">let</span> <span class="nv">filePath</span> <span class="p">=</span> <span class="n">Bundle</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="n">path</span><span class="p">(</span><span class="n">forResource</span><span class="p">:</span> <span class="s">&#34;h5/index&#34;</span><span class="p">,</span> <span class="n">ofType</span><span class="p">:</span> <span class="s">&#34;html&#34;</span><span class="p">)</span><span class="o">!</span>
+<span class="kd">let</span> <span class="nv">myURL</span> <span class="p">=</span> <span class="n">URL</span><span class="p">(</span><span class="n">fileURLWithPath</span><span class="p">:</span> <span class="n">filePath</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">myRequest</span> <span class="p">=</span> <span class="n">URLRequest</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="n">myURL</span><span class="p">)</span>
+<span class="n">webView</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">myRequest</span><span class="p">)</span></code></pre></div>
 <blockquote>
 <p>当加载远程不安全的链接(http)时，需要在info.plist文件添加App Transport Security Settings-Allow Arbitrary Loads为YES</p>
 </blockquote>
@@ -97,43 +94,39 @@ webView.load(myRequest)
     
 <span class="p">})</span></code></pre></div>
 <p>测试文件 index.html</p>
+<div class="highlight"><pre class="chroma"><code class="language-Html" data-lang="Html"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
 
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
+<span class="p">&lt;</span><span class="nt">head</span> <span class="na">lang</span><span class="o">=</span><span class="s">&#34;en&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&#34;utf-8&#34;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;viewport&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;width=device-width,initial-scale=1, user-scalable=no&#34;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>h5<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
 
-&lt;head lang=&quot;en&quot;&gt;
-    &lt;meta charset=&quot;utf-8&quot; /&gt;
-    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1, user-scalable=no&quot; /&gt;
-    &lt;title&gt;h5&lt;/title&gt;
-&lt;/head&gt;
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;margin-top: 20px&#34;</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">h2</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;text-align: center&#34;</span><span class="p">&gt;</span>iOS和JavaScript交互<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;button&#34;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#34;share&#34;</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&#34;shareHandler()&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="kd">function</span> <span class="nx">shareHandler</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">info</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&#34;title&#34;</span><span class="o">:</span> <span class="s2">&#34;标题&#34;</span><span class="p">,</span>
+            <span class="s2">&#34;desc&#34;</span><span class="o">:</span> <span class="s2">&#34;内容&#34;</span><span class="p">,</span>
+            <span class="s2">&#34;shareUrl&#34;</span><span class="o">:</span> <span class="s2">&#34;http://xuyunan.github.io&#34;</span><span class="p">,</span>
+            <span class="s2">&#34;shareIcon&#34;</span><span class="o">:</span> <span class="s2">&#34;https://cdn.pixabay.com/photo/2019/03/12/18/00/kerala-4051412_1280.jpg&#34;</span>
+        <span class="p">}</span>
+        <span class="nb">window</span><span class="p">.</span><span class="nx">webkit</span><span class="p">.</span><span class="nx">messageHandlers</span><span class="p">.</span><span class="nx">share</span><span class="p">.</span><span class="nx">postMessage</span><span class="p">(</span><span class="nx">info</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kd">function</span> <span class="nx">shareCallback</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
 
-&lt;body&gt;
-    &lt;div style=&quot;margin-top: 20px&quot;&gt;
-        &lt;h2 style=&quot;text-align: center&quot;&gt;iOS和JavaScript交互&lt;/h1&gt;
-    &lt;/div&gt;
-    &lt;div&gt;
-        &lt;input type=&quot;button&quot; value=&quot;share&quot; onclick=&quot;shareHandler()&quot;&gt;
-    &lt;/div&gt;
-    &lt;script&gt;
-    function shareHandler() {
-        var info = {
-            &quot;title&quot;: &quot;标题&quot;,
-            &quot;desc&quot;: &quot;内容&quot;,
-            &quot;shareUrl&quot;: &quot;http://xuyunan.github.io&quot;,
-            &quot;shareIcon&quot;: &quot;https://cdn.pixabay.com/photo/2019/03/12/18/00/kerala-4051412_1280.jpg&quot;
-        }
-        window.webkit.messageHandlers.share.postMessage(info);
-    }
-    function shareCallback(result) {
-        console.log(result);
-    }
-    &lt;/script&gt;
-&lt;/body&gt;
-
-&lt;/html&gt;
-
-</code></pre>
-
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span></code></pre></div>
 <p>参考</p>
 
 <p><a href="https://nshipster.cn/wkwebkit/">nshipster.cn</a>
@@ -150,8 +143,8 @@ webView.load(myRequest)
 			<description>简介 UIWebView是我们从iOS2.0就开始使用的web组件, 但是从iOS8.0以后, 苹果建议我们使用WKWebView, 那么他们之间有什么不同呢? WKWebView又怎么使用呢?
 UIWebView是UIKit组件, 由于在项目刚开始构建的时候就已经默认引入了UIKit组件, 所以你可以任何地方声明UIWebView来使用都可以, 包括IB; WKWebView是WebKit组件, 在使用的时候要提前引入import WebKit
 关于scalesPageToFit WKWebView不再包含scalesPageToFit属性, 但是可以通过在header中添加meta属性来控制
-// width=device-width &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width,initial-scale=1, user-scalable=no&amp;quot; /&amp;gt;  如果HTML文件不是本地文件，我们也可以通过WKUserScript将meta注入进去
-let javaScript = &amp;quot;&amp;quot;&amp;quot; var meta = document.createElement(&#39;meta&#39;); meta.setAttribute(&#39;name&#39;, &#39;viewport&#39;); meta.setAttribute(&#39;content&#39;, &#39;width=device-width&#39;); document.getElementsByTagName(&#39;head&#39;)[0].appendChild(meta); &amp;quot;&amp;quot;&amp;quot; let userScript = WKUserScript(source: javaScript, injectionTime: .atDocumentEnd, forMainFrameOnly: true) let userController = WKUserContentController() userController.addUserScript(userScript) let webConfiguration = WKWebViewConfiguration() webConfiguration.userContentController = userController webView = WKWebView(frame: .zero, configuration: webConfiguration) // let myURL = URL(fileURLWithPath: Bundle.</description>
+// width=device-width &amp;lt;meta name=&amp;#34;viewport&amp;#34; content=&amp;#34;width=device-width,initial-scale=1, user-scalable=no&amp;#34; /&amp;gt;  如果HTML文件不是本地文件，我们也可以通过WKUserScript将meta注入进去
+let javaScript = &amp;#34;&amp;#34;&amp;#34; var meta = document.createElement(&amp;#39;meta&amp;#39;); meta.setAttribute(&amp;#39;name&amp;#39;, &amp;#39;viewport&amp;#39;); meta.setAttribute(&amp;#39;content&amp;#39;, &amp;#39;width=device-width&amp;#39;); document.getElementsByTagName(&amp;#39;head&amp;#39;)[0].appendChild(meta); &amp;#34;&amp;#34;&amp;#34; let userScript = WKUserScript(source: javaScript, injectionTime: .atDocumentEnd, forMainFrameOnly: true) let userController = WKUserContentController() userController.addUserScript(userScript) let webConfiguration = WKWebViewConfiguration() webConfiguration.userContentController = userController webView = WKWebView(frame: .zero, configuration: webConfiguration) // let myURL = URL(fileURLWithPath: Bundle.</description>
 			<content type="html"><![CDATA[
 
 <h2 id="简介">简介</h2>
@@ -163,45 +156,38 @@ let javaScript = &amp;quot;&amp;quot;&amp;quot; var meta = document.createElemen
 <h2 id="关于scalespagetofit">关于scalesPageToFit</h2>
 
 <p>WKWebView不再包含scalesPageToFit属性, 但是可以通过在header中添加meta属性来控制</p>
-
-<pre><code>// width=device-width
-&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1, user-scalable=no&quot; /&gt;
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-JavaScript" data-lang="JavaScript"><span class="c1">// width=device-width
+</span><span class="c1"></span><span class="o">&lt;</span><span class="nx">meta</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&#34;viewport&#34;</span> <span class="nx">content</span><span class="o">=</span><span class="s2">&#34;width=device-width,initial-scale=1, user-scalable=no&#34;</span> <span class="err">/&gt;</span>
+</code></pre></div>
 <p>如果HTML文件不是本地文件，我们也可以通过WKUserScript将meta注入进去</p>
+<div class="highlight"><pre class="chroma"><code class="language-JavaScript" data-lang="JavaScript"><span class="kd">let</span> <span class="nx">javaScript</span> <span class="o">=</span> <span class="s2">&#34;&#34;&#34;
+</span><span class="s2">    var meta = document.createElement(&#39;meta&#39;);
+</span><span class="s2">    meta.setAttribute(&#39;name&#39;, &#39;viewport&#39;);
+</span><span class="s2">    meta.setAttribute(&#39;content&#39;, &#39;width=device-width&#39;);
+</span><span class="s2">    document.getElementsByTagName(&#39;head&#39;)[0].appendChild(meta);
+</span><span class="s2">    &#34;&#34;&#34;</span>
+    
+<span class="kd">let</span> <span class="nx">userScript</span> <span class="o">=</span> <span class="nx">WKUserScript</span><span class="p">(</span><span class="nx">source</span><span class="o">:</span> <span class="nx">javaScript</span><span class="p">,</span> <span class="nx">injectionTime</span><span class="o">:</span> <span class="p">.</span><span class="nx">atDocumentEnd</span><span class="p">,</span> <span class="nx">forMainFrameOnly</span><span class="o">:</span> <span class="kc">true</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nx">userController</span> <span class="o">=</span> <span class="nx">WKUserContentController</span><span class="p">()</span>
+<span class="nx">userController</span><span class="p">.</span><span class="nx">addUserScript</span><span class="p">(</span><span class="nx">userScript</span><span class="p">)</span>
+    
+<span class="kd">let</span> <span class="nx">webConfiguration</span> <span class="o">=</span> <span class="nx">WKWebViewConfiguration</span><span class="p">()</span>
+<span class="nx">webConfiguration</span><span class="p">.</span><span class="nx">userContentController</span> <span class="o">=</span> <span class="nx">userController</span>
 
-<pre><code>let javaScript = &quot;&quot;&quot;
-    var meta = document.createElement('meta');
-    meta.setAttribute('name', 'viewport');
-    meta.setAttribute('content', 'width=device-width');
-    document.getElementsByTagName('head')[0].appendChild(meta);
-    &quot;&quot;&quot;
+<span class="nx">webView</span> <span class="o">=</span> <span class="nx">WKWebView</span><span class="p">(</span><span class="nx">frame</span><span class="o">:</span> <span class="p">.</span><span class="nx">zero</span><span class="p">,</span> <span class="nx">configuration</span><span class="o">:</span> <span class="nx">webConfiguration</span><span class="p">)</span>
     
-let userScript = WKUserScript(source: javaScript, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
-let userController = WKUserContentController()
-userController.addUserScript(userScript)
+<span class="c1">// let myURL = URL(fileURLWithPath: Bundle.main.path(forResource: &#34;h5/index&#34;, ofType: &#34;html&#34;)!)
+</span><span class="c1"></span><span class="kd">let</span> <span class="nx">myURL</span> <span class="o">=</span> <span class="nx">URL</span><span class="p">(</span><span class="nx">string</span><span class="o">:</span> <span class="s2">&#34;https://github.com&#34;</span><span class="p">)</span><span class="o">!</span>
+<span class="kd">let</span> <span class="nx">myRequest</span> <span class="o">=</span> <span class="nx">URLRequest</span><span class="p">(</span><span class="nx">url</span><span class="o">:</span> <span class="nx">myURL</span><span class="p">)</span>
+<span class="nx">webView</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="nx">myRequest</span><span class="p">)</span>
     
-let webConfiguration = WKWebViewConfiguration()
-webConfiguration.userContentController = userController
-
-webView = WKWebView(frame: .zero, configuration: webConfiguration)
-    
-// let myURL = URL(fileURLWithPath: Bundle.main.path(forResource: &quot;h5/index&quot;, ofType: &quot;html&quot;)!)
-let myURL = URL(string: &quot;https://github.com&quot;)!
-let myRequest = URLRequest(url: myURL)
-webView.load(myRequest)
-    
-view = webView
-</code></pre>
-
+<span class="nx">view</span> <span class="o">=</span> <span class="nx">webView</span>
+</code></pre></div>
 <h2 id="白屏问题">白屏问题</h2>
 
 <p>UIWebView内存过大，会导致app crash, 由于WKWebView是运行在另一个进程里，内存过大不会导致整个app crash, 但是会导致页面白屏, 庆幸的时候我们可以通过WKNavigationDelegate的回调方法来处理白屏事件，收到事件后, 我们可以弹框提示, 或者及时刷新页面.</p>
-
-<pre><code>@available(iOS 9.0, *)
-optional public func webViewWebContentProcessDidTerminate(_ webView: WKWebView)
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-Swift" data-lang="Swift"><span class="p">@</span><span class="n">available</span><span class="p">(</span><span class="n">iOS</span> <span class="mf">9.0</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span>
+<span class="kr">optional</span> <span class="kd">public</span> <span class="kd">func</span> <span class="nf">webViewWebContentProcessDidTerminate</span><span class="p">(</span><span class="kc">_</span> <span class="n">webView</span><span class="p">:</span> <span class="n">WKWebView</span><span class="p">)</span></code></pre></div>
 <h2 id="cookies问题">Cookies问题</h2>
 
 <p>网上流传一种说法: WKWebView加载网页得到的Cookie会同步到NSHTTPCookieStorage中, 但接下来的请求不会自动携带Cookie. 但是目前测试下来，cookie是会带上的，WKWebView中登录github.com，然后杀掉进程，再次进入，依然是登录状态，通过safari的develop菜单，可以看到cookie的信息. 如果说真的不自动携带cookie, 我们也可以通过setValue:forHTTPHeaderField:和WKUserScript注入的形式，将cookie写入进去.</p>

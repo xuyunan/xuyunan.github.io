@@ -13,7 +13,7 @@
 1、纯原生开发 Objective-C、Swift、Java、Kotlin 2、原生&#43;跨平台混合开发 ReactNative、Flutter 3、原生&#43;H5混合开发
 更是随着科技的发展，5G的到来，网速越来越快，H5页面在移动应用上表现的越来越优秀，很多时候我们不得不选择原生&#43;H5的混合开发方案，以便能够快速适应产品需求。接下来我们就看看iOS最新的web组件WKWebView如何与原生交互共存的。
 下面的场景需要我们加载一个简单的本地html文件来测试
-let filePath = Bundle.main.path(forResource: &quot;h5/index&quot;, ofType: &quot;html&quot;)! let myURL = URL(fileURLWithPath: filePath) let myRequest = URLRequest(url: myURL) webView.load(myRequest)   当加载远程不安全的链接(http)时，需要在info.plist文件添加App Transport Security Settings-Allow Arbitrary Loads为YES
+let filePath = Bundle.main.path(forResource: &#34;h5/index&#34;, ofType: &#34;html&#34;)! let myURL = URL(fileURLWithPath: filePath) let myRequest = URLRequest(url: myURL) webView.load(myRequest)  当加载远程不安全的链接(http)时，需要在info.plist文件添加App Transport Security Settings-Allow Arbitrary Loads为YES
  嵌入JavaScript代码 通过WKUserScript注入JavaScript代码
 let contentController = WKUserContentController() let scriptSource = &#34;document.body.style.backgroundColor = `red`;&#34; let script = WKUserScript(source: scriptSource, injectionTime: .atDocumentEnd, forMainFrameOnly: true) contentController.addUserScript(script) let config = WKWebViewConfiguration() config.userContentController = contentController 初始化是有个三个参数
  source: JavaScript代码字符串 injectionTime: 注入的时机，.">
@@ -31,7 +31,7 @@ let contentController = WKUserContentController() let scriptSource = &#34;docume
 1、纯原生开发 Objective-C、Swift、Java、Kotlin 2、原生&#43;跨平台混合开发 ReactNative、Flutter 3、原生&#43;H5混合开发
 更是随着科技的发展，5G的到来，网速越来越快，H5页面在移动应用上表现的越来越优秀，很多时候我们不得不选择原生&#43;H5的混合开发方案，以便能够快速适应产品需求。接下来我们就看看iOS最新的web组件WKWebView如何与原生交互共存的。
 下面的场景需要我们加载一个简单的本地html文件来测试
-let filePath = Bundle.main.path(forResource: &quot;h5/index&quot;, ofType: &quot;html&quot;)! let myURL = URL(fileURLWithPath: filePath) let myRequest = URLRequest(url: myURL) webView.load(myRequest)   当加载远程不安全的链接(http)时，需要在info.plist文件添加App Transport Security Settings-Allow Arbitrary Loads为YES
+let filePath = Bundle.main.path(forResource: &#34;h5/index&#34;, ofType: &#34;html&#34;)! let myURL = URL(fileURLWithPath: filePath) let myRequest = URLRequest(url: myURL) webView.load(myRequest)  当加载远程不安全的链接(http)时，需要在info.plist文件添加App Transport Security Settings-Allow Arbitrary Loads为YES
  嵌入JavaScript代码 通过WKUserScript注入JavaScript代码
 let contentController = WKUserContentController() let scriptSource = &#34;document.body.style.backgroundColor = `red`;&#34; let script = WKUserScript(source: scriptSource, injectionTime: .atDocumentEnd, forMainFrameOnly: true) contentController.addUserScript(script) let config = WKWebViewConfiguration() config.userContentController = contentController 初始化是有个三个参数
  source: JavaScript代码字符串 injectionTime: 注入的时机，." />
@@ -45,7 +45,7 @@ let contentController = WKUserContentController() let scriptSource = &#34;docume
 1、纯原生开发 Objective-C、Swift、Java、Kotlin 2、原生&#43;跨平台混合开发 ReactNative、Flutter 3、原生&#43;H5混合开发
 更是随着科技的发展，5G的到来，网速越来越快，H5页面在移动应用上表现的越来越优秀，很多时候我们不得不选择原生&#43;H5的混合开发方案，以便能够快速适应产品需求。接下来我们就看看iOS最新的web组件WKWebView如何与原生交互共存的。
 下面的场景需要我们加载一个简单的本地html文件来测试
-let filePath = Bundle.main.path(forResource: &quot;h5/index&quot;, ofType: &quot;html&quot;)! let myURL = URL(fileURLWithPath: filePath) let myRequest = URLRequest(url: myURL) webView.load(myRequest)   当加载远程不安全的链接(http)时，需要在info.plist文件添加App Transport Security Settings-Allow Arbitrary Loads为YES
+let filePath = Bundle.main.path(forResource: &#34;h5/index&#34;, ofType: &#34;html&#34;)! let myURL = URL(fileURLWithPath: filePath) let myRequest = URLRequest(url: myURL) webView.load(myRequest)  当加载远程不安全的链接(http)时，需要在info.plist文件添加App Transport Security Settings-Allow Arbitrary Loads为YES
  嵌入JavaScript代码 通过WKUserScript注入JavaScript代码
 let contentController = WKUserContentController() let scriptSource = &#34;document.body.style.backgroundColor = `red`;&#34; let script = WKUserScript(source: scriptSource, injectionTime: .atDocumentEnd, forMainFrameOnly: true) contentController.addUserScript(script) let config = WKWebViewConfiguration() config.userContentController = contentController 初始化是有个三个参数
  source: JavaScript代码字符串 injectionTime: 注入的时机，."/>
@@ -108,13 +108,10 @@ let contentController = WKUserContentController() let scriptSource = &#34;docume
 <p>更是随着科技的发展，5G的到来，网速越来越快，H5页面在移动应用上表现的越来越优秀，很多时候我们不得不选择原生+H5的混合开发方案，以便能够快速适应产品需求。接下来我们就看看iOS最新的web组件WKWebView如何与原生交互共存的。</p>
 
 <p>下面的场景需要我们加载一个简单的本地html文件来测试</p>
-
-<pre><code>let filePath = Bundle.main.path(forResource: &quot;h5/index&quot;, ofType: &quot;html&quot;)!
-let myURL = URL(fileURLWithPath: filePath)
-let myRequest = URLRequest(url: myURL)
-webView.load(myRequest)
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-Swift" data-lang="Swift"><span class="kd">let</span> <span class="nv">filePath</span> <span class="p">=</span> <span class="n">Bundle</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="n">path</span><span class="p">(</span><span class="n">forResource</span><span class="p">:</span> <span class="s">&#34;h5/index&#34;</span><span class="p">,</span> <span class="n">ofType</span><span class="p">:</span> <span class="s">&#34;html&#34;</span><span class="p">)</span><span class="o">!</span>
+<span class="kd">let</span> <span class="nv">myURL</span> <span class="p">=</span> <span class="n">URL</span><span class="p">(</span><span class="n">fileURLWithPath</span><span class="p">:</span> <span class="n">filePath</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">myRequest</span> <span class="p">=</span> <span class="n">URLRequest</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="n">myURL</span><span class="p">)</span>
+<span class="n">webView</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">myRequest</span><span class="p">)</span></code></pre></div>
 <blockquote>
 <p>当加载远程不安全的链接(http)时，需要在info.plist文件添加App Transport Security Settings-Allow Arbitrary Loads为YES</p>
 </blockquote>
@@ -168,43 +165,39 @@ webView.load(myRequest)
     
 <span class="p">})</span></code></pre></div>
 <p>测试文件 index.html</p>
+<div class="highlight"><pre class="chroma"><code class="language-Html" data-lang="Html"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
 
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
+<span class="p">&lt;</span><span class="nt">head</span> <span class="na">lang</span><span class="o">=</span><span class="s">&#34;en&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&#34;utf-8&#34;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;viewport&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;width=device-width,initial-scale=1, user-scalable=no&#34;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>h5<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
 
-&lt;head lang=&quot;en&quot;&gt;
-    &lt;meta charset=&quot;utf-8&quot; /&gt;
-    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1, user-scalable=no&quot; /&gt;
-    &lt;title&gt;h5&lt;/title&gt;
-&lt;/head&gt;
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;margin-top: 20px&#34;</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">h2</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;text-align: center&#34;</span><span class="p">&gt;</span>iOS和JavaScript交互<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;button&#34;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#34;share&#34;</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&#34;shareHandler()&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="kd">function</span> <span class="nx">shareHandler</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">info</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&#34;title&#34;</span><span class="o">:</span> <span class="s2">&#34;标题&#34;</span><span class="p">,</span>
+            <span class="s2">&#34;desc&#34;</span><span class="o">:</span> <span class="s2">&#34;内容&#34;</span><span class="p">,</span>
+            <span class="s2">&#34;shareUrl&#34;</span><span class="o">:</span> <span class="s2">&#34;http://xuyunan.github.io&#34;</span><span class="p">,</span>
+            <span class="s2">&#34;shareIcon&#34;</span><span class="o">:</span> <span class="s2">&#34;https://cdn.pixabay.com/photo/2019/03/12/18/00/kerala-4051412_1280.jpg&#34;</span>
+        <span class="p">}</span>
+        <span class="nb">window</span><span class="p">.</span><span class="nx">webkit</span><span class="p">.</span><span class="nx">messageHandlers</span><span class="p">.</span><span class="nx">share</span><span class="p">.</span><span class="nx">postMessage</span><span class="p">(</span><span class="nx">info</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kd">function</span> <span class="nx">shareCallback</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
 
-&lt;body&gt;
-    &lt;div style=&quot;margin-top: 20px&quot;&gt;
-        &lt;h2 style=&quot;text-align: center&quot;&gt;iOS和JavaScript交互&lt;/h1&gt;
-    &lt;/div&gt;
-    &lt;div&gt;
-        &lt;input type=&quot;button&quot; value=&quot;share&quot; onclick=&quot;shareHandler()&quot;&gt;
-    &lt;/div&gt;
-    &lt;script&gt;
-    function shareHandler() {
-        var info = {
-            &quot;title&quot;: &quot;标题&quot;,
-            &quot;desc&quot;: &quot;内容&quot;,
-            &quot;shareUrl&quot;: &quot;http://xuyunan.github.io&quot;,
-            &quot;shareIcon&quot;: &quot;https://cdn.pixabay.com/photo/2019/03/12/18/00/kerala-4051412_1280.jpg&quot;
-        }
-        window.webkit.messageHandlers.share.postMessage(info);
-    }
-    function shareCallback(result) {
-        console.log(result);
-    }
-    &lt;/script&gt;
-&lt;/body&gt;
-
-&lt;/html&gt;
-
-</code></pre>
-
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span></code></pre></div>
 <p>参考</p>
 
 <p><a href="https://nshipster.cn/wkwebkit/">nshipster.cn</a>
@@ -239,7 +232,7 @@ webView.load(myRequest)
             return;
         }
         var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "xuyunan0113" + '.disqus.com/embed.js';
+        s.src = '//' + "https-xuyunan-github-io-1" + '.disqus.com/embed.js';
         s.setAttribute('data-timestamp', +new Date());
         (d.head || d.body).appendChild(s);
     })();
