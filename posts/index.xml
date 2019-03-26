@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Posts on Tommy</title>
+		<link>https://xuyunan.github.io/posts/</link>
+		<description>Recent content in Posts on Tommy</description>
+		<generator>Hugo -- gohugo.io</generator>
+		<language>en-us</language>
+		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+		<lastBuildDate>Wed, 07 Jun 2017 22:00:00 +0800</lastBuildDate>
+		<atom:link href="https://xuyunan.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>Swift和OC混用</title>
+			<link>https://xuyunan.github.io/posts/swift-oc-mix-and-match/</link>
+			<pubDate>Wed, 07 Jun 2017 22:00:00 +0800</pubDate>
+			
+			<guid>https://xuyunan.github.io/posts/swift-oc-mix-and-match/</guid>
+			<description> 前言 你有一个使用Objective-c语言写的项目，想要混用部分Swift代码，于是你创建了一个Swift文件，就在此时，Xcode提示会生成一个跟你项目名称相关联的桥接文件ProductModuleName-Bridging-Header.h, 我们暂且叫它OC桥接文件, 其实Xcode还创建了另外一个桥接文件，叫ProductModuleName-Swift.h, 这个文件在列表里看不到而已, 我们暂且把它叫做Swift桥接文件。
+Swift使用OC代码 想要在Swift中使用OC代码，我们只需要做两件事情
+1、将要使用的OC文件, 在OC桥接文件导入
+#import &amp;quot;XYZCustomCell.h&amp;quot; #import &amp;quot;XYZCustomView.h&amp;quot; #import &amp;quot;XYZCustomViewController.h”  2、确保Build Settings里, Objective-C Bridging Header这个选项里有正确的桥接文件相对地址, 一般系统都帮你填好了, 类似ProductModuleName/ProductModuleName-Bridging-Header.h
+同一个target下不需要导入任何代码即可使用, 不用target, 要导入模块名.
+OC使用Swift代码 1、Swift桥接文件是Xcode自动处理的，我们只需要在写Swift代码的时候稍微主要下就可以了，那么具体要注意什么?
+使用public或者open标记的代码，将会无条件的引入到桥接文件中; 关于被internal标记的代码，只有在项目中有OC桥接文件的情况下，才会被引入到Swift桥接文件中，之后暴露给OC代码; private和fileprivate标记的代码是不会被OC代码所看到的。
+ 如果被private和fileprivate标记的代码块里含有@IBAction, @IBOutlet, or @objc, 那么这些代码也将会暴露给OC。
+ 2、如果不再一个模块里，需要确保Build Settings里, Defines Module这个选项的值为YES, 才能混用
+使用Swift代码时, 需要导入Swift桥接文件
+#import &amp;quot;ProductModuleName-Swift.h&amp;quot;  如果不在一个模块，怎么办? 如果混用时不再一个模块, 需要导入模块名
+1、将模块引入Swift代码中
+import FrameworkName  2、将模块引入OC代码中
+@import FrameworkName;  </description>
+			<content type="html"><![CDATA[
+
+<h2 id="前言">前言</h2>
+
+<p>你有一个使用Objective-c语言写的项目，想要混用部分Swift代码，于是你创建了一个Swift文件，就在此时，Xcode提示会生成一个跟你项目名称相关联的桥接文件ProductModuleName-Bridging-Header.h, 我们暂且叫它<strong>OC桥接文件</strong>, 其实Xcode还创建了另外一个桥接文件，叫ProductModuleName-Swift.h, 这个文件在列表里看不到而已, 我们暂且把它叫做<strong>Swift桥接文件</strong>。</p>
+
+<h2 id="swift使用oc代码">Swift使用OC代码</h2>
+
+<p>想要在Swift中使用OC代码，我们只需要做两件事情</p>
+
+<p>1、将要使用的OC文件, 在<strong>OC桥接文件</strong>导入</p>
+
+<pre><code>#import &quot;XYZCustomCell.h&quot;
+#import &quot;XYZCustomView.h&quot;
+#import &quot;XYZCustomViewController.h”
+</code></pre>
+
+<p>2、确保Build Settings里, Objective-C Bridging Header这个选项里有正确的桥接文件相对地址, 一般系统都帮你填好了, 类似ProductModuleName/ProductModuleName-Bridging-Header.h</p>
+
+<p>同一个target下不需要导入任何代码即可使用, 不用target, 要导入模块名.</p>
+
+<h2 id="oc使用swift代码">OC使用Swift代码</h2>
+
+<p>1、<strong>Swift桥接文件</strong>是Xcode自动处理的，我们只需要在写Swift代码的时候稍微主要下就可以了，那么具体要注意什么?</p>
+
+<p>使用public或者open标记的代码，将会无条件的引入到桥接文件中; 关于被internal标记的代码，只有在项目中有<strong>OC桥接文件</strong>的情况下，才会被引入到<strong>Swift桥接文件</strong>中，之后暴露给OC代码; private和fileprivate标记的代码是不会被OC代码所看到的。</p>
+
+<blockquote>
+<p>如果被private和fileprivate标记的代码块里含有@IBAction, @IBOutlet, or @objc, 那么这些代码也将会暴露给OC。</p>
+</blockquote>
+
+<p>2、如果不再一个模块里，需要确保Build Settings里, Defines Module这个选项的值为YES, 才能混用</p>
+
+<p>使用Swift代码时, 需要导入<strong>Swift桥接文件</strong></p>
+
+<pre><code>#import &quot;ProductModuleName-Swift.h&quot;
+</code></pre>
+
+<h2 id="如果不在一个模块-怎么办">如果不在一个模块，怎么办?</h2>
+
+<p>如果混用时不再一个模块, 需要导入模块名</p>
+
+<p>1、将模块引入Swift代码中</p>
+
+<pre><code>import FrameworkName
+</code></pre>
+
+<p>2、将模块引入OC代码中</p>
+
+<pre><code>@import FrameworkName;
+</code></pre>
+]]></content>
+		</item>
+		
+		<item>
+			<title>创建私有Pod</title>
+			<link>https://xuyunan.github.io/posts/create-a-private-pod/</link>
+			<pubDate>Sun, 02 Apr 2017 22:00:00 +0800</pubDate>
+			
+			<guid>https://xuyunan.github.io/posts/create-a-private-pod/</guid>
+			<description>为什么搭建私有库 私有库可以保证代码的安全性，亦可以将复用性强的代码、控件封装成模块，提供给部门或公司的人员用。
+搭建过程 首先需要创建一个私有git仓库，用来存放描述文件，可以使用bitbucket，假设创建了一个名为REPO_NAME的私有仓库。然后创建一个可复用的项目叫HexColors, 是一个swift中使用十六进制颜色的扩展，放到了bitbucket上。并且打了tag，HexColors.podspec文件也已经创建好了，整个过程和创建开源库没有什么区别。
+关联私有库地址
+pod repo add REPO_NAME SOURCE_URL  验证是否配置正确
+cd ~/.cocoapods/repos/REPO_NAME pod repo lint .  将刚刚创建好的pod描述文件，推至私有仓库
+pod repo push REPO_NAME SPEC_NAME.podspec  此时，你的私有仓库应该是这个结构
+. ├── Specs └── [SPEC_NAME] └── [VERSION] └── [SPEC_NAME].podspec  使用 切到要使用的项目，这里我还用我的YNPodDemo，在Podfile里加上这样一行，来指定私有和共开仓库
+# Private Specs source &#39;URL_TO_REPOSITORY&#39; # Public Specs source &#39;https://github.com/CocoaPods/Specs.git&#39;  然后添加HexColors
+pod &#39;HexColors&#39;, &#39;~&amp;gt;0.0.1&#39;  之后就跟使用开源库一样了
+pod install  YNPodDemo 这个Demo打了三个tag:
+ 0.1 测试使用Cocoapods 0.2 测试使用自己创建的开源库 0.3 测试使用自己创建的私有库  使用下面这条命令可以检出特定Tag对应的代码</description>
+			<content type="html"><![CDATA[
+
+<h2 id="为什么搭建私有库">为什么搭建私有库</h2>
+
+<p>私有库可以保证代码的安全性，亦可以将复用性强的代码、控件封装成模块，提供给部门或公司的人员用。</p>
+
+<h2 id="搭建过程">搭建过程</h2>
+
+<p>首先需要创建一个私有git仓库，用来存放描述文件，可以使用bitbucket，假设创建了一个名为REPO_NAME的私有仓库。然后创建一个可复用的项目叫<code>HexColors</code>, 是一个swift中使用十六进制颜色的扩展，放到了bitbucket上。并且打了tag，<code>HexColors.podspec</code>文件也已经创建好了，整个过程和创建开源库没有什么区别。</p>
+
+<p>关联私有库地址</p>
+
+<pre><code>pod repo add REPO_NAME SOURCE_URL
+</code></pre>
+
+<p>验证是否配置正确</p>
+
+<pre><code>cd ~/.cocoapods/repos/REPO_NAME
+pod repo lint .
+</code></pre>
+
+<p>将刚刚创建好的pod描述文件，推至私有仓库</p>
+
+<pre><code>pod repo push REPO_NAME SPEC_NAME.podspec
+</code></pre>
+
+<p>此时，你的私有仓库应该是这个结构</p>
+
+<pre><code>.
+├── Specs
+    └── [SPEC_NAME]
+        └── [VERSION]
+            └── [SPEC_NAME].podspec
+</code></pre>
+
+<h2 id="使用">使用</h2>
+
+<p>切到要使用的项目，这里我还用我的YNPodDemo，在Podfile里加上这样一行，来指定私有和共开仓库</p>
+
+<pre><code># Private Specs
+source 'URL_TO_REPOSITORY'
+# Public Specs
+source 'https://github.com/CocoaPods/Specs.git'
+</code></pre>
+
+<p>然后添加HexColors</p>
+
+<pre><code>pod 'HexColors', '~&gt;0.0.1'
+</code></pre>
+
+<p>之后就跟使用开源库一样了</p>
+
+<pre><code>pod install
+</code></pre>
+
+<h2 id="ynpoddemo-https-github-com-xuyunan-ynpoddemo"><a href="https://github.com/xuyunan/YNPodDemo">YNPodDemo</a></h2>
+
+<p>这个Demo打了三个tag:</p>
+
+<ul>
+<li>0.1 测试使用Cocoapods</li>
+<li>0.2 测试使用自己创建的开源库</li>
+<li>0.3 测试使用自己创建的私有库</li>
+</ul>
+
+<p>使用下面这条命令可以检出特定Tag对应的代码</p>
+
+<pre><code>git clone --branch &lt;tag_name&gt; &lt;repo_url&gt;
+</code></pre>
+]]></content>
+		</item>
+		
+		<item>
+			<title>创建Pod</title>
+			<link>https://xuyunan.github.io/posts/create-a-pod/</link>
+			<pubDate>Sun, 02 Apr 2017 18:00:00 +0800</pubDate>
+			
+			<guid>https://xuyunan.github.io/posts/create-a-pod/</guid>
+			<description>首先，要有需要分享的项目 这里我使用YNWebViewController，一开始目录结构是这样的
+├── Demo ├── LICENSE ├── README.md └── YNWebViewController  要分享的代码和资源文件都在YNWebViewController文件夹里了, 项目源代码在Github上。
+先给项目打个tag，后面要用到
+git tag 0.1.5 git push --tags  Pod描述文件  pod spec create YNWebViewController create后面跟的是项目名，在项目主目录下执行该命令后，系统会自动在该目录下创建一个名为YNWebViewController.podspec的描述文件，用于记录项目信息。 在podspec文件里，写入相关的项目信息，如：作者，项目地址，要包含的源文件和资源文件路径，开源协议等，具体还是要看里面的注释。Podspec Syntax Reference pod spec lint YNWebViewController.podspec 然后我们该命令来验证这个描述文件有没有错误， 没问题的话，就把这个文件也push到项目git。  上传描述文件  pod trunk register xu_yunan@163.com &#39;tommy xu&#39; --description=&#39;macbook pro&#39; 首先在你电脑上注册信息, 注册好之后可以用 pod trunk me 查看个人信息。 pod trunk push YNWebViewController.podspec 接下来使用这个命令，将pod描述文件推至cocoapods库。 成功之后就可以在cocoapods网站上看到你的库了YNWebViewController  经过以上几个步骤，一般情况下，别人就已经可以使用你的开源库了。如果在执行命令的时候总提示timeout，那就挂个梯子吧。
+遇到的问题 以下是我在创建的过程遇到的几个问题及解决方法，希望对你有用:
+ 明明已经提示上传好了，却还搜不到，这时就需要把本地缓存删掉  rm ~/Library/Caches/CocoaPods/search_index.json   搜到之后，在使用的过程中报错 Cannot call value of non-function type &amp;lsquo;module&amp;lsquo;  将class和需要开放出来的方法和属性声明为public   方法，属性都能正常使用了，但是图片资源加载不出来，此时需要更换图片加载方式 Pod images not loading  let bundle = Bundle(for: YNWebViewController.</description>
+			<content type="html"><![CDATA[
+
+<h2 id="首先-要有需要分享的项目">首先，要有需要分享的项目</h2>
+
+<p>这里我使用<code>YNWebViewController</code>，一开始目录结构是这样的</p>
+
+<pre><code>├── Demo
+├── LICENSE
+├── README.md
+└── YNWebViewController
+</code></pre>
+
+<p>要分享的代码和资源文件都在YNWebViewController文件夹里了, 项目源代码在<a href="https://github.com/xuyunan/YNWebViewController">Github</a>上。</p>
+
+<p>先给项目打个tag，后面要用到</p>
+
+<pre><code>git tag 0.1.5
+git push --tags
+</code></pre>
+
+<h2 id="pod描述文件">Pod描述文件</h2>
+
+<ol>
+<li><code>pod spec create YNWebViewController</code> create后面跟的是项目名，在项目主目录下执行该命令后，系统会自动在该目录下创建一个名为<code>YNWebViewController.podspec</code>的描述文件，用于记录项目信息。</li>
+<li>在podspec文件里，写入相关的项目信息，如：作者，项目地址，要包含的源文件和资源文件路径，开源协议等，具体还是要看里面的注释。<a href="https://guides.cocoapods.org/syntax/podspec.html">Podspec Syntax Reference</a></li>
+<li><code>pod spec lint YNWebViewController.podspec</code> 然后我们该命令来验证这个描述文件有没有错误， 没问题的话，就把这个文件也push到项目git。</li>
+</ol>
+
+<h2 id="上传描述文件">上传描述文件</h2>
+
+<ol>
+<li><code>pod trunk register xu_yunan@163.com 'tommy xu' --description='macbook pro'</code> 首先在你电脑上注册信息, 注册好之后可以用 <code>pod trunk me</code> 查看个人信息。</li>
+<li><code>pod trunk push YNWebViewController.podspec</code> 接下来使用这个命令，将pod描述文件推至cocoapods库。</li>
+<li>成功之后就可以在cocoapods网站上看到你的库了<a href="https://cocoapods.org/pods/YNWebViewController">YNWebViewController</a></li>
+</ol>
+
+<p>经过以上几个步骤，一般情况下，别人就已经可以使用你的开源库了。如果在执行命令的时候总提示timeout，那就挂个梯子吧。</p>
+
+<h2 id="遇到的问题">遇到的问题</h2>
+
+<p>以下是我在创建的过程遇到的几个问题及解决方法，希望对你有用:</p>
+
+<ul>
+<li>明明已经提示上传好了，却还搜不到，这时就需要把本地缓存删掉</li>
+</ul>
+
+<pre><code>rm ~/Library/Caches/CocoaPods/search_index.json
+</code></pre>
+
+<ul>
+<li>搜到之后，在使用的过程中报错 Cannot call value of non-function type &lsquo;module<YNWebViewController>&lsquo;</li>
+</ul>
+
+<pre><code>将class和需要开放出来的方法和属性声明为public
+</code></pre>
+
+<ul>
+<li>方法，属性都能正常使用了，但是图片资源加载不出来，此时需要更换图片加载方式 <a href="(http://stackoverflow.com/questions/33983209/swift-pod-images-not-loading-not-found-returns-nil)">Pod images not loading</a></li>
+</ul>
+
+<pre><code>let bundle = Bundle(for: YNWebViewController.self)
+let backImage = UIImage(named: &quot;YNWebViewControllerBack.png&quot;, in: bundle, compatibleWith: nil)
+</code></pre>
+
+<hr />
+
+<p><a href="https://cocoapods.org/pods/YNWebViewController">项目地址</a><br />
+<a href="https://github.com/xuyunan/YNPodDemo">测试项目地址</a></p>
+
+<p>参考:</p>
+
+<p><a href="https://cocoapods.org/">CREATE A POD</a><br />
+<a href="https://guides.cocoapods.org/making/getting-setup-with-trunk.html">Getting setup with Trunk</a><br />
+<a href="http://stackoverflow.com/questions/5480258/how-to-delete-a-git-remote-tag">Delete a tag</a></p>
+]]></content>
+		</item>
+		
+		<item>
+			<title>如何使用cocoapods</title>
+			<link>https://xuyunan.github.io/posts/how-to-use-cocoapods/</link>
+			<pubDate>Sun, 02 Apr 2017 08:00:00 +0800</pubDate>
+			
+			<guid>https://xuyunan.github.io/posts/how-to-use-cocoapods/</guid>
+			<description>简介 它 可以说是一个平台，因为它保存了无数的开源库。 可以说是一个工具，一个帮你管理第三方库的工具。
+安装  pod 检查是否已经安装，如果出现pod COMMAND，说明你已经安装过了。 sudo gem install cocoapods 安装或者更新 pod search Alamofire 搜索  使用  首先我创建了个项目YNPodDemo 切到项目主目录，执行pod init，系统就会自动帮你创建一个名为Podfile的文件 将你要使用的库写进去 pod &#39;Alamofire&#39;, &#39;~&amp;gt;4.3.0&#39; 执行pod install，将使用的库安装到本地 之后就会在工程文件夹下多出一个类似YNPodDemo.xcworkspace这样的工程文件，以后用这个打开项目就可以了，不要在使用YNPodDemo.xcodeproj 导入&amp;amp;使用   在使用库时，如果有错误提示 Cannot load underlying module for &amp;lsquo;Alamofire&amp;rsquo;, clean然后build。issues441
+ 卸载 sudo gem uninstall cocoapods 一般也用不到
+ cocoapods.org How to Use CocoaPods with Swift Alamofire  下面的可以不用看了，只是一些栗子:
+Podfile示例
+# Uncomment the next line to define a global platform for your project # platform :ios, &#39;9.</description>
+			<content type="html"><![CDATA[
+
+<h2 id="简介">简介</h2>
+
+<p>它
+可以说是一个平台，因为它保存了无数的开源库。
+可以说是一个工具，一个帮你管理第三方库的工具。</p>
+
+<h2 id="安装">安装</h2>
+
+<ul>
+<li><code>pod</code> 检查是否已经安装，如果出现pod COMMAND，说明你已经安装过了。</li>
+<li><code>sudo gem install cocoapods</code> 安装或者更新</li>
+<li><code>pod search Alamofire</code> 搜索</li>
+</ul>
+
+<h2 id="使用">使用</h2>
+
+<ol>
+<li>首先我创建了个项目<code>YNPodDemo</code></li>
+<li>切到项目主目录，执行<code>pod init</code>，系统就会自动帮你创建一个名为Podfile的文件</li>
+<li>将你要使用的库写进去 <code>pod 'Alamofire', '~&gt;4.3.0'</code></li>
+<li>执行<code>pod install</code>，将使用的库安装到本地</li>
+<li>之后就会在工程文件夹下多出一个类似<code>YNPodDemo.xcworkspace</code>这样的工程文件，以后用这个打开项目就可以了，不要在使用<code>YNPodDemo.xcodeproj</code></li>
+<li>导入&amp;使用</li>
+</ol>
+
+<blockquote>
+<p>在使用库时，如果有错误提示 Cannot load underlying module for &lsquo;Alamofire&rsquo;, clean然后build。<a href="https://github.com/Alamofire/Alamofire/issues/441">issues441</a></p>
+</blockquote>
+
+<h2 id="卸载">卸载</h2>
+
+<p><code>sudo gem uninstall cocoapods</code> 一般也用不到</p>
+
+<ul>
+<li><a href="https://cocoapods.org/">cocoapods.org</a></li>
+<li><a href="https://www.raywenderlich.com/97014/use-cocoapods-with-swift">How to Use CocoaPods with Swift</a></li>
+<li><a href="https://github.com/Alamofire/Alamofire">Alamofire</a></li>
+</ul>
+
+<hr />
+
+<p>下面的可以不用看了，只是一些栗子:</p>
+
+<p>Podfile示例</p>
+
+<pre><code># Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'YNPodDemo' do
+  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for YNPodDemo
+  pod 'Alamofire', '~&gt;4.3.0'
+
+  target 'YNPodDemoTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'YNPodDemoUITests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
+</code></pre>
+
+<p>使用示例</p>
+
+<pre><code>import UIKit
+import Alamofire
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+        
+        Alamofire.request(&quot;https://httpbin.org/get&quot;).responseJSON { response in
+            print(response.request ?? &quot;&quot;)  // original URL request
+            print(response.response ?? &quot;&quot;) // HTTP URL response
+            print(response.data ?? &quot;&quot;)     // server data
+            print(response.result)   // result of response serialization
+            
+            if let JSON = response.result.value {
+                print(&quot;JSON: \(JSON)&quot;)
+            }
+        }
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+}
+</code></pre>
+]]></content>
+		</item>
+		
+		<item>
+			<title>多CONFIG配置</title>
+			<link>https://xuyunan.github.io/posts/mutiple-configuration/</link>
+			<pubDate>Sat, 01 Apr 2017 10:00:00 +0900</pubDate>
+			
+			<guid>https://xuyunan.github.io/posts/mutiple-configuration/</guid>
+			<description>点击 Project -&amp;gt; Info -&amp;gt; Configurations 下面的加号, 可以复制一个同样的配置.
+点击 Targets -&amp;gt; Build Settings 里的加号, 可以在配置里属性. 添加之后会在最下方看到，然后就可以对不同的配置修改不同的属性值.
+获取配置中的属性值 在Info.plist中添加一个别名, 如CFBundleName, 值为配置中的属性名, 如$(BUNDLE_NAME)
+tips &amp;gt; 如果出现断点调试变量值都为nil，将Build Settings中Optimization Level设置成None即可。</description>
+			<content type="html"><![CDATA[
+
+<p>点击 <code>Project -&gt; Info -&gt; Configurations</code> 下面的加号, 可以复制一个同样的配置.</p>
+
+<p><img src="/assets/add_configuration.png" alt="add_configuration" /></p>
+
+<p>点击 <code>Targets -&gt; Build Settings</code> 里的加号, 可以在配置里属性. 添加之后会在最下方看到，然后就可以对不同的配置修改不同的属性值.</p>
+
+<p><img src="/assets/add_config_property.png" alt="add_config_property" /></p>
+
+<h2 id="获取配置中的属性值">获取配置中的属性值</h2>
+
+<p>在<code>Info.plist</code>中添加一个别名, 如<code>CFBundleName</code>, 值为配置中的属性名, 如<code>$(BUNDLE_NAME)</code></p>
+
+<p>tips
+&gt; 如果出现断点调试变量值都为nil，将Build Settings中Optimization Level设置成None即可。</p>
+]]></content>
+		</item>
+		
+	</channel>
+</rss>
