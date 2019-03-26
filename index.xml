@@ -7,10 +7,39 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Wed, 07 Jun 2017 22:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 26 Mar 2019 17:06:18 +0800</lastBuildDate>
     
 	<atom:link href="https://xuyunan.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>WKWebView(二)-和原生交互</title>
+      <link>https://xuyunan.github.io/posts/wkwebview-interaction/</link>
+      <pubDate>Tue, 26 Mar 2019 17:06:18 +0800</pubDate>
+      
+      <guid>https://xuyunan.github.io/posts/wkwebview-interaction/</guid>
+      <description>简介 随意移动互联网的飞速发展，移动应用技术的方案也变得丰富起来了
+1、纯原生开发 Objective-C、Swift、Java、Kotlin 2、原生+跨平台混合开发 ReactNative、Flutter 3、原生+H5混合开发
+更是随着科技的发展，5G的到来，网速越来越快，H5页面在移动应用上表现的越来越优秀，很多时候我们不得不选择原生+H5的混合开发方案，以便能够快速适应产品需求。接下来我们就看看iOS最新的web组件WKWebView如何与原生交互共存的。
+下面的场景需要我们加载一个简单的本地html文件来测试
+let filePath = Bundle.main.path(forResource: &amp;quot;h5/index&amp;quot;, ofType: &amp;quot;html&amp;quot;)! let myURL = URL(fileURLWithPath: filePath) let myRequest = URLRequest(url: myURL) webView.load(myRequest)   当加载远程不安全的链接(http)时，需要在info.plist文件添加App Transport Security Settings-Allow Arbitrary Loads为YES
+ 嵌入JavaScript代码 通过WKUserScript注入JavaScript代码
+let contentController = WKUserContentController() let scriptSource = &amp;#34;document.body.style.backgroundColor = `red`;&amp;#34; let script = WKUserScript(source: scriptSource, injectionTime: .atDocumentEnd, forMainFrameOnly: true) contentController.addUserScript(script) let config = WKWebViewConfiguration() config.userContentController = contentController 初始化是有个三个参数
+ source: JavaScript代码字符串 injectionTime: 注入的时机，.</description>
+    </item>
+    
+    <item>
+      <title>WKWebView(一)-简介</title>
+      <link>https://xuyunan.github.io/posts/wkwebview/</link>
+      <pubDate>Tue, 26 Mar 2019 17:01:25 +0800</pubDate>
+      
+      <guid>https://xuyunan.github.io/posts/wkwebview/</guid>
+      <description>简介 UIWebView是我们从iOS2.0就开始使用的web组件, 但是从iOS8.0以后, 苹果建议我们使用WKWebView, 那么他们之间有什么不同呢? WKWebView又怎么使用呢?
+UIWebView是UIKit组件, 由于在项目刚开始构建的时候就已经默认引入了UIKit组件, 所以你可以任何地方声明UIWebView来使用都可以, 包括IB; WKWebView是WebKit组件, 在使用的时候要提前引入import WebKit
+关于scalesPageToFit WKWebView不再包含scalesPageToFit属性, 但是可以通过在header中添加meta属性来控制
+// width=device-width &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width,initial-scale=1, user-scalable=no&amp;quot; /&amp;gt;  如果HTML文件不是本地文件，我们也可以通过WKUserScript将meta注入进去
+let javaScript = &amp;quot;&amp;quot;&amp;quot; var meta = document.createElement(&#39;meta&#39;); meta.setAttribute(&#39;name&#39;, &#39;viewport&#39;); meta.setAttribute(&#39;content&#39;, &#39;width=device-width&#39;); document.getElementsByTagName(&#39;head&#39;)[0].appendChild(meta); &amp;quot;&amp;quot;&amp;quot; let userScript = WKUserScript(source: javaScript, injectionTime: .atDocumentEnd, forMainFrameOnly: true) let userController = WKUserContentController() userController.addUserScript(userScript) let webConfiguration = WKWebViewConfiguration() webConfiguration.userContentController = userController webView = WKWebView(frame: .zero, configuration: webConfiguration) // let myURL = URL(fileURLWithPath: Bundle.</description>
+    </item>
     
     <item>
       <title>Swift和OC混用</title>
