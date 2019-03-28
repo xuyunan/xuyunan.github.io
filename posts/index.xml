@@ -7,8 +7,114 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>en-us</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Tue, 26 Mar 2019 17:06:18 +0800</lastBuildDate>
+		<lastBuildDate>Thu, 28 Mar 2019 15:55:48 +0800</lastBuildDate>
 		<atom:link href="https://xuyunan.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>Block到底存放在哪里</title>
+			<link>https://xuyunan.github.io/posts/block/</link>
+			<pubDate>Thu, 28 Mar 2019 15:55:48 +0800</pubDate>
+			
+			<guid>https://xuyunan.github.io/posts/block/</guid>
+			<description>Block简介 block可以说是一种匿名函数，但是又以对象的形式存在，内部使用结构体实现，我们可以将一个block作为参数传给其它的函数或者block. 一个简单的block如下:
+^(NSInteger param) { NSLog(@&amp;#34;%d&amp;#34;, param); }; 其它block写法参考: fuckingblocksyntax.com
+Block类型 我们都知道block有三种类型
+ NSGlobalBlock 全局block NSStackBlock 栈区block NSMallocBlock 堆区block  那么是什么条件决定了block的种类呢? 也就是说是什么条件决定了block存在的内存区域呢? 下面就通过实践来探索下结果.
+ iOS的内存存储区域: 栈区、堆区、全局/静态区、常量区、代码区
+ Block实例  我们声明一个block，什么都不关联，看看默认情况下是什么类型  NSLog(@&amp;#34;%@&amp;#34;, ^(NSInteger a) { }); // TestBlockMemory[4885:374356] &amp;lt;__NSGlobalBlock__: 0x1000010c0&amp;gt; 通过实例我们可以看出，最最简单的block是NSGlobalBlock类型，存在全局区.
+ 当block引用了外部变量  NSInteger num = 10; NSLog(@&amp;#34;%@&amp;#34;, ^(NSInteger a) { return a + num; }); // TestBlockMemory[4918:378440] &amp;lt;__NSStackBlock__: 0x7ffeefbff4b8&amp;gt; 首先测试的是引用了一个局部变量，结果为NSStackBlock, 在栈区, 如果引用全局变量呢?
+static NSInteger num = 10; NSLog(@&amp;#34;%@&amp;#34;, ^(NSInteger a) { return a + num; }); // TestBlockMemory[4941:379770] &amp;lt;__NSGlobalBlock__: 0x1000010d8&amp;gt; 看的出，引用全局变量后并没有像局部变量那样改变了block原始类型，依然是NSGlobalBlock类型.</description>
+			<content type="html"><![CDATA[
+
+<h2 id="block简介">Block简介</h2>
+
+<p>block可以说是一种匿名函数，但是又以对象的形式存在，内部使用结构体实现，我们可以将一个block作为参数传给其它的函数或者block. 一个简单的block如下:</p>
+<div class="highlight"><pre class="chroma"><code class="language-Objective-C" data-lang="Objective-C"><span class="o">^</span><span class="p">(</span><span class="n">NSInteger</span> <span class="n">param</span><span class="p">)</span> <span class="p">{</span>
+     <span class="n">NSLog</span><span class="p">(</span><span class="s">@&#34;%d&#34;</span><span class="p">,</span> <span class="n">param</span><span class="p">);</span>
+<span class="p">};</span></code></pre></div>
+<p>其它block写法参考: <a href="http://fuckingblocksyntax.com/">fuckingblocksyntax.com</a></p>
+
+<h2 id="block类型">Block类型</h2>
+
+<p>我们都知道block有三种类型</p>
+
+<ul>
+<li>NSGlobalBlock 全局block</li>
+<li>NSStackBlock  栈区block</li>
+<li>NSMallocBlock 堆区block</li>
+</ul>
+
+<p>那么是什么条件决定了block的种类呢? 也就是说是什么条件决定了block存在的内存区域呢? 下面就通过实践来探索下结果.</p>
+
+<blockquote>
+<p>iOS的内存存储区域: 栈区、堆区、全局/静态区、常量区、代码区</p>
+</blockquote>
+
+<h2 id="block实例">Block实例</h2>
+
+<ol>
+<li>我们声明一个block，什么都不关联，看看默认情况下是什么类型</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-Objective-C" data-lang="Objective-C"><span class="n">NSLog</span><span class="p">(</span><span class="s">@&#34;%@&#34;</span><span class="p">,</span> <span class="o">^</span><span class="p">(</span><span class="n">NSInteger</span> <span class="n">a</span><span class="p">)</span> <span class="p">{</span>
+    
+<span class="p">});</span>
+<span class="o">//</span> <span class="n">TestBlockMemory</span><span class="p">[</span><span class="mi">4885</span><span class="o">:</span><span class="mi">374356</span><span class="p">]</span> <span class="o">&lt;</span><span class="nl">__NSGlobalBlock__</span><span class="p">:</span> <span class="mh">0x1000010c0</span><span class="o">&gt;</span></code></pre></div>
+<p>通过实例我们可以看出，最最简单的block是NSGlobalBlock类型，存在全局区.</p>
+
+<ol>
+<li>当block引用了外部变量</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-Objective-C" data-lang="Objective-C"><span class="n">NSInteger</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="n">NSLog</span><span class="p">(</span><span class="s">@&#34;%@&#34;</span><span class="p">,</span> <span class="o">^</span><span class="p">(</span><span class="n">NSInteger</span> <span class="n">a</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">num</span><span class="p">;</span>
+<span class="p">});</span>
+<span class="o">//</span> <span class="n">TestBlockMemory</span><span class="p">[</span><span class="mi">4918</span><span class="o">:</span><span class="mi">378440</span><span class="p">]</span> <span class="o">&lt;</span><span class="nl">__NSStackBlock__</span><span class="p">:</span> <span class="mh">0x7ffeefbff4b8</span><span class="o">&gt;</span></code></pre></div>
+<p>首先测试的是引用了一个局部变量，结果为NSStackBlock, 在栈区, 如果引用全局变量呢?</p>
+<div class="highlight"><pre class="chroma"><code class="language-Objective-C" data-lang="Objective-C"><span class="k">static</span> <span class="n">NSInteger</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="n">NSLog</span><span class="p">(</span><span class="s">@&#34;%@&#34;</span><span class="p">,</span> <span class="o">^</span><span class="p">(</span><span class="n">NSInteger</span> <span class="n">a</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">num</span><span class="p">;</span>
+<span class="p">});</span>
+<span class="o">//</span> <span class="n">TestBlockMemory</span><span class="p">[</span><span class="mi">4941</span><span class="o">:</span><span class="mi">379770</span><span class="p">]</span> <span class="o">&lt;</span><span class="nl">__NSGlobalBlock__</span><span class="p">:</span> <span class="mh">0x1000010d8</span><span class="o">&gt;</span></code></pre></div>
+<p>看的出，引用全局变量后并没有像局部变量那样改变了block原始类型，依然是NSGlobalBlock类型. 在全局区.</p>
+
+<ol>
+<li>block赋值操作</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-Objective-C" data-lang="Objective-C"><span class="n">NSInteger</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="n">NSInteger</span> <span class="p">(</span><span class="o">^</span><span class="n">addNum</span><span class="p">)(</span><span class="n">NSInteger</span> <span class="n">a</span><span class="p">)</span> <span class="o">=</span> <span class="o">^</span><span class="n">NSInteger</span><span class="p">(</span><span class="n">NSInteger</span> <span class="n">a</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">num</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">NSLog</span><span class="p">(</span><span class="s">@&#34;%@&#34;</span><span class="p">,</span> <span class="n">addNum</span><span class="p">);</span>
+<span class="o">//</span> <span class="n">TestBlockMemory</span><span class="p">[</span><span class="mi">5002</span><span class="o">:</span><span class="mi">387216</span><span class="p">]</span> <span class="o">&lt;</span><span class="nl">__NSMallocBlock__</span><span class="p">:</span> <span class="mh">0x10055a710</span><span class="o">&gt;</span></code></pre></div>
+<p>终于出现了堆区</p>
+<div class="highlight"><pre class="chroma"><code class="language-Objective-C" data-lang="Objective-C"><span class="k">static</span> <span class="n">NSInteger</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="n">NSInteger</span> <span class="p">(</span><span class="o">^</span><span class="n">addNum</span><span class="p">)(</span><span class="n">NSInteger</span> <span class="n">a</span><span class="p">)</span> <span class="o">=</span> <span class="o">^</span><span class="n">NSInteger</span><span class="p">(</span><span class="n">NSInteger</span> <span class="n">a</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">num</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">NSLog</span><span class="p">(</span><span class="s">@&#34;%@&#34;</span><span class="p">,</span> <span class="n">addNum</span><span class="p">);</span>
+<span class="o">//</span> <span class="n">TestBlockMemory</span><span class="p">[</span><span class="mi">5025</span><span class="o">:</span><span class="mi">388490</span><span class="p">]</span> <span class="o">&lt;</span><span class="nl">__NSGlobalBlock__</span><span class="p">:</span> <span class="mh">0x100001058</span><span class="o">&gt;</span></code></pre></div>
+<p>虽然有了赋值操作，但是引用的是全局变量，block又变回了全局类型.</p>
+
+<h2 id="总结">总结</h2>
+
+<p>通过以上这些示例，可以得出结论</p>
+
+<ol>
+<li>当block刚创建好时，不引用变量或者引用的是全局变量，不进行赋值时是NSGlobalBlock类型，全局区block.</li>
+<li>当block引用了外部局部变量，不进行赋值操作时是NSStackBlock类型，栈区block.</li>
+<li>当block引用了外部局部变量，且进行了赋值操作时是NSMallocBlock类型，堆区block.</li>
+</ol>
+
+<p>其实block在哪个区都是有它特定的意义的，当系统不知道你怎么使用时，就把它放到全局区；系统能明确管理的时候，就把它放到栈区; 当你进行了赋值操作，系统可能认为你在将来某个点会用到这个block，于是就放到堆区，延长它的生命周期.</p>
+
+<h2 id="接下来">接下来</h2>
+
+<p>如果想更深入的了解block，可以通过clang命令来将oc代码转为c++代码，看内部是如何实现的，执行命令之后会在当前目录产生一个cpp源代码文件</p>
+
+<pre><code>clang -rewrite-objc main.m
+</code></pre>
+]]></content>
+		</item>
 		
 		<item>
 			<title>WKWebView(二)-和原生交互</title>

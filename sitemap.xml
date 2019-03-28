@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://xuyunan.github.io/posts/block/</loc>
+    <lastmod>2019-03-28T15:55:48+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://xuyunan.github.io/posts/wkwebview-interaction/</loc>
     <lastmod>2019-03-26T17:06:18+08:00</lastmod>
   </url>
@@ -38,19 +43,26 @@
   </url>
   
   <url>
+    <loc>https://xuyunan.github.io/tags/block/</loc>
+    <lastmod>2019-03-28T15:55:48+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://xuyunan.github.io/posts/</loc>
-    <lastmod>2019-03-26T17:06:18+08:00</lastmod>
+    <lastmod>2019-03-28T15:55:48+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://xuyunan.github.io/tags/</loc>
+    <lastmod>2019-03-28T15:55:48+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://xuyunan.github.io/</loc>
-    <lastmod>2019-03-26T17:06:18+08:00</lastmod>
+    <lastmod>2019-03-28T15:55:48+08:00</lastmod>
     <priority>0</priority>
   </url>
   
