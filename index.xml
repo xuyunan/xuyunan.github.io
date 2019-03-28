@@ -29,6 +29,16 @@ static NSInteger num = 10; NSLog(@&amp;#34;%@&amp;#34;, ^(NSInteger a) { return 
     </item>
     
     <item>
+      <title>About</title>
+      <link>https://xuyunan.github.io/about/</link>
+      <pubDate>Tue, 26 Mar 2019 17:13:26 +0800</pubDate>
+      
+      <guid>https://xuyunan.github.io/about/</guid>
+      <description>2016&amp;frasl;03 - 2018&amp;frasl;12 Weimob
+ Objective-C Swift ReactNative React  </description>
+    </item>
+    
+    <item>
       <title>WKWebView(二)-和原生交互</title>
       <link>https://xuyunan.github.io/posts/wkwebview-interaction/</link>
       <pubDate>Tue, 26 Mar 2019 17:06:18 +0800</pubDate>
