@@ -12,10 +12,10 @@
 		
 		<item>
 			<title>关于__block的底层实现</title>
-			<link>https://xuyunan.github.io/posts/__block/</link>
+			<link>https://xuyunan.github.io/posts/block-keyword/</link>
 			<pubDate>Sat, 30 Mar 2019 19:09:59 +0800</pubDate>
 			
-			<guid>https://xuyunan.github.io/posts/__block/</guid>
+			<guid>https://xuyunan.github.io/posts/block-keyword/</guid>
 			<description>我们都知道, 如果要在block中修改外部的变量, 要使用__block来修饰, 那么为什么这么做呢, 里面的原理是什么?
 经过实践查阅源码后，我们可以了解到:
  block底层是一个struct, block的参数对应着struct的构造函数参数, block代码块对应着一个函数. 这个函数的参数是当前block. 不加__block，外部变量copy到block内部，底层是通过struct构造函数将值传递进去，因为是值传递，所以修改不了外面的值. 加了__block，外面的变量的引用，通过struct的构造函数传递进去，内部持有了这个引用，是个引用传递，所以可以修改外面的值.  测试的原始block
