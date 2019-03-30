@@ -7,10 +7,23 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Thu, 28 Mar 2019 15:55:48 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 30 Mar 2019 19:09:59 +0800</lastBuildDate>
     
 	<atom:link href="https://xuyunan.github.io/tags/block/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>关于__block的底层实现</title>
+      <link>https://xuyunan.github.io/posts/__block/</link>
+      <pubDate>Sat, 30 Mar 2019 19:09:59 +0800</pubDate>
+      
+      <guid>https://xuyunan.github.io/posts/__block/</guid>
+      <description>我们都知道, 如果要在block中修改外部的变量, 要使用__block来修饰, 那么为什么这么做呢, 里面的原理是什么?
+经过实践查阅源码后，我们可以了解到:
+ block底层是一个struct, block的参数对应着struct的构造函数参数, block代码块对应着一个函数. 这个函数的参数是当前block. 不加__block，外部变量copy到block内部，底层是通过struct构造函数将值传递进去，因为是值传递，所以修改不了外面的值. 加了__block，外面的变量的引用，通过struct的构造函数传递进去，内部持有了这个引用，是个引用传递，所以可以修改外面的值.  测试的原始block
+// __block NSInteger num = 10; NSInteger num = 10;	void (^add)(void) = ^void(void) { NSLog(@&amp;#34;%ld&amp;#34;, num); }; 不加__block, clang rewrite之后的源码
+struct __main_block_impl_0 { struct __block_impl impl; struct __main_block_desc_0* Desc; NSInteger num; __main_block_impl_0(void *fp, struct __main_block_desc_0 *desc, NSInteger _num, int flags=0) : num(_num) { impl.isa = &amp;amp;_NSConcreteStackBlock; impl.Flags = flags; impl.FuncPtr = fp; Desc = desc; } }; static void __main_block_func_0(struct __main_block_impl_0 *__cself) { NSInteger num = __cself-&amp;gt;num; // bound by copy  NSLog((NSString *)&amp;amp;__NSConstantStringImpl__var_folders_bm_939gjfvj42b5bzxh93zwnxcm0000gn_T_main_db5d50_mi_0, num); }  加了__blcok, clang rewrite之后的源码</description>
+    </item>
     
     <item>
       <title>Block到底存放在哪里</title>

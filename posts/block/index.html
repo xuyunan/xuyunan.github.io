@@ -21,7 +21,7 @@ static NSInteger num = 10; NSLog(@&#34;%@&#34;, ^(NSInteger a) { return a &#43; 
 
 <meta itemprop="datePublished" content="2019-03-28T15:55:48&#43;08:00" />
 <meta itemprop="dateModified" content="2019-03-28T15:55:48&#43;08:00" />
-<meta itemprop="wordCount" content="303">
+<meta itemprop="wordCount" content="138">
 
 
 
@@ -178,67 +178,6 @@ static NSInteger num = 10; NSLog(@&#34;%@&#34;, ^(NSInteger a) { return a &#43; 
 
 <p>其实block在哪个区都是有它特定的意义的，当系统不知道你怎么使用时，就把它放到全局区；系统能明确管理的时候，就把它放到栈区; 当你进行了赋值操作，系统可能认为你在将来某个点会用到这个block，于是就放到堆区，延长它的生命周期.</p>
 
-<h2 id="关于-block的补充">关于__block的补充<a href="#关于-block的补充" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
-
-<p>我们都知道, 如果要在block中修改外部的变量, 要使用__block来修饰, 那么为什么这么做呢, 里面的原理是什么?</p>
-
-<p>经过实践查阅源码后，我们可以了解到:</p>
-
-<ul>
-<li>block底层是一个struct, block的参数对应着struct的构造函数参数, block代码块对应着一个函数. 这个函数的参数是当前block.</li>
-<li>不加__block，外部变量copy到block内部，底层是通过struct构造函数将值传递进去，因为是值传递，所以修改不了外面的值.</li>
-<li>加了__block，外面的变量的引用，通过struct的构造函数传递进去，内部持有了这个引用，是个引用传递，所以可以修改外面的值.</li>
-</ul>
-
-<p>测试的原始block</p>
-<div class="highlight"><pre class="chroma"><code class="language-Objective-C" data-lang="Objective-C"><span class="c1">// __block NSInteger num = 10;
-</span><span class="c1"></span><span class="n">NSInteger</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>	
-<span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="n">add</span><span class="p">)(</span><span class="kt">void</span><span class="p">)</span> <span class="o">=</span> <span class="o">^</span><span class="kt">void</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&#34;%ld&#34;</span><span class="p">,</span> <span class="n">num</span><span class="p">);</span>
-<span class="p">};</span></code></pre></div>
-<p>不加__block, clang rewrite之后的源码</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">struct</span> <span class="n">__main_block_impl_0</span> <span class="p">{</span>
-  <span class="k">struct</span> <span class="n">__block_impl</span> <span class="n">impl</span><span class="p">;</span>
-  <span class="k">struct</span> <span class="n">__main_block_desc_0</span><span class="o">*</span> <span class="n">Desc</span><span class="p">;</span>
-  <span class="n">NSInteger</span> <span class="n">num</span><span class="p">;</span>
-  <span class="n">__main_block_impl_0</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">__main_block_desc_0</span> <span class="o">*</span><span class="n">desc</span><span class="p">,</span> <span class="n">NSInteger</span> <span class="n">_num</span><span class="p">,</span> <span class="kt">int</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">:</span> <span class="n">num</span><span class="p">(</span><span class="n">_num</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">impl</span><span class="p">.</span><span class="n">isa</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">_NSConcreteStackBlock</span><span class="p">;</span>
-    <span class="n">impl</span><span class="p">.</span><span class="n">Flags</span> <span class="o">=</span> <span class="n">flags</span><span class="p">;</span>
-    <span class="n">impl</span><span class="p">.</span><span class="n">FuncPtr</span> <span class="o">=</span> <span class="n">fp</span><span class="p">;</span>
-    <span class="n">Desc</span> <span class="o">=</span> <span class="n">desc</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">};</span>
-<span class="k">static</span> <span class="kt">void</span> <span class="nf">__main_block_func_0</span><span class="p">(</span><span class="k">struct</span> <span class="n">__main_block_impl_0</span> <span class="o">*</span><span class="n">__cself</span><span class="p">)</span> <span class="p">{</span>
-  <span class="n">NSInteger</span> <span class="n">num</span> <span class="o">=</span> <span class="n">__cself</span><span class="o">-&gt;</span><span class="n">num</span><span class="p">;</span> <span class="c1">// bound by copy
-</span><span class="c1"></span>  <span class="n">NSLog</span><span class="p">((</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">__NSConstantStringImpl__var_folders_bm_939gjfvj42b5bzxh93zwnxcm0000gn_T_main_db5d50_mi_0</span><span class="p">,</span> <span class="n">num</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-<p>加了__blcok, clang rewrite之后的源码</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">struct</span> <span class="n">__Block_byref_num_0</span> <span class="p">{</span>
-  <span class="kt">void</span> <span class="o">*</span><span class="n">__isa</span><span class="p">;</span>
-  <span class="n">__Block_byref_num_0</span> <span class="o">*</span><span class="n">__forwarding</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">__flags</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">__size</span><span class="p">;</span>
-  <span class="n">NSInteger</span> <span class="n">num</span><span class="p">;</span>
-<span class="p">};</span>
-
-<span class="k">struct</span> <span class="n">__main_block_impl_0</span> <span class="p">{</span>
-  <span class="k">struct</span> <span class="n">__block_impl</span> <span class="n">impl</span><span class="p">;</span>
-  <span class="k">struct</span> <span class="n">__main_block_desc_0</span><span class="o">*</span> <span class="n">Desc</span><span class="p">;</span>
-  <span class="n">__Block_byref_num_0</span> <span class="o">*</span><span class="n">num</span><span class="p">;</span> <span class="c1">// by ref
-</span><span class="c1"></span>  <span class="n">__main_block_impl_0</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">__main_block_desc_0</span> <span class="o">*</span><span class="n">desc</span><span class="p">,</span> <span class="n">__Block_byref_num_0</span> <span class="o">*</span><span class="n">_num</span><span class="p">,</span> <span class="kt">int</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">:</span> <span class="n">num</span><span class="p">(</span><span class="n">_num</span><span class="o">-&gt;</span><span class="n">__forwarding</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">impl</span><span class="p">.</span><span class="n">isa</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">_NSConcreteStackBlock</span><span class="p">;</span>
-    <span class="n">impl</span><span class="p">.</span><span class="n">Flags</span> <span class="o">=</span> <span class="n">flags</span><span class="p">;</span>
-    <span class="n">impl</span><span class="p">.</span><span class="n">FuncPtr</span> <span class="o">=</span> <span class="n">fp</span><span class="p">;</span>
-    <span class="n">Desc</span> <span class="o">=</span> <span class="n">desc</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">};</span>
-
-<span class="k">static</span> <span class="kt">void</span> <span class="nf">__main_block_func_0</span><span class="p">(</span><span class="k">struct</span> <span class="n">__main_block_impl_0</span> <span class="o">*</span><span class="n">__cself</span><span class="p">)</span> <span class="p">{</span>
-  <span class="n">__Block_byref_num_0</span> <span class="o">*</span><span class="n">num</span> <span class="o">=</span> <span class="n">__cself</span><span class="o">-&gt;</span><span class="n">num</span><span class="p">;</span> <span class="c1">// bound by ref
-</span><span class="c1"></span>  <span class="n">NSLog</span><span class="p">((</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">__NSConstantStringImpl__var_folders_bm_939gjfvj42b5bzxh93zwnxcm0000gn_T_main_3ba1e4_mi_0</span><span class="p">,</span> <span class="p">(</span><span class="n">num</span><span class="o">-&gt;</span><span class="n">__forwarding</span><span class="o">-&gt;</span><span class="n">num</span><span class="p">));</span>
-<span class="p">}</span>
-</code></pre></div>
 <h2 id="接下来">接下来<a href="#接下来" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p>如果想更深入的了解block，可以通过clang命令来将oc代码转为c++代码，看内部是如何实现的，执行命令之后会在当前目录产生一个cpp源代码文件</p>
@@ -254,11 +193,14 @@ static NSInteger num = 10; NSLog(@&#34;%@&#34;, ^(NSInteger a) { return a &#43; 
 				<p>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://xuyunan.github.io/tags/block">block</a></span>
 				</p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>303 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>138 Words</p>
 				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-03-28 15:55 &#43;0800</p>
 			</footer>
 		</article>
 		<div class="post-nav thin">
+			<a class="next-post" href="https://xuyunan.github.io/posts/__block/">
+				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;Newer</span><br><span>关于__block的底层实现</span>
+			</a>
 			<a class="prev-post" href="https://xuyunan.github.io/posts/wkwebview-interaction/">
 				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>WKWebView(二)-和原生交互</span>
 			</a>
