@@ -107,12 +107,75 @@ static NSInteger num = 10; NSLog(@&amp;#34;%@&amp;#34;, ^(NSInteger a) { return 
 
 <p>其实block在哪个区都是有它特定的意义的，当系统不知道你怎么使用时，就把它放到全局区；系统能明确管理的时候，就把它放到栈区; 当你进行了赋值操作，系统可能认为你在将来某个点会用到这个block，于是就放到堆区，延长它的生命周期.</p>
 
+<h2 id="关于-block的补充">关于__block的补充</h2>
+
+<p>我们都知道, 如果要在block中修改外部的变量, 要使用__block来修饰, 那么为什么这么做呢, 里面的原理是什么?</p>
+
+<p>经过实践查阅源码后，我们可以了解到:</p>
+
+<ul>
+<li>block底层是一个struct, block的参数对应着struct的构造函数参数, block代码块对应着一个函数. 这个函数的参数是当前block.</li>
+<li>不加__block，外部变量copy到block内部，底层是通过struct构造函数将值传递进去，因为是值传递，所以修改不了外面的值.</li>
+<li>加了__block，外面的变量的引用，通过struct的构造函数传递进去，内部持有了这个引用，是个引用传递，所以可以修改外面的值.</li>
+</ul>
+
+<p>测试的原始block</p>
+<div class="highlight"><pre class="chroma"><code class="language-Objective-C" data-lang="Objective-C"><span class="c1">// __block NSInteger num = 10;
+</span><span class="c1"></span><span class="n">NSInteger</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>	
+<span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="n">add</span><span class="p">)(</span><span class="kt">void</span><span class="p">)</span> <span class="o">=</span> <span class="o">^</span><span class="kt">void</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&#34;%ld&#34;</span><span class="p">,</span> <span class="n">num</span><span class="p">);</span>
+<span class="p">};</span></code></pre></div>
+<p>不加__block, clang rewrite之后的源码</p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">struct</span> <span class="n">__main_block_impl_0</span> <span class="p">{</span>
+  <span class="k">struct</span> <span class="n">__block_impl</span> <span class="n">impl</span><span class="p">;</span>
+  <span class="k">struct</span> <span class="n">__main_block_desc_0</span><span class="o">*</span> <span class="n">Desc</span><span class="p">;</span>
+  <span class="n">NSInteger</span> <span class="n">num</span><span class="p">;</span>
+  <span class="n">__main_block_impl_0</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">__main_block_desc_0</span> <span class="o">*</span><span class="n">desc</span><span class="p">,</span> <span class="n">NSInteger</span> <span class="n">_num</span><span class="p">,</span> <span class="kt">int</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">:</span> <span class="n">num</span><span class="p">(</span><span class="n">_num</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">impl</span><span class="p">.</span><span class="n">isa</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">_NSConcreteStackBlock</span><span class="p">;</span>
+    <span class="n">impl</span><span class="p">.</span><span class="n">Flags</span> <span class="o">=</span> <span class="n">flags</span><span class="p">;</span>
+    <span class="n">impl</span><span class="p">.</span><span class="n">FuncPtr</span> <span class="o">=</span> <span class="n">fp</span><span class="p">;</span>
+    <span class="n">Desc</span> <span class="o">=</span> <span class="n">desc</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">__main_block_func_0</span><span class="p">(</span><span class="k">struct</span> <span class="n">__main_block_impl_0</span> <span class="o">*</span><span class="n">__cself</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">NSInteger</span> <span class="n">num</span> <span class="o">=</span> <span class="n">__cself</span><span class="o">-&gt;</span><span class="n">num</span><span class="p">;</span> <span class="c1">// bound by copy
+</span><span class="c1"></span>  <span class="n">NSLog</span><span class="p">((</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">__NSConstantStringImpl__var_folders_bm_939gjfvj42b5bzxh93zwnxcm0000gn_T_main_db5d50_mi_0</span><span class="p">,</span> <span class="n">num</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>加了__blcok, clang rewrite之后的源码</p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">struct</span> <span class="n">__Block_byref_num_0</span> <span class="p">{</span>
+  <span class="kt">void</span> <span class="o">*</span><span class="n">__isa</span><span class="p">;</span>
+  <span class="n">__Block_byref_num_0</span> <span class="o">*</span><span class="n">__forwarding</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">__flags</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">__size</span><span class="p">;</span>
+  <span class="n">NSInteger</span> <span class="n">num</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">struct</span> <span class="n">__main_block_impl_0</span> <span class="p">{</span>
+  <span class="k">struct</span> <span class="n">__block_impl</span> <span class="n">impl</span><span class="p">;</span>
+  <span class="k">struct</span> <span class="n">__main_block_desc_0</span><span class="o">*</span> <span class="n">Desc</span><span class="p">;</span>
+  <span class="n">__Block_byref_num_0</span> <span class="o">*</span><span class="n">num</span><span class="p">;</span> <span class="c1">// by ref
+</span><span class="c1"></span>  <span class="n">__main_block_impl_0</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">__main_block_desc_0</span> <span class="o">*</span><span class="n">desc</span><span class="p">,</span> <span class="n">__Block_byref_num_0</span> <span class="o">*</span><span class="n">_num</span><span class="p">,</span> <span class="kt">int</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">:</span> <span class="n">num</span><span class="p">(</span><span class="n">_num</span><span class="o">-&gt;</span><span class="n">__forwarding</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">impl</span><span class="p">.</span><span class="n">isa</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">_NSConcreteStackBlock</span><span class="p">;</span>
+    <span class="n">impl</span><span class="p">.</span><span class="n">Flags</span> <span class="o">=</span> <span class="n">flags</span><span class="p">;</span>
+    <span class="n">impl</span><span class="p">.</span><span class="n">FuncPtr</span> <span class="o">=</span> <span class="n">fp</span><span class="p">;</span>
+    <span class="n">Desc</span> <span class="o">=</span> <span class="n">desc</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">__main_block_func_0</span><span class="p">(</span><span class="k">struct</span> <span class="n">__main_block_impl_0</span> <span class="o">*</span><span class="n">__cself</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">__Block_byref_num_0</span> <span class="o">*</span><span class="n">num</span> <span class="o">=</span> <span class="n">__cself</span><span class="o">-&gt;</span><span class="n">num</span><span class="p">;</span> <span class="c1">// bound by ref
+</span><span class="c1"></span>  <span class="n">NSLog</span><span class="p">((</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">__NSConstantStringImpl__var_folders_bm_939gjfvj42b5bzxh93zwnxcm0000gn_T_main_3ba1e4_mi_0</span><span class="p">,</span> <span class="p">(</span><span class="n">num</span><span class="o">-&gt;</span><span class="n">__forwarding</span><span class="o">-&gt;</span><span class="n">num</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre></div>
 <h2 id="接下来">接下来</h2>
 
 <p>如果想更深入的了解block，可以通过clang命令来将oc代码转为c++代码，看内部是如何实现的，执行命令之后会在当前目录产生一个cpp源代码文件</p>
 
 <pre><code>clang -rewrite-objc main.m
 </code></pre>
+
+<p>参考</p>
 ]]></content>
 		</item>
 		
