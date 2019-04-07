@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+
+<meta itemprop="name" content="Objective-C Runtime Programming Guide">
+<meta itemprop="description" content="以下内容根据官方文档和其他博客整理而得, 由于文档版本较旧, 有些api已经过时, 比如标记OBJC2_UNAVAILABLE的api, 此文档仅作了解, 在使用过程中, 还需多看代码注释和文档, 多动手测试.
+运行时版本与平台 老版本对应Objective-C 1.0, 新版本随Objective-C 2.0一起发布. 两个版本有什么区别呢?
+ 在老版本中，如果你改变了一个类的实例变量，就需要重新编译所有继承自它的类 在新版本中，则不需要重新编译继承自它的类  什么应用程序是运行在新版本中呢?
+iPhone应用程序和Mac OS X 10.5以后的64位应用程序使用的是新版本. 其它(Mac OS X的32位应用程序)使用的是旧版本.
+与运行时的交互 oc中我们时时刻刻在跟运行时打交道，可以通过以下三种形式和运行时接触.
+Objective-C源代码 oc是个动态语言，要依托于运行时才能执行，当我们写源代码时，其实已经在和运行时打交道了，比如对象方法调用，在运行时会被解释成objc_msgSend.
+NSObject的方法 - (BOOL)isKindOfClass:(Class)aClass; // 检测是否是某类的子类 - (BOOL)isMemberOfClass:(Class)aClass; // 检测是否是某类的成员 - (BOOL)conformsToProtocol:(Protocol *)aProtocol; // 检测是否实现了协议 - (BOOL)respondsToSelector:(SEL)aSelector; // 检测是否含有方法 - (IMP)methodForSelector:(SEL)aSelector; // 返回一个指向方法实现的指针 这些方法恰恰是运用了运行时的能力.
+运行时方法 运行时系统是一个动态共享库，在头文件中，有很多的方法和数据结构，头文件位于/usr/include/objc
+发送消息 objc_msgSend 方法调用[receiver message]在运行时会被解释成
+objc_msgSend(receiver, selector) // 无参数情况下 objc_msgSend(receiver, selector, arg1, arg2, ...) // 有参数情况下  receiver是调用函数的对象，selector是message方法的选择器，通过它运行时可以找到对应的函数实现.">
+
+
+<meta itemprop="datePublished" content="2019-04-07T16:51:43&#43;08:00" />
+<meta itemprop="dateModified" content="2019-04-07T16:51:43&#43;08:00" />
+<meta itemprop="wordCount" content="515">
+
+
+
+<meta itemprop="keywords" content="runtime," />
+<meta property="og:title" content="Objective-C Runtime Programming Guide" />
+<meta property="og:description" content="以下内容根据官方文档和其他博客整理而得, 由于文档版本较旧, 有些api已经过时, 比如标记OBJC2_UNAVAILABLE的api, 此文档仅作了解, 在使用过程中, 还需多看代码注释和文档, 多动手测试.
+运行时版本与平台 老版本对应Objective-C 1.0, 新版本随Objective-C 2.0一起发布. 两个版本有什么区别呢?
+ 在老版本中，如果你改变了一个类的实例变量，就需要重新编译所有继承自它的类 在新版本中，则不需要重新编译继承自它的类  什么应用程序是运行在新版本中呢?
+iPhone应用程序和Mac OS X 10.5以后的64位应用程序使用的是新版本. 其它(Mac OS X的32位应用程序)使用的是旧版本.
+与运行时的交互 oc中我们时时刻刻在跟运行时打交道，可以通过以下三种形式和运行时接触.
+Objective-C源代码 oc是个动态语言，要依托于运行时才能执行，当我们写源代码时，其实已经在和运行时打交道了，比如对象方法调用，在运行时会被解释成objc_msgSend.
+NSObject的方法 - (BOOL)isKindOfClass:(Class)aClass; // 检测是否是某类的子类 - (BOOL)isMemberOfClass:(Class)aClass; // 检测是否是某类的成员 - (BOOL)conformsToProtocol:(Protocol *)aProtocol; // 检测是否实现了协议 - (BOOL)respondsToSelector:(SEL)aSelector; // 检测是否含有方法 - (IMP)methodForSelector:(SEL)aSelector; // 返回一个指向方法实现的指针 这些方法恰恰是运用了运行时的能力.
+运行时方法 运行时系统是一个动态共享库，在头文件中，有很多的方法和数据结构，头文件位于/usr/include/objc
+发送消息 objc_msgSend 方法调用[receiver message]在运行时会被解释成
+objc_msgSend(receiver, selector) // 无参数情况下 objc_msgSend(receiver, selector, arg1, arg2, ...) // 有参数情况下  receiver是调用函数的对象，selector是message方法的选择器，通过它运行时可以找到对应的函数实现." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://xuyunan.github.io/posts/oc-runtime/" />
+<meta property="article:published_time" content="2019-04-07T16:51:43&#43;08:00"/>
+<meta property="article:modified_time" content="2019-04-07T16:51:43&#43;08:00"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Objective-C Runtime Programming Guide"/>
+<meta name="twitter:description" content="以下内容根据官方文档和其他博客整理而得, 由于文档版本较旧, 有些api已经过时, 比如标记OBJC2_UNAVAILABLE的api, 此文档仅作了解, 在使用过程中, 还需多看代码注释和文档, 多动手测试.
+运行时版本与平台 老版本对应Objective-C 1.0, 新版本随Objective-C 2.0一起发布. 两个版本有什么区别呢?
+ 在老版本中，如果你改变了一个类的实例变量，就需要重新编译所有继承自它的类 在新版本中，则不需要重新编译继承自它的类  什么应用程序是运行在新版本中呢?
+iPhone应用程序和Mac OS X 10.5以后的64位应用程序使用的是新版本. 其它(Mac OS X的32位应用程序)使用的是旧版本.
+与运行时的交互 oc中我们时时刻刻在跟运行时打交道，可以通过以下三种形式和运行时接触.
+Objective-C源代码 oc是个动态语言，要依托于运行时才能执行，当我们写源代码时，其实已经在和运行时打交道了，比如对象方法调用，在运行时会被解释成objc_msgSend.
+NSObject的方法 - (BOOL)isKindOfClass:(Class)aClass; // 检测是否是某类的子类 - (BOOL)isMemberOfClass:(Class)aClass; // 检测是否是某类的成员 - (BOOL)conformsToProtocol:(Protocol *)aProtocol; // 检测是否实现了协议 - (BOOL)respondsToSelector:(SEL)aSelector; // 检测是否含有方法 - (IMP)methodForSelector:(SEL)aSelector; // 返回一个指向方法实现的指针 这些方法恰恰是运用了运行时的能力.
+运行时方法 运行时系统是一个动态共享库，在头文件中，有很多的方法和数据结构，头文件位于/usr/include/objc
+发送消息 objc_msgSend 方法调用[receiver message]在运行时会被解释成
+objc_msgSend(receiver, selector) // 无参数情况下 objc_msgSend(receiver, selector, arg1, arg2, ...) // 有参数情况下  receiver是调用函数的对象，selector是message方法的选择器，通过它运行时可以找到对应的函数实现."/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>Objective-C Runtime Programming Guide</title>
+	<link rel="stylesheet" href="https://xuyunan.github.io/css/style.min.31706917653d2b9e8410abd431f30ec4359a88a94fc87a63654779d87329edec.css" integrity="sha256-MXBpF2U9K56EEKvUMfMOxDWaiKlPyHpjZUd52HMp7ew=">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp faster">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://xuyunan.github.io">Tommy</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					<a href="https://xuyunan.github.io/posts/">Posts</a>
+					<a href="https://xuyunan.github.io/about/">About</a>
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<span class="hdr-social hide-in-mobile"><a href="https://twitter.com/xuyunan" target="_blank" rel="noopener" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://instagram.com/tommyxyn" target="_blank" rel="noopener" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"></line></svg></a><a href="https://github.com/xuyunan" target="_blank" rel="noopener" title="Github"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://xuyunan.github.io/posts/">Posts</a></li>
+			<li><a href="https://xuyunan.github.io/about/">About</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Apr 7, 2019</span></div>
+				<h1>Objective-C Runtime Programming Guide</h1>
+			</header>
+			<div class="content">
+				
+
+<p>以下内容根据官方文档和其他博客整理而得, 由于文档版本较旧, 有些api已经过时, 比如标记OBJC2_UNAVAILABLE的api, 此文档仅作了解, 在使用过程中, 还需多看代码注释和文档, 多动手测试.</p>
+
+<h2 id="运行时版本与平台">运行时版本与平台<a href="#运行时版本与平台" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>老版本对应Objective-C 1.0, 新版本随Objective-C 2.0一起发布. 两个版本有什么区别呢?</p>
+
+<ul>
+<li>在老版本中，如果你改变了一个类的实例变量，就需要重新编译所有继承自它的类</li>
+<li>在新版本中，则不需要重新编译继承自它的类</li>
+</ul>
+
+<p>什么应用程序是运行在新版本中呢?</p>
+
+<p>iPhone应用程序和Mac OS X 10.5以后的64位应用程序使用的是新版本. 其它(Mac OS X的32位应用程序)使用的是旧版本.</p>
+
+<h2 id="与运行时的交互">与运行时的交互<a href="#与运行时的交互" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>oc中我们时时刻刻在跟运行时打交道，可以通过以下三种形式和运行时接触.</p>
+
+<h3 id="objective-c源代码">Objective-C源代码<a href="#objective-c源代码" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>oc是个动态语言，要依托于运行时才能执行，当我们写源代码时，其实已经在和运行时打交道了，比如对象方法调用，在运行时会被解释成objc_msgSend.</p>
+
+<h3 id="nsobject的方法">NSObject的方法<a href="#nsobject的方法" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<div class="highlight"><pre class="chroma"><code class="language-Objective-C" data-lang="Objective-C"><span class="p">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">isKindOfClass:</span><span class="p">(</span><span class="kt">Class</span><span class="p">)</span><span class="nv">aClass</span><span class="p">;</span>        <span class="c1">// 检测是否是某类的子类
+</span><span class="c1"></span><span class="p">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">isMemberOfClass:</span><span class="p">(</span><span class="kt">Class</span><span class="p">)</span><span class="nv">aClass</span><span class="p">;</span>      <span class="c1">// 检测是否是某类的成员 
+</span><span class="c1"></span><span class="p">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">conformsToProtocol:</span><span class="p">(</span><span class="n">Protocol</span> <span class="o">*</span><span class="p">)</span><span class="nv">aProtocol</span><span class="p">;</span>   <span class="c1">// 检测是否实现了协议
+</span><span class="c1"></span><span class="p">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">respondsToSelector:</span><span class="p">(</span><span class="kt">SEL</span><span class="p">)</span><span class="nv">aSelector</span><span class="p">;</span>  <span class="c1">// 检测是否含有方法
+</span><span class="c1"></span><span class="p">-</span> <span class="p">(</span><span class="kt">IMP</span><span class="p">)</span><span class="nf">methodForSelector:</span><span class="p">(</span><span class="kt">SEL</span><span class="p">)</span><span class="nv">aSelector</span><span class="p">;</span>    <span class="o">//</span> <span class="err">返回一个指向方法实现的指针</span></code></pre></div>
+<p>这些方法恰恰是运用了运行时的能力.</p>
+
+<h3 id="运行时方法">运行时方法<a href="#运行时方法" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>运行时系统是一个动态共享库，在头文件中，有很多的方法和数据结构，头文件位于/usr/include/objc</p>
+
+<h2 id="发送消息">发送消息<a href="#发送消息" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<h3 id="objc-msgsend">objc_msgSend<a href="#objc-msgsend" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>方法调用[receiver message]在运行时会被解释成</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="n">objc_msgSend</span><span class="p">(</span><span class="n">receiver</span><span class="p">,</span> <span class="n">selector</span><span class="p">)</span>                    <span class="c1">// 无参数情况下  
+</span><span class="c1"></span><span class="n">objc_msgSend</span><span class="p">(</span><span class="n">receiver</span><span class="p">,</span> <span class="n">selector</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">,</span> <span class="p">...)</span>   <span class="o">//</span> <span class="err">有参数情况下</span>  </code></pre></div>
+<p>receiver是调用函数的对象，selector是message方法的选择器，通过它运行时可以找到对应的函数实现.</p>
+
+<h3 id="对象执行方法的具体过程">对象执行方法的具体过程<a href="#对象执行方法的具体过程" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>对象在运行时会被解释成结构体objc_object, 类会被解释成objc_class, objc_object里面只有一个isa指针, isa指针指向objc_class, objc_class里面保存着类的变量和方法等信息, 以下代码都能在/usr/include/objc/runtime.h中找到, 头文件中还有两个比较重要的是SEL和IMP, SEL也是一个结构体指针, 是方法的选择器，IMP是方法的实现, objc_class中有一个dispatch table, 在table里SEL和IMP一一对应.</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="c1">/// An opaque type that represents an Objective-C class.
+</span><span class="c1"></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">objc_class</span> <span class="o">*</span><span class="n">Class</span><span class="p">;</span>
+
+<span class="c1">/// Represents an instance of a class.
+</span><span class="c1"></span><span class="k">struct</span> <span class="n">objc_object</span> <span class="p">{</span>
+    <span class="n">Class</span> <span class="n">_Nonnull</span> <span class="n">isa</span>  <span class="n">OBJC_ISA_AVAILABILITY</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">/// A pointer to an instance of a class.
+</span><span class="c1"></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">objc_object</span> <span class="o">*</span><span class="n">id</span><span class="p">;</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">objc_class</span> <span class="p">{</span>
+    <span class="n">Class</span> <span class="n">_Nonnull</span> <span class="n">isa</span>  <span class="n">OBJC_ISA_AVAILABILITY</span><span class="p">;</span>
+
+<span class="cp">#if !__OBJC2__
+</span><span class="cp"></span>    <span class="n">Class</span> <span class="n">_Nullable</span> <span class="n">super_class</span>                              <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">_Nonnull</span> <span class="n">name</span>                               <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="n">version</span>                                             <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="n">info</span>                                                <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="n">instance_size</span>                                       <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">objc_ivar_list</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">ivars</span>                  <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">objc_method_list</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">methodLists</span>                    <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">objc_cache</span> <span class="o">*</span> <span class="n">_Nonnull</span> <span class="n">cache</span>                       <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">objc_protocol_list</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">protocols</span>          <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
+<span class="cp">#endif
+</span><span class="cp"></span>
+<span class="p">}</span> <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
+<span class="cm">/* Use `Class` instead of `struct objc_class *` */</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="c1">/// An opaque type that represents a method selector.
+</span><span class="c1"></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">objc_selector</span> <span class="o">*</span><span class="n">SEL</span><span class="p">;</span>
+
+<span class="c1">/// A pointer to the function of a method implementation. 
+</span><span class="c1"></span><span class="cp">#if !OBJC_OLD_DISPATCH_PROTOTYPES
+</span><span class="cp"></span><span class="k">typedef</span> <span class="nf">void</span> <span class="p">(</span><span class="o">*</span><span class="n">IMP</span><span class="p">)(</span><span class="kt">void</span> <span class="cm">/* id, SEL, ... */</span> <span class="p">);</span> 
+<span class="cp">#else
+</span><span class="cp"></span><span class="k">typedef</span> <span class="n">id</span> <span class="nf">_Nullable</span> <span class="p">(</span><span class="o">*</span><span class="n">IMP</span><span class="p">)(</span><span class="n">id</span> <span class="n">_Nonnull</span><span class="p">,</span> <span class="n">SEL</span> <span class="n">_Nonnull</span><span class="p">,</span> <span class="p">...);</span> 
+<span class="cp">#endif</span></code></pre></div>
+<p>当一个对象调用方法时, objc_object会通过isa指针找到当前的类objc_class, 检查cache中是否已经缓存了方法，没缓存就再在方法列表中找，找不到就顺着isa指针找到super_class, 然后在按照同样的方法找，直到NSObject, 一旦定位到选择器之后，从dispatch table中找出方法的实现IMP, 然后执行.</p>
+
+<p>查找过程</p>
+
+<p><img src="/assets/messaging-framework.png" alt="messaging-framework" /></p>
+
+<h3 id="隐藏的参数">隐藏的参数<a href="#隐藏的参数" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>在方法调用过程中, 有两个隐藏的参数</p>
+
+<ul>
+<li>self 这个就比较常见了,</li>
+<li>_cmd, 就是当前方法的选择器, 类型为SEL, 结构体指针, 我们可以打印出来看看</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-Objective-C" data-lang="Objective-C"><span class="n">NSLog</span><span class="p">(</span><span class="s">@&#34;_cmd: %@&#34;</span><span class="p">,</span> <span class="n">NSStringFromSelector</span><span class="p">(</span><span class="n">_cmd</span><span class="p">));</span></code></pre></div>
+<h3 id="获取方法地址">获取方法地址<a href="#获取方法地址" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">setter</span><span class="p">)(</span><span class="n">id</span><span class="p">,</span> <span class="n">SEL</span><span class="p">,</span> <span class="n">BOOL</span><span class="p">);</span>
+<span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+<span class="n">setter</span> <span class="o">=</span> <span class="p">(</span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="n">id</span><span class="p">,</span> <span class="n">SEL</span><span class="p">,</span> <span class="n">BOOL</span><span class="p">))[</span><span class="n">target</span> <span class="nl">methodForSelector</span><span class="p">:</span><span class="err">@</span><span class="n">selector</span><span class="p">(</span><span class="nl">setFilled</span><span class="p">:)];</span>
+<span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
+    <span class="n">setter</span><span class="p">(</span><span class="n">targetList</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="err">@</span><span class="n">selector</span><span class="p">(</span><span class="nl">setFilled</span><span class="p">:),</span> <span class="n">YES</span><span class="p">);</span></code></pre></div>
+<p>通过methodForSelector可以获取一个指向函数实现的指针IMP, 然后执行它, 这样可以节省不少消息传递开销, 一般情况下我们都不需要这么做, 像上面这样, 同一个方法频繁执行时, 我们才考虑这么优化.</p>
+
+<h2 id="动态方法解析">动态方法解析<a href="#动态方法解析" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>有时候我们需要动态提供方法的实现, 像使用了@dynamic的属性, 该关键字告诉编译器, 属性相关的方法会在运行时动态提供(setter, getter).</p>
+<div class="highlight"><pre class="chroma"><code class="language-Objective-C" data-lang="Objective-C"><span class="k">@dynamic</span> <span class="n">propertyName</span><span class="p">;</span></code></pre></div>
+<p>可以通过实现resolveInstanceMethod:来给类添加实例方法实现, 通过实现resolveClassMethod:来给类添加类方法实现. OC方法就是有至少两个参数(self, _cmd)的简单c函数, 我们使用class_addMethod函数来添加一个方法, 函数如下:</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">void</span> <span class="nf">dynamicMethodIMP</span><span class="p">(</span><span class="n">id</span> <span class="n">self</span><span class="p">,</span> <span class="n">SEL</span> <span class="n">_cmd</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// implementation ....
+</span><span class="c1"></span><span class="p">}</span></code></pre></div>
+<p>通过resolveInstanceMethod:将方法resolveThisMethodDynamically动态的添加到类中</p>
+<div class="highlight"><pre class="chroma"><code class="language-Objective-C" data-lang="Objective-C"><span class="k">@implementation</span> <span class="nc">MyClass</span>
+<span class="p">+</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">resolveInstanceMethod:</span><span class="p">(</span><span class="kt">SEL</span><span class="p">)</span><span class="nv">aSEL</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">aSEL</span> <span class="o">==</span> <span class="k">@selector</span><span class="p">(</span><span class="n">resolveThisMethodDynamically</span><span class="p">))</span> <span class="p">{</span>
+          <span class="n">class_addMethod</span><span class="p">([</span><span class="nb">self</span> <span class="k">class</span><span class="p">],</span> <span class="n">aSEL</span><span class="p">,</span> <span class="p">(</span><span class="kt">IMP</span><span class="p">)</span> <span class="n">dynamicMethodIMP</span><span class="p">,</span> <span class="s">&#34;v@:&#34;</span><span class="p">);</span>
+          <span class="k">return</span> <span class="nb">YES</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">super</span> <span class="nl">resolveInstanceMethod</span><span class="p">:</span><span class="n">aSEL</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="k">@end</span></code></pre></div>
+<p>动态加载</p>
+
+<p>OC可以再运行时动态加载和链接新的类和类别, 这些代码被合并进程序，和启动时加载的类和类别同等对待. 原文中还有关于objc/objc-load.h, objc_loadModules的描述, 但是在iOS中，并不支持, macOS才支持.</p>
+
+<h2 id="消息转发">消息转发<a href="#消息转发" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>当我们给一个对象发送消息时, 若该对象不能处理该消息, 比如, 方法该对象没有该方法, 此时我们有两种方式将此消息转发到其它有能力处理的对象上.</p>
+
+<ol>
+<li>forwardingTargetForSelector:</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-Objective-C" data-lang="Objective-C"><span class="p">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">forwardingTargetForSelector:</span><span class="p">(</span><span class="kt">SEL</span><span class="p">)</span><span class="nv">aSelector</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">([</span><span class="nb">self</span><span class="p">.</span><span class="n">cat</span> <span class="nl">respondsToSelector</span><span class="p">:</span><span class="n">aSelector</span><span class="p">])</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">self</span><span class="p">.</span><span class="n">cat</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+<ol>
+<li>当forwardingTargetForSelector:没有实现, 或者返回nil时, 使用forwardInvocation:, 在使用该方法转发消息是, 需要同时实现methodSignatureForSelector:对选择器进行签名, 消息转发机制使用从这个方法中返回的信息来创建NSInvocation对象.</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-Objective-C" data-lang="Objective-C"><span class="c1">// [Cat respondsToSelector:anInvocation.selector]  处理Cat类方法
+</span><span class="c1">// [Cat instancesRespondToSelector:anInvocation.selector]   处理Cat实例方法
+</span><span class="c1">// [Cat instancesRespondToSelector:anInvocation.selector] 等价于 [self.cat respondsToSelector:aSelector]
+</span><span class="c1"></span><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">forwardInvocation:</span><span class="p">(</span><span class="n">NSInvocation</span> <span class="o">*</span><span class="p">)</span><span class="nv">anInvocation</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">([</span><span class="n">Cat</span> <span class="nl">instancesRespondToSelector</span><span class="p">:</span><span class="n">anInvocation</span><span class="p">.</span><span class="n">selector</span><span class="p">])</span> <span class="p">{</span>
+        <span class="p">[</span><span class="n">anInvocation</span> <span class="nl">invokeWithTarget</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">cat</span><span class="p">];</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="p">[</span><span class="nb">super</span> <span class="nl">forwardInvocation</span><span class="p">:</span><span class="n">anInvocation</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="p">-</span> <span class="p">(</span><span class="n">NSMethodSignature</span> <span class="o">*</span><span class="p">)</span><span class="nf">methodSignatureForSelector:</span><span class="p">(</span><span class="kt">SEL</span><span class="p">)</span><span class="nv">aSelector</span>
+<span class="p">{</span>
+    <span class="n">NSMethodSignature</span> <span class="o">*</span><span class="n">sign</span> <span class="o">=</span> <span class="p">[</span><span class="nb">super</span> <span class="nl">methodSignatureForSelector</span><span class="p">:</span><span class="n">aSelector</span><span class="p">];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">sign</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">([</span><span class="n">Cat</span> <span class="nl">instancesRespondToSelector</span><span class="p">:</span><span class="n">aSelector</span><span class="p">])</span> <span class="p">{</span>
+            <span class="n">sign</span> <span class="o">=</span> <span class="p">[</span><span class="n">Cat</span> <span class="nl">instanceMethodSignatureForSelector</span><span class="p">:</span><span class="n">aSelector</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">sign</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
+<blockquote>
+<p>forwardInvocation:在swift中是不支持的, 有关的api都已经被标示为UNAVAILABLE</p>
+</blockquote>
+
+<p>思考多重继承</p>
+
+<p>虽然OC不支持多重继承, 但是通过以上的功能, 我们可以模拟出多重继承的效果, 用一个类, 接收处理多个类的事件, 然后将事件通过消息转发分散到其它类中处理.</p>
+
+<h2 id="类型编码">类型编码<a href="#类型编码" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>为协助运行时系统，编译器会将每个方法中的返回值和参数类型编码成字符串并且和方法选择器联系起来, 给一个类型, @encode()会返回对应的编码字符串, 使用方法就像c语言的sizeof一样.</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c">    <span class="kt">char</span> <span class="o">*</span><span class="n">buf1</span> <span class="o">=</span> <span class="err">@</span><span class="n">encode</span><span class="p">(</span><span class="kt">int</span> <span class="o">**</span><span class="p">);</span>       <span class="c1">// ^^i
+</span><span class="c1"></span>    <span class="kt">char</span> <span class="o">*</span><span class="n">buf2</span> <span class="o">=</span> <span class="err">@</span><span class="n">encode</span><span class="p">(</span><span class="kt">long</span><span class="p">);</span>         <span class="c1">// q
+</span><span class="c1"></span>    <span class="kt">char</span> <span class="o">*</span><span class="n">buf3</span> <span class="o">=</span> <span class="err">@</span><span class="n">encode</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>         <span class="c1">// v
+</span><span class="c1"></span>    <span class="kt">char</span> <span class="o">*</span><span class="n">buf4</span> <span class="o">=</span> <span class="err">@</span><span class="n">encode</span><span class="p">(</span><span class="n">NSObject</span><span class="p">);</span>     <span class="c1">// {NSObject=#}
+</span><span class="c1"></span>    <span class="kt">char</span> <span class="o">*</span><span class="n">buf5</span> <span class="o">=</span> <span class="err">@</span><span class="n">encode</span><span class="p">(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">);</span>   <span class="c1">// @
+</span><span class="c1"></span>    <span class="kt">char</span> <span class="o">*</span><span class="n">buf6</span> <span class="o">=</span> <span class="err">@</span><span class="n">encode</span><span class="p">(</span><span class="n">Class</span><span class="p">);</span>        <span class="c1">// #
+</span><span class="c1"></span>    <span class="o">//</span> <span class="n">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s">&#34;%s&#34;</span><span class="p">,</span> <span class="n">buf1</span><span class="p">);</span></code></pre></div>
+<p>函数的类型编码，我们也可以通过运行时函数获取</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">method_getTypeEncoding</span><span class="p">(</span><span class="n">Method</span> <span class="n">_Nonnull</span> <span class="n">m</span><span class="p">)</span> </code></pre></div>
+<p>例如函数 void function(id self, SEL _cmd)的运行编码为&rdquo;v@:&rdquo;</p>
+
+<p>想要查看其它类型编码, 可以到官方编码表查找 <a href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html#//apple_ref/doc/uid/TP40008048-CH100-SW1">Table: Objective-C type encodings</a></p>
+
+<p>参考</p>
+
+<p><a href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40008048-CH1-SW1">Objective-C Runtime Programming Guide</a><br />
+<a href="https://176zane.github.io/2017/11/03/%E3%80%90%E7%BF%BB%E8%AF%91%E3%80%91Objective-C%20Runtime%20Programming%20Guide/">【翻译】Objective-C Runtime Programming Guide</a><br />
+<a href="https://danisfabric.gitbooks.io/objective-c-runtime-programming-guide/content/">Objective-C Runtime Programming Guide中文版</a></p>
+
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://xuyunan.github.io/tags/runtime">runtime</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>515 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-04-07 16:51 &#43;0800</p>
+			</footer>
+		</article>
+		<div class="post-nav thin">
+			<a class="prev-post" href="https://xuyunan.github.io/posts/block-keyword/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>关于__block的底层实现</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "https-xuyunan-github-io-1" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2019 <a href="https://xuyunan.github.io">Tommy xu</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://xuyunan.github.io/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+	<script src="https://xuyunan.github.io/js/main.min.784417f5847151f848c339cf0acb13a06cbb648b1483435a28ed4556c4ead69b.js" integrity="sha256-eEQX9YRxUfhIwznPCssToGy7ZIsUg0NaKO1FVsTq1ps="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-44114042-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+</body>
+
+</html>

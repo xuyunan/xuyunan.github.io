@@ -7,10 +7,28 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Sat, 30 Mar 2019 19:09:59 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 07 Apr 2019 16:51:43 +0800</lastBuildDate>
     
 	<atom:link href="https://xuyunan.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Objective-C Runtime Programming Guide</title>
+      <link>https://xuyunan.github.io/posts/oc-runtime/</link>
+      <pubDate>Sun, 07 Apr 2019 16:51:43 +0800</pubDate>
+      
+      <guid>https://xuyunan.github.io/posts/oc-runtime/</guid>
+      <description>以下内容根据官方文档和其他博客整理而得, 由于文档版本较旧, 有些api已经过时, 比如标记OBJC2_UNAVAILABLE的api, 此文档仅作了解, 在使用过程中, 还需多看代码注释和文档, 多动手测试.
+运行时版本与平台 老版本对应Objective-C 1.0, 新版本随Objective-C 2.0一起发布. 两个版本有什么区别呢?
+ 在老版本中，如果你改变了一个类的实例变量，就需要重新编译所有继承自它的类 在新版本中，则不需要重新编译继承自它的类  什么应用程序是运行在新版本中呢?
+iPhone应用程序和Mac OS X 10.5以后的64位应用程序使用的是新版本. 其它(Mac OS X的32位应用程序)使用的是旧版本.
+与运行时的交互 oc中我们时时刻刻在跟运行时打交道，可以通过以下三种形式和运行时接触.
+Objective-C源代码 oc是个动态语言，要依托于运行时才能执行，当我们写源代码时，其实已经在和运行时打交道了，比如对象方法调用，在运行时会被解释成objc_msgSend.
+NSObject的方法 - (BOOL)isKindOfClass:(Class)aClass; // 检测是否是某类的子类 - (BOOL)isMemberOfClass:(Class)aClass; // 检测是否是某类的成员 - (BOOL)conformsToProtocol:(Protocol *)aProtocol; // 检测是否实现了协议 - (BOOL)respondsToSelector:(SEL)aSelector; // 检测是否含有方法 - (IMP)methodForSelector:(SEL)aSelector; // 返回一个指向方法实现的指针 这些方法恰恰是运用了运行时的能力.
+运行时方法 运行时系统是一个动态共享库，在头文件中，有很多的方法和数据结构，头文件位于/usr/include/objc
+发送消息 objc_msgSend 方法调用[receiver message]在运行时会被解释成
+objc_msgSend(receiver, selector) // 无参数情况下 objc_msgSend(receiver, selector, arg1, arg2, ...) // 有参数情况下  receiver是调用函数的对象，selector是message方法的选择器，通过它运行时可以找到对应的函数实现.</description>
+    </item>
     
     <item>
       <title>关于__block的底层实现</title>
@@ -147,18 +165,6 @@ git tag 0.1.5 git push --tags  Pod描述文件  pod spec create YNWebViewControl
  cocoapods.org How to Use CocoaPods with Swift Alamofire  下面的可以不用看了，只是一些栗子:
 Podfile示例
 # Uncomment the next line to define a global platform for your project # platform :ios, &#39;9.</description>
-    </item>
-    
-    <item>
-      <title>多CONFIG配置</title>
-      <link>https://xuyunan.github.io/posts/mutiple-configuration/</link>
-      <pubDate>Sat, 01 Apr 2017 10:00:00 +0900</pubDate>
-      
-      <guid>https://xuyunan.github.io/posts/mutiple-configuration/</guid>
-      <description>点击 Project -&amp;gt; Info -&amp;gt; Configurations 下面的加号, 可以复制一个同样的配置.
-点击 Targets -&amp;gt; Build Settings 里的加号, 可以在配置里属性. 添加之后会在最下方看到，然后就可以对不同的配置修改不同的属性值.
-获取配置中的属性值 在Info.plist中添加一个别名, 如CFBundleName, 值为配置中的属性名, 如$(BUNDLE_NAME)
-tips &amp;gt; 如果出现断点调试变量值都为nil，将Build Settings中Optimization Level设置成None即可。</description>
     </item>
     
   </channel>
