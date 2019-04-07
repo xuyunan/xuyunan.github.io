@@ -290,7 +290,7 @@ objc_msgSend(receiver, selector) // 无参数情况下 objc_msgSend(receiver, se
 </span><span class="c1"></span>    <span class="o">//</span> <span class="n">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s">&#34;%s&#34;</span><span class="p">,</span> <span class="n">buf1</span><span class="p">);</span></code></pre></div>
 <p>函数的类型编码，我们也可以通过运行时函数获取</p>
 <div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">method_getTypeEncoding</span><span class="p">(</span><span class="n">Method</span> <span class="n">_Nonnull</span> <span class="n">m</span><span class="p">)</span> </code></pre></div>
-<p>例如函数 void function(id self, SEL _cmd)的运行编码为&rdquo;v@:&rdquo;</p>
+<p>例如函数 void function(id self, SEL _cmd)的类型编码为&rdquo;v@:&rdquo;</p>
 
 <p>想要查看其它类型编码, 可以到官方编码表查找 <a href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html#//apple_ref/doc/uid/TP40008048-CH100-SW1">Table: Objective-C type encodings</a></p>
 
