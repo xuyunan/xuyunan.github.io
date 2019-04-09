@@ -184,7 +184,7 @@ objc_msgSend(receiver, selector) // 无参数情况下 objc_msgSend(receiver, se
 <span class="cp">#else
 </span><span class="cp"></span><span class="k">typedef</span> <span class="n">id</span> <span class="nf">_Nullable</span> <span class="p">(</span><span class="o">*</span><span class="n">IMP</span><span class="p">)(</span><span class="n">id</span> <span class="n">_Nonnull</span><span class="p">,</span> <span class="n">SEL</span> <span class="n">_Nonnull</span><span class="p">,</span> <span class="p">...);</span> 
 <span class="cp">#endif</span></code></pre></div>
-<p>当一个对象调用方法时, objc_object会通过isa指针找到当前的类objc_class, 检查cache中是否已经缓存了方法，没缓存就再在方法列表中找，找不到就顺着isa指针找到super_class, 然后在按照同样的方法找，直到NSObject, 一旦定位到选择器之后，从dispatch table中找出方法的实现IMP, 然后执行.</p>
+<p>当一个对象调用方法时, objc_object会通过isa指针找到当前的类objc_class, 检查cache中是否已经缓存了方法，没缓存就再在方法列表中找，找不到就会顺着super_class往父类查找, 然后在按照同样的方法，直到NSObject, 一旦定位到选择器之后，从dispatch table中找出方法的实现IMP, 然后执行.</p>
 
 <p>查找过程</p>
 
