@@ -3,6 +3,16 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://xuyunan.github.io/posts/ios-lock-synchronized/</loc>
+    <lastmod>2019-04-17T16:46:36+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://xuyunan.github.io/posts/ios-lock-pthread_mutex/</loc>
+    <lastmod>2019-04-17T16:44:45+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://xuyunan.github.io/posts/oc-runtime/</loc>
     <lastmod>2019-04-07T16:51:43+08:00</lastmod>
   </url>
@@ -64,8 +74,14 @@
   </url>
   
   <url>
+    <loc>https://xuyunan.github.io/tags/lock/</loc>
+    <lastmod>2019-04-17T16:46:36+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://xuyunan.github.io/posts/</loc>
-    <lastmod>2019-04-07T16:51:43+08:00</lastmod>
+    <lastmod>2019-04-17T16:46:36+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -83,7 +99,7 @@
   
   <url>
     <loc>https://xuyunan.github.io/</loc>
-    <lastmod>2019-04-07T16:51:43+08:00</lastmod>
+    <lastmod>2019-04-17T16:46:36+08:00</lastmod>
     <priority>0</priority>
   </url>
   

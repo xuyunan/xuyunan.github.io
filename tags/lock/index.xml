@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Lock on Tommy</title>
+    <link>https://xuyunan.github.io/tags/lock/</link>
+    <description>Recent content in Lock on Tommy</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Wed, 17 Apr 2019 16:46:36 +0800</lastBuildDate>
+    
+	<atom:link href="https://xuyunan.github.io/tags/lock/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>iOS中的锁(二)-synchronized</title>
+      <link>https://xuyunan.github.io/posts/ios-lock-synchronized/</link>
+      <pubDate>Wed, 17 Apr 2019 16:46:36 +0800</pubDate>
+      
+      <guid>https://xuyunan.github.io/posts/ios-lock-synchronized/</guid>
+      <description>11年刚入道的时候，只会用这么一种锁，简单方便
+@synchronized (obj) { } 我们在main函数里写段简单的代码，然后用clang命令看看它的具体实现
+id _rethrow = 0; id _sync_obj = (id)obj; objc_sync_enter(_sync_obj); try { struct _SYNC_EXIT { _SYNC_EXIT(id arg) : sync_exit(arg) {} ~_SYNC_EXIT() {objc_sync_exit(sync_exit);} id sync_exit; } _sync_exit(_sync_obj); // TODO: } catch (id e) { _rethrow = e; } 从上面我们可以看出
+1、使用的是objc_sync_enter和objc_sync_exit来加锁和解锁
+2、创建了一个结构体，充当了一个defer的角色, 当前代码块执行完之后会执行析构函数, 以释放锁资源
+关于锁的两个函数声明我们可以在usr/include/objc/objc-sync.h中找到(cmd+shift+p搜索objc-sync.h)
+/** * Begin synchronizing on &amp;#39;obj&amp;#39;. * Allocates recursive pthread_mutex associated with &amp;#39;obj&amp;#39; if needed. * * @param obj The object to begin synchronizing on.</description>
+    </item>
+    
+    <item>
+      <title>iOS中的锁(一)-pthread_mutex_lock</title>
+      <link>https://xuyunan.github.io/posts/ios-lock-pthread_mutex/</link>
+      <pubDate>Wed, 17 Apr 2019 16:44:45 +0800</pubDate>
+      
+      <guid>https://xuyunan.github.io/posts/ios-lock-pthread_mutex/</guid>
+      <description>底层pthread级别加锁, 使用c语言的api, 可用作互斥锁、递归锁, 使用api前，需要导入头文件
+#import &amp;lt;pthread.h&amp;gt; 互斥锁
+static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; pthread_mutex_lock(&amp;amp;mutex); // TODO: pthread_mutex_unlock(&amp;amp;mutex); 递归锁，允许同一个线程多次递归访问被锁资源，加锁和解锁必须成对出现，使得最终锁能够被解开，其它线程能够访问资源.
+pthread_mutexattr_t attr; pthread_mutex_t mutex; pthread_mutexattr_settype(&amp;amp;attr, PTHREAD_MUTEX_RECURSIVE); pthread_mutex_init(&amp;amp;mutex, &amp;amp;attr); // 下面一段有可能被通一个线程，在一个或多个方法中多次调用 pthread_mutex_lock(&amp;amp;mutex); // TODO: pthread_mutex_unlock(&amp;amp;mutex); 类似PTHREAD_MUTEX_RECURSIVE影响锁行为的总共有三种类型
+// 如果相同的线程不尝试先解锁，而再次加锁互斥对象，会造成死锁 #define PTHREAD_MUTEX_NORMAL	0 // 如果相同的线程试图不先解锁互斥对象而再一次锁定同一个互斥对象，会返回一个非零值的错误，避免死锁 #define PTHREAD_MUTEX_ERRORCHECK	1 // 递归地使用pthread_mutex_lock加锁互斥对象，不会造成死锁 #define PTHREAD_MUTEX_RECURSIVE	2 #define PTHREAD_MUTEX_DEFAULT	PTHREAD_MUTEX_NORMAL</description>
+    </item>
+    
+  </channel>
+</rss>

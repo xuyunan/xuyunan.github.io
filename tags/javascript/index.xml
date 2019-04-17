@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Javascript on Tommy</title>
+    <link>https://xuyunan.github.io/tags/javascript/</link>
+    <description>Recent content in Javascript on Tommy</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Tue, 26 Mar 2019 21:41:33 +0800</lastBuildDate>
+    
+	<atom:link href="https://xuyunan.github.io/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>JavaScriptCore</title>
+      <link>https://xuyunan.github.io/posts/javascriptcore/</link>
+      <pubDate>Tue, 26 Mar 2019 21:41:33 +0800</pubDate>
+      
+      <guid>https://xuyunan.github.io/posts/javascriptcore/</guid>
+      <description>什么是JavaScriptCore 是apple提供给开发者的一个框架，一个能够访问WebKit的JavaScript引擎. 底层是C API，在iOS 7和OS X 10.9以后被apple封装成为更高级的api, 使得开发者可以通过Swift/Objective-C语言来使用. ReactNative就是通过JavaScriptCore来构建的，官网这里有说明，JavaScript Environment , 但是当我们用Chrome调试时，用的是google的V8引擎.
+JavaScriptCore有几个重要的组件
+ JSVirtualMachine JSContext JSValue  JSVirtualMachine 虚拟机，js的代码的解释器，我们一般不太会用到这个类. 但是，值得一提的是，它不支持多个线程同时操作，如果你想要多个JavaScript任务并行执行，就必须创建多个JSVirtualMachine. 每个JSVirtualMachine都有自己的堆空间和垃圾收集器，这也就意味着，你不能在两个JSVirtualMachine之间传值，因为一个堆上的垃圾收集器不知道怎么管理另外一个堆上的对象.
+JSContext JavaScript的执行环境，我们俗称的上下文环境，类似web中的window对象.
+JSValue 交互过程中非常重要的一个类型，代表JavaScript类型，所有通过JavaScript上下文过来的对象，统称为JSValue.</description>
+    </item>
+    
+  </channel>
+</rss>

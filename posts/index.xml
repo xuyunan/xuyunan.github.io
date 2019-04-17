@@ -7,8 +7,149 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>en-us</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Sun, 07 Apr 2019 16:51:43 +0800</lastBuildDate>
+		<lastBuildDate>Wed, 17 Apr 2019 16:46:36 +0800</lastBuildDate>
 		<atom:link href="https://xuyunan.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>iOS中的锁(二)-synchronized</title>
+			<link>https://xuyunan.github.io/posts/ios-lock-synchronized/</link>
+			<pubDate>Wed, 17 Apr 2019 16:46:36 +0800</pubDate>
+			
+			<guid>https://xuyunan.github.io/posts/ios-lock-synchronized/</guid>
+			<description>11年刚入道的时候，只会用这么一种锁，简单方便
+@synchronized (obj) { } 我们在main函数里写段简单的代码，然后用clang命令看看它的具体实现
+id _rethrow = 0; id _sync_obj = (id)obj; objc_sync_enter(_sync_obj); try { struct _SYNC_EXIT { _SYNC_EXIT(id arg) : sync_exit(arg) {} ~_SYNC_EXIT() {objc_sync_exit(sync_exit);} id sync_exit; } _sync_exit(_sync_obj); // TODO: } catch (id e) { _rethrow = e; } 从上面我们可以看出
+1、使用的是objc_sync_enter和objc_sync_exit来加锁和解锁
+2、创建了一个结构体，充当了一个defer的角色, 当前代码块执行完之后会执行析构函数, 以释放锁资源
+关于锁的两个函数声明我们可以在usr/include/objc/objc-sync.h中找到(cmd+shift+p搜索objc-sync.h)
+/** * Begin synchronizing on &amp;#39;obj&amp;#39;. * Allocates recursive pthread_mutex associated with &amp;#39;obj&amp;#39; if needed. * * @param obj The object to begin synchronizing on.</description>
+			<content type="html"><![CDATA[<p>11年刚入道的时候，只会用这么一种锁，简单方便</p>
+<div class="highlight"><pre class="chroma"><code class="language-Objective-C" data-lang="Objective-C"><span class="k">@synchronized</span> <span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="p">{</span>  <span class="p">}</span></code></pre></div>
+<p>我们在main函数里写段简单的代码，然后用clang命令看看它的具体实现</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="n">id</span> <span class="n">_rethrow</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">id</span> <span class="n">_sync_obj</span> <span class="o">=</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="n">obj</span><span class="p">;</span> <span class="n">objc_sync_enter</span><span class="p">(</span><span class="n">_sync_obj</span><span class="p">);</span>
+<span class="n">try</span> <span class="p">{</span>
+	<span class="k">struct</span> <span class="n">_SYNC_EXIT</span> <span class="p">{</span>
+		<span class="n">_SYNC_EXIT</span><span class="p">(</span><span class="n">id</span> <span class="n">arg</span><span class="p">)</span> <span class="o">:</span> <span class="n">sync_exit</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="p">{}</span>
+		<span class="o">~</span><span class="n">_SYNC_EXIT</span><span class="p">()</span> <span class="p">{</span><span class="n">objc_sync_exit</span><span class="p">(</span><span class="n">sync_exit</span><span class="p">);}</span>
+		<span class="n">id</span> <span class="n">sync_exit</span><span class="p">;</span>
+	<span class="p">}</span> <span class="n">_sync_exit</span><span class="p">(</span><span class="n">_sync_obj</span><span class="p">);</span>
+	<span class="c1">// TODO:
+</span><span class="c1"></span><span class="p">}</span> <span class="n">catch</span> <span class="p">(</span><span class="n">id</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">_rethrow</span> <span class="o">=</span> <span class="n">e</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
+<p>从上面我们可以看出</p>
+
+<p>1、使用的是objc_sync_enter和objc_sync_exit来加锁和解锁<br />
+2、创建了一个结构体，充当了一个defer的角色, 当前代码块执行完之后会执行析构函数, 以释放锁资源</p>
+
+<p>关于锁的两个函数声明我们可以在usr/include/objc/objc-sync.h中找到(cmd+shift+p搜索objc-sync.h)</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="cm">/** 
+</span><span class="cm"> * Begin synchronizing on &#39;obj&#39;.  
+</span><span class="cm"> * Allocates recursive pthread_mutex associated with &#39;obj&#39; if needed.
+</span><span class="cm"> * 
+</span><span class="cm"> * @param obj The object to begin synchronizing on.
+</span><span class="cm"> * 
+</span><span class="cm"> * @return OBJC_SYNC_SUCCESS once lock is acquired.  
+</span><span class="cm"> */</span>
+<span class="n">OBJC_EXPORT</span> <span class="kt">int</span>
+<span class="nf">objc_sync_enter</span><span class="p">(</span><span class="n">id</span> <span class="n">_Nonnull</span> <span class="n">obj</span><span class="p">)</span>
+    <span class="n">OBJC_AVAILABLE</span><span class="p">(</span><span class="mf">10.3</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">9.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">);</span>
+
+<span class="cm">/** 
+</span><span class="cm"> * End synchronizing on &#39;obj&#39;. 
+</span><span class="cm"> * 
+</span><span class="cm"> * @param obj The object to end synchronizing on.
+</span><span class="cm"> * 
+</span><span class="cm"> * @return OBJC_SYNC_SUCCESS or OBJC_SYNC_NOT_OWNING_THREAD_ERROR
+</span><span class="cm"> */</span>
+<span class="n">OBJC_EXPORT</span> <span class="kt">int</span>
+<span class="nf">objc_sync_exit</span><span class="p">(</span><span class="n">id</span> <span class="n">_Nonnull</span> <span class="n">obj</span><span class="p">)</span>
+    <span class="n">OBJC_AVAILABLE</span><span class="p">(</span><span class="mf">10.3</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">9.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">);</span></code></pre></div>
+<p>注释中有提到使用的是pthread_mutex的递归锁, 我尝试着找了一下.m的实现, 但是网上版本太多了, 最后通过注释搜索, 找到了与该版本匹配的实现文件， 下面也贴出了重要的函数实现</p>
+
+<p><a href="https://opensource.apple.com/source/objc4/objc4-371/runtime/objc-sync.h">objc4-371 objc-sync.h</a><br />
+<a href="https://opensource.apple.com/source/objc4/objc4-371/runtime/objc-sync.m">objc4-371 objc-sync.m</a></p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="k">static</span> <span class="n">pthread_mutexattr_t</span><span class="o">*</span> <span class="nf">recursiveAttributes</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// 略略略...
+</span><span class="c1"></span>    <span class="n">err</span> <span class="o">=</span> <span class="n">pthread_mutexattr_settype</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sRecursiveLockAttr</span><span class="p">,</span> <span class="n">PTHREAD_MUTEX_RECURSIVE</span><span class="p">);</span>
+    <span class="c1">// 略略略...
+</span><span class="c1"></span>    <span class="k">return</span> <span class="o">&amp;</span><span class="n">sRecursiveLockAttr</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">// Begin synchronizing on &#39;obj&#39;.  
+</span><span class="c1">// Allocates recursive pthread_mutex associated with &#39;obj&#39; if needed.
+</span><span class="c1">// Returns OBJC_SYNC_SUCCESS once lock is acquired.  
+</span><span class="c1"></span><span class="kt">int</span> <span class="nf">objc_sync_enter</span><span class="p">(</span><span class="n">id</span> <span class="n">obj</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// 略略略...
+</span><span class="c1"></span>    <span class="n">result</span> <span class="o">=</span> <span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">data</span><span class="o">-&gt;</span><span class="n">mutex</span><span class="p">);</span>
+    <span class="c1">// 略略略...
+</span><span class="c1"></span>    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// End synchronizing on &#39;obj&#39;. 
+</span><span class="c1">// Returns OBJC_SYNC_SUCCESS or OBJC_SYNC_NOT_OWNING_THREAD_ERROR
+</span><span class="c1"></span><span class="kt">int</span> <span class="nf">objc_sync_exit</span><span class="p">(</span><span class="n">id</span> <span class="n">obj</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// 略略略...
+</span><span class="c1"></span>    <span class="n">result</span> <span class="o">=</span> <span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">data</span><span class="o">-&gt;</span><span class="n">mutex</span><span class="p">);</span>
+    <span class="c1">// 略略略...
+</span><span class="c1"></span>    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
+<p>这下就很明了了, synchronized其实就是通过pthread_mutex_lock创建的递归锁(PTHREAD_MUTEX_RECURSIVE), 值得注意的是<strong>swift已经没有这个语法糖了</strong>, 不过可以通过尾随闭包的简写形式实现</p>
+<div class="highlight"><pre class="chroma"><code class="language-swift" data-lang="swift"><span class="c1">// 实现</span>
+<span class="kd">func</span> <span class="nf">synchronized</span><span class="p">(</span><span class="n">lock</span><span class="p">:</span> <span class="nb">AnyObject</span><span class="p">,</span> <span class="n">closure</span><span class="p">:</span> <span class="p">()</span> <span class="p">-&gt;</span> <span class="p">())</span> <span class="p">{</span>
+    <span class="n">objc_sync_enter</span><span class="p">(</span><span class="n">lock</span><span class="p">)</span>
+    <span class="n">closure</span><span class="p">()</span>
+    <span class="n">objc_sync_exit</span><span class="p">(</span><span class="n">lock</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// 使用</span>
+<span class="n">synchronized</span><span class="p">(</span><span class="n">anObj</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// </span><span class="cs">TODO:</span>
+<span class="p">}</span></code></pre></div>
+<p>参考链接
+<a href="https://swifter.tips/lock/">https://swifter.tips/lock/</a></p>
+]]></content>
+		</item>
+		
+		<item>
+			<title>iOS中的锁(一)-pthread_mutex_lock</title>
+			<link>https://xuyunan.github.io/posts/ios-lock-pthread_mutex/</link>
+			<pubDate>Wed, 17 Apr 2019 16:44:45 +0800</pubDate>
+			
+			<guid>https://xuyunan.github.io/posts/ios-lock-pthread_mutex/</guid>
+			<description>底层pthread级别加锁, 使用c语言的api, 可用作互斥锁、递归锁, 使用api前，需要导入头文件
+#import &amp;lt;pthread.h&amp;gt; 互斥锁
+static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; pthread_mutex_lock(&amp;amp;mutex); // TODO: pthread_mutex_unlock(&amp;amp;mutex); 递归锁，允许同一个线程多次递归访问被锁资源，加锁和解锁必须成对出现，使得最终锁能够被解开，其它线程能够访问资源.
+pthread_mutexattr_t attr; pthread_mutex_t mutex; pthread_mutexattr_settype(&amp;amp;attr, PTHREAD_MUTEX_RECURSIVE); pthread_mutex_init(&amp;amp;mutex, &amp;amp;attr); // 下面一段有可能被通一个线程，在一个或多个方法中多次调用 pthread_mutex_lock(&amp;amp;mutex); // TODO: pthread_mutex_unlock(&amp;amp;mutex); 类似PTHREAD_MUTEX_RECURSIVE影响锁行为的总共有三种类型
+// 如果相同的线程不尝试先解锁，而再次加锁互斥对象，会造成死锁 #define PTHREAD_MUTEX_NORMAL	0 // 如果相同的线程试图不先解锁互斥对象而再一次锁定同一个互斥对象，会返回一个非零值的错误，避免死锁 #define PTHREAD_MUTEX_ERRORCHECK	1 // 递归地使用pthread_mutex_lock加锁互斥对象，不会造成死锁 #define PTHREAD_MUTEX_RECURSIVE	2 #define PTHREAD_MUTEX_DEFAULT	PTHREAD_MUTEX_NORMAL</description>
+			<content type="html"><![CDATA[<p>底层pthread级别加锁, 使用c语言的api, 可用作互斥锁、递归锁, 使用api前，需要导入头文件</p>
+<div class="highlight"><pre class="chroma"><code class="language-Objective-C" data-lang="Objective-C"><span class="cp">#import &lt;pthread.h&gt;</span></code></pre></div>
+<p>互斥锁</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="k">static</span> <span class="n">pthread_mutex_t</span> <span class="n">mutex</span> <span class="o">=</span> <span class="n">PTHREAD_MUTEX_INITIALIZER</span><span class="p">;</span>
+<span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mutex</span><span class="p">);</span>
+<span class="c1">// TODO:
+</span><span class="c1"></span><span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mutex</span><span class="p">);</span></code></pre></div>
+<p>递归锁，允许同一个线程多次递归访问被锁资源，加锁和解锁必须成对出现，使得最终锁能够被解开，其它线程能够访问资源.</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="n">pthread_mutexattr_t</span>    <span class="n">attr</span><span class="p">;</span>
+<span class="n">pthread_mutex_t</span> <span class="n">mutex</span><span class="p">;</span>
+    
+<span class="n">pthread_mutexattr_settype</span><span class="p">(</span><span class="o">&amp;</span><span class="n">attr</span><span class="p">,</span> <span class="n">PTHREAD_MUTEX_RECURSIVE</span><span class="p">);</span>
+<span class="n">pthread_mutex_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mutex</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">attr</span><span class="p">);</span>
+    
+<span class="c1">// 下面一段有可能被通一个线程，在一个或多个方法中多次调用
+</span><span class="c1"></span><span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mutex</span><span class="p">);</span>
+<span class="c1">// TODO:
+</span><span class="c1"></span><span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mutex</span><span class="p">);</span></code></pre></div>
+<p>类似PTHREAD_MUTEX_RECURSIVE影响锁行为的总共有三种类型</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="c1">// 如果相同的线程不尝试先解锁，而再次加锁互斥对象，会造成死锁
+</span><span class="c1"></span><span class="cp">#define PTHREAD_MUTEX_NORMAL		0     
+</span><span class="cp"></span><span class="c1">// 如果相同的线程试图不先解锁互斥对象而再一次锁定同一个互斥对象，会返回一个非零值的错误，避免死锁
+</span><span class="c1"></span><span class="cp">#define PTHREAD_MUTEX_ERRORCHECK	1      
+</span><span class="cp"></span><span class="c1">// 递归地使用pthread_mutex_lock加锁互斥对象，不会造成死锁
+</span><span class="c1"></span><span class="cp">#define PTHREAD_MUTEX_RECURSIVE		2
+</span><span class="cp">#define PTHREAD_MUTEX_DEFAULT		PTHREAD_MUTEX_NORMAL</span></code></pre></div>]]></content>
+		</item>
 		
 		<item>
 			<title>Objective-C Runtime Programming Guide</title>
@@ -844,149 +985,6 @@ let backImage = UIImage(named: &quot;YNWebViewControllerBack.png&quot;, in: bund
 <p><a href="https://cocoapods.org/">CREATE A POD</a><br />
 <a href="https://guides.cocoapods.org/making/getting-setup-with-trunk.html">Getting setup with Trunk</a><br />
 <a href="http://stackoverflow.com/questions/5480258/how-to-delete-a-git-remote-tag">Delete a tag</a></p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>如何使用cocoapods</title>
-			<link>https://xuyunan.github.io/posts/how-to-use-cocoapods/</link>
-			<pubDate>Sun, 02 Apr 2017 08:00:00 +0800</pubDate>
-			
-			<guid>https://xuyunan.github.io/posts/how-to-use-cocoapods/</guid>
-			<description>简介 它 可以说是一个平台，因为它保存了无数的开源库。 可以说是一个工具，一个帮你管理第三方库的工具。
-安装  pod 检查是否已经安装，如果出现pod COMMAND，说明你已经安装过了。 sudo gem install cocoapods 安装或者更新 pod search Alamofire 搜索  使用  首先我创建了个项目YNPodDemo 切到项目主目录，执行pod init，系统就会自动帮你创建一个名为Podfile的文件 将你要使用的库写进去 pod &#39;Alamofire&#39;, &#39;~&amp;gt;4.3.0&#39; 执行pod install，将使用的库安装到本地 之后就会在工程文件夹下多出一个类似YNPodDemo.xcworkspace这样的工程文件，以后用这个打开项目就可以了，不要在使用YNPodDemo.xcodeproj 导入&amp;amp;使用   在使用库时，如果有错误提示 Cannot load underlying module for &amp;lsquo;Alamofire&amp;rsquo;, clean然后build。issues441
- 卸载 sudo gem uninstall cocoapods 一般也用不到
- cocoapods.org How to Use CocoaPods with Swift Alamofire  下面的可以不用看了，只是一些栗子:
-Podfile示例
-# Uncomment the next line to define a global platform for your project # platform :ios, &#39;9.</description>
-			<content type="html"><![CDATA[
-
-<h2 id="简介">简介</h2>
-
-<p>它
-可以说是一个平台，因为它保存了无数的开源库。
-可以说是一个工具，一个帮你管理第三方库的工具。</p>
-
-<h2 id="安装">安装</h2>
-
-<ul>
-<li><code>pod</code> 检查是否已经安装，如果出现pod COMMAND，说明你已经安装过了。</li>
-<li><code>sudo gem install cocoapods</code> 安装或者更新</li>
-<li><code>pod search Alamofire</code> 搜索</li>
-</ul>
-
-<h2 id="使用">使用</h2>
-
-<ol>
-<li>首先我创建了个项目<code>YNPodDemo</code></li>
-<li>切到项目主目录，执行<code>pod init</code>，系统就会自动帮你创建一个名为Podfile的文件</li>
-<li>将你要使用的库写进去 <code>pod 'Alamofire', '~&gt;4.3.0'</code></li>
-<li>执行<code>pod install</code>，将使用的库安装到本地</li>
-<li>之后就会在工程文件夹下多出一个类似<code>YNPodDemo.xcworkspace</code>这样的工程文件，以后用这个打开项目就可以了，不要在使用<code>YNPodDemo.xcodeproj</code></li>
-<li>导入&amp;使用</li>
-</ol>
-
-<blockquote>
-<p>在使用库时，如果有错误提示 Cannot load underlying module for &lsquo;Alamofire&rsquo;, clean然后build。<a href="https://github.com/Alamofire/Alamofire/issues/441">issues441</a></p>
-</blockquote>
-
-<h2 id="卸载">卸载</h2>
-
-<p><code>sudo gem uninstall cocoapods</code> 一般也用不到</p>
-
-<ul>
-<li><a href="https://cocoapods.org/">cocoapods.org</a></li>
-<li><a href="https://www.raywenderlich.com/97014/use-cocoapods-with-swift">How to Use CocoaPods with Swift</a></li>
-<li><a href="https://github.com/Alamofire/Alamofire">Alamofire</a></li>
-</ul>
-
-<hr />
-
-<p>下面的可以不用看了，只是一些栗子:</p>
-
-<p>Podfile示例</p>
-
-<pre><code># Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
-
-target 'YNPodDemo' do
-  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
-  use_frameworks!
-
-  # Pods for YNPodDemo
-  pod 'Alamofire', '~&gt;4.3.0'
-
-  target 'YNPodDemoTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
-  target 'YNPodDemoUITests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
-end
-</code></pre>
-
-<p>使用示例</p>
-
-<pre><code>import UIKit
-import Alamofire
-
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        
-        Alamofire.request(&quot;https://httpbin.org/get&quot;).responseJSON { response in
-            print(response.request ?? &quot;&quot;)  // original URL request
-            print(response.response ?? &quot;&quot;) // HTTP URL response
-            print(response.data ?? &quot;&quot;)     // server data
-            print(response.result)   // result of response serialization
-            
-            if let JSON = response.result.value {
-                print(&quot;JSON: \(JSON)&quot;)
-            }
-        }
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-}
-</code></pre>
-]]></content>
-		</item>
-		
-		<item>
-			<title>多CONFIG配置</title>
-			<link>https://xuyunan.github.io/posts/mutiple-configuration/</link>
-			<pubDate>Sat, 01 Apr 2017 10:00:00 +0900</pubDate>
-			
-			<guid>https://xuyunan.github.io/posts/mutiple-configuration/</guid>
-			<description>点击 Project -&amp;gt; Info -&amp;gt; Configurations 下面的加号, 可以复制一个同样的配置.
-点击 Targets -&amp;gt; Build Settings 里的加号, 可以在配置里属性. 添加之后会在最下方看到，然后就可以对不同的配置修改不同的属性值.
-获取配置中的属性值 在Info.plist中添加一个别名, 如CFBundleName, 值为配置中的属性名, 如$(BUNDLE_NAME)
-tips &amp;gt; 如果出现断点调试变量值都为nil，将Build Settings中Optimization Level设置成None即可。</description>
-			<content type="html"><![CDATA[
-
-<p>点击 <code>Project -&gt; Info -&gt; Configurations</code> 下面的加号, 可以复制一个同样的配置.</p>
-
-<p><img src="/assets/add_configuration.png" alt="add_configuration" /></p>
-
-<p>点击 <code>Targets -&gt; Build Settings</code> 里的加号, 可以在配置里属性. 添加之后会在最下方看到，然后就可以对不同的配置修改不同的属性值.</p>
-
-<p><img src="/assets/add_config_property.png" alt="add_config_property" /></p>
-
-<h2 id="获取配置中的属性值">获取配置中的属性值</h2>
-
-<p>在<code>Info.plist</code>中添加一个别名, 如<code>CFBundleName</code>, 值为配置中的属性名, 如<code>$(BUNDLE_NAME)</code></p>
-
-<p>tips
-&gt; 如果出现断点调试变量值都为nil，将Build Settings中Optimization Level设置成None即可。</p>
 ]]></content>
 		</item>
 		
