@@ -13,13 +13,13 @@
     
     
     <item>
-      <title>iOS中的锁(二)-Semaphore</title>
+      <title>iOS中的锁(三)-Semaphore</title>
       <link>https://xuyunan.github.io/posts/ios-lock-semaphore/</link>
       <pubDate>Fri, 17 May 2019 15:13:13 +0800</pubDate>
       
       <guid>https://xuyunan.github.io/posts/ios-lock-semaphore/</guid>
       <description>通过dispatch_semaphore控制并发, 实现锁机制。 dispatch_semaphore是用来控制并发数的，类似往篮子里放鸡蛋拿鸡蛋，停车场的车辆入库出库。 通过控制信号量值为0或者1，来实现锁。 dispatch_semaphore_wait会使信号量-1，dispatch_semaphore_signal会使信号量+1，信号量为0时线程等待，为1时方可继续执行。
-dispatch_semaphore_t signal = dispatch_semaphore_create(1); // Thread 1 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{ NSLog(@&amp;quot;Thread 1 waiting&amp;quot;); dispatch_semaphore_wait(signal, DISPATCH_TIME_FOREVER); // 信号量 -1 NSLog(@&amp;quot;Thread 1 start doing something&amp;quot;); [NSThread sleepForTimeInterval:4]; NSLog(@&amp;quot;Thread 1 done&amp;quot;); dispatch_semaphore_signal(signal); // 信号量 +1 NSLog(@&amp;quot;Thread 1 signal&amp;quot;); }); // Thread 2 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{ NSLog(@&amp;quot;Thread 2 waiting&amp;quot;); dispatch_semaphore_wait(signal, DISPATCH_TIME_FOREVER); NSLog(@&amp;quot;Thread 2 start doing something&amp;quot;); [NSThread sleepForTimeInterval:5]; NSLog(@&amp;quot;Thread 2 done&amp;quot;); dispatch_semaphore_signal(signal); NSLog(@&amp;quot;Thread 2 signal&amp;quot;); });  如果要控制一个事件的超时时间，可以通过dispatch_semaphore_wait的第二个参数来控制。</description>
+dispatch_semaphore_t signal = dispatch_semaphore_create(1); // Thread 1 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{ NSLog(@&amp;#34;Thread 1 waiting&amp;#34;); dispatch_semaphore_wait(signal, DISPATCH_TIME_FOREVER); // 信号量 -1  NSLog(@&amp;#34;Thread 1 start doing something&amp;#34;); [NSThread sleepForTimeInterval:4]; NSLog(@&amp;#34;Thread 1 done&amp;#34;); dispatch_semaphore_signal(signal); // 信号量 +1  NSLog(@&amp;#34;Thread 1 signal&amp;#34;); }); // Thread 2 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{ NSLog(@&amp;#34;Thread 2 waiting&amp;#34;); dispatch_semaphore_wait(signal, DISPATCH_TIME_FOREVER); NSLog(@&amp;#34;Thread 2 start doing something&amp;#34;); [NSThread sleepForTimeInterval:5]; NSLog(@&amp;#34;Thread 2 done&amp;#34;); dispatch_semaphore_signal(signal); NSLog(@&amp;#34;Thread 2 signal&amp;#34;); }); 如果要控制一个事件的超时时间，可以通过dispatch_semaphore_wait的第二个参数来控制。</description>
     </item>
     
     <item>
