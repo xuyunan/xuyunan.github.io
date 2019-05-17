@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Wed, 17 Apr 2019 16:46:36 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 17 May 2019 15:13:13 +0800</lastBuildDate>
     
 	<atom:link href="https://xuyunan.github.io/tags/lock/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>iOS中的锁(二)-Semaphore</title>
+      <link>https://xuyunan.github.io/posts/ios-lock-semaphore/</link>
+      <pubDate>Fri, 17 May 2019 15:13:13 +0800</pubDate>
+      
+      <guid>https://xuyunan.github.io/posts/ios-lock-semaphore/</guid>
+      <description>通过dispatch_semaphore控制并发, 实现锁机制。 dispatch_semaphore是用来控制并发数的，类似往篮子里放鸡蛋拿鸡蛋，停车场的车辆入库出库。 通过控制信号量值为0或者1，来实现锁。 dispatch_semaphore_wait会使信号量-1，dispatch_semaphore_signal会使信号量+1，信号量为0时线程等待，为1时方可继续执行。
+dispatch_semaphore_t signal = dispatch_semaphore_create(1); // Thread 1 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{ NSLog(@&amp;quot;Thread 1 waiting&amp;quot;); dispatch_semaphore_wait(signal, DISPATCH_TIME_FOREVER); // 信号量 -1 NSLog(@&amp;quot;Thread 1 start doing something&amp;quot;); [NSThread sleepForTimeInterval:4]; NSLog(@&amp;quot;Thread 1 done&amp;quot;); dispatch_semaphore_signal(signal); // 信号量 +1 NSLog(@&amp;quot;Thread 1 signal&amp;quot;); }); // Thread 2 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{ NSLog(@&amp;quot;Thread 2 waiting&amp;quot;); dispatch_semaphore_wait(signal, DISPATCH_TIME_FOREVER); NSLog(@&amp;quot;Thread 2 start doing something&amp;quot;); [NSThread sleepForTimeInterval:5]; NSLog(@&amp;quot;Thread 2 done&amp;quot;); dispatch_semaphore_signal(signal); NSLog(@&amp;quot;Thread 2 signal&amp;quot;); });  如果要控制一个事件的超时时间，可以通过dispatch_semaphore_wait的第二个参数来控制。</description>
+    </item>
     
     <item>
       <title>iOS中的锁(二)-synchronized</title>
