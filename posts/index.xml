@@ -7,8 +7,57 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>en-us</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Fri, 17 May 2019 15:13:13 +0800</lastBuildDate>
+		<lastBuildDate>Wed, 22 May 2019 16:58:12 +0800</lastBuildDate>
 		<atom:link href="https://xuyunan.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>iOS中的锁(四)-NSLock, NSRecursiveLock, NSConditionLock</title>
+			<link>https://xuyunan.github.io/posts/ios-lock-nslock/</link>
+			<pubDate>Wed, 22 May 2019 16:58:12 +0800</pubDate>
+			
+			<guid>https://xuyunan.github.io/posts/ios-lock-nslock/</guid>
+			<description>这几种锁都是对pthread_mutex的封装
+NSLock 遵循 NSLocking 协议. lock 加锁，unlock 解锁，tryLock 尝试加锁，如果失败的话返回 NO，lockBeforeDate: 是在指定Date之前尝试加锁，如果在指定时间之前都不能加锁，则返回NO
+[self.lock lock]; // todo [self.lock unlock]; NSRecursiveLock 是通过pthread_mutex封装的递归锁, 同一个线程可以多次获取同一个递归锁，不会产生死锁，加锁锁解锁次数也必须相同.
+- (void)recursiveFunc:(NSInteger)value { [theLock lock]; if (value != 0) { --value; recursiveFunc(value); } [theLock unlock]; } NSConditionLock 即条件锁，可以设置自定义的条件来获得锁和释放锁. 比如
+- (void)produce { while (1) { [theLock lockWhenCondition:NO_DATA]; // create data 　[theLock unlockWithCondition:HAS_DATA]; } } - (void)consume { while (1) { if ([theLock tryLockWhenCondition:HAS_DATA]) { // display data 　[theLock unlockWithCondition:NO_DATA]; } sleep(1.</description>
+			<content type="html"><![CDATA[<p>这几种锁都是对pthread_mutex的封装</p>
+
+<p>NSLock 遵循 NSLocking 协议. lock 加锁，unlock 解锁，tryLock 尝试加锁，如果失败的话返回 NO，lockBeforeDate: 是在指定Date之前尝试加锁，如果在指定时间之前都不能加锁，则返回NO</p>
+<div class="highlight"><pre class="chroma"><code class="language-Objective-C" data-lang="Objective-C"><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">lock</span> <span class="n">lock</span><span class="p">];</span>
+<span class="c1">// todo
+</span><span class="c1"></span><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">lock</span> <span class="n">unlock</span><span class="p">];</span></code></pre></div>
+<p>NSRecursiveLock 是通过pthread_mutex封装的递归锁, 同一个线程可以多次获取同一个递归锁，不会产生死锁，加锁锁解锁次数也必须相同.</p>
+<div class="highlight"><pre class="chroma"><code class="language-Objective-C" data-lang="Objective-C"><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">recursiveFunc:</span><span class="p">(</span><span class="n">NSInteger</span><span class="p">)</span><span class="nv">value</span>
+<span class="p">{</span> 
+　　<span class="p">[</span><span class="n">theLock</span> <span class="n">lock</span><span class="p">];</span> 
+　　<span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> 
+　　　　<span class="o">--</span><span class="n">value</span><span class="p">;</span> 
+　　　　<span class="n">recursiveFunc</span><span class="p">(</span><span class="n">value</span><span class="p">);</span> 
+　　<span class="p">}</span>
+　　<span class="p">[</span><span class="n">theLock</span> <span class="n">unlock</span><span class="p">];</span>
+<span class="p">}</span></code></pre></div>
+<p>NSConditionLock 即条件锁，可以设置自定义的条件来获得锁和释放锁. 比如</p>
+<div class="highlight"><pre class="chroma"><code class="language-Objective-C" data-lang="Objective-C"><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">produce</span>
+<span class="p">{</span>
+　　<span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+       <span class="p">[</span><span class="n">theLock</span> <span class="nl">lockWhenCondition</span><span class="p">:</span><span class="n">NO_DATA</span><span class="p">];</span>
+　　　　<span class="c1">// create data
+</span><span class="c1"></span>　　　　<span class="p">[</span><span class="n">theLock</span> <span class="nl">unlockWithCondition</span><span class="p">:</span><span class="n">HAS_DATA</span><span class="p">];</span>
+　　<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">consume</span>
+<span class="p">{</span>
+　　<span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+　　　　<span class="k">if</span> <span class="p">([</span><span class="n">theLock</span> <span class="nl">tryLockWhenCondition</span><span class="p">:</span><span class="n">HAS_DATA</span><span class="p">])</span> <span class="p">{</span>
+　　　　　　<span class="c1">// display data
+</span><span class="c1"></span>　　　　　　<span class="p">[</span><span class="n">theLock</span> <span class="nl">unlockWithCondition</span><span class="p">:</span><span class="n">NO_DATA</span><span class="p">];</span>
+　　　　<span class="p">}</span>
+　　　　<span class="n">sleep</span><span class="p">(</span><span class="mf">1.0</span><span class="p">);</span> <span class="c1">// sleep a while
+</span><span class="c1"></span>　　<span class="p">}</span>
+<span class="p">}</span></code></pre></div>]]></content>
+		</item>
 		
 		<item>
 			<title>iOS中的锁(三)-Semaphore</title>
@@ -845,95 +894,6 @@ import FrameworkName  2、将模块引入OC代码中
 <p>2、将模块引入OC代码中</p>
 
 <pre><code>@import FrameworkName;
-</code></pre>
-]]></content>
-		</item>
-		
-		<item>
-			<title>创建私有Pod</title>
-			<link>https://xuyunan.github.io/posts/create-a-private-pod/</link>
-			<pubDate>Sun, 02 Apr 2017 22:00:00 +0800</pubDate>
-			
-			<guid>https://xuyunan.github.io/posts/create-a-private-pod/</guid>
-			<description>为什么搭建私有库 私有库可以保证代码的安全性，亦可以将复用性强的代码、控件封装成模块，提供给部门或公司的人员用。
-搭建过程 首先需要创建一个私有git仓库，用来存放描述文件，可以使用bitbucket，假设创建了一个名为REPO_NAME的私有仓库。然后创建一个可复用的项目叫HexColors, 是一个swift中使用十六进制颜色的扩展，放到了bitbucket上。并且打了tag，HexColors.podspec文件也已经创建好了，整个过程和创建开源库没有什么区别。
-关联私有库地址
-pod repo add REPO_NAME SOURCE_URL  验证是否配置正确
-cd ~/.cocoapods/repos/REPO_NAME pod repo lint .  将刚刚创建好的pod描述文件，推至私有仓库
-pod repo push REPO_NAME SPEC_NAME.podspec  此时，你的私有仓库应该是这个结构
-. ├── Specs └── [SPEC_NAME] └── [VERSION] └── [SPEC_NAME].podspec  使用 切到要使用的项目，这里我还用我的YNPodDemo，在Podfile里加上这样一行，来指定私有和共开仓库
-# Private Specs source &#39;URL_TO_REPOSITORY&#39; # Public Specs source &#39;https://github.com/CocoaPods/Specs.git&#39;  然后添加HexColors
-pod &#39;HexColors&#39;, &#39;~&amp;gt;0.0.1&#39;  之后就跟使用开源库一样了
-pod install  YNPodDemo 这个Demo打了三个tag:
- 0.1 测试使用Cocoapods 0.2 测试使用自己创建的开源库 0.3 测试使用自己创建的私有库  使用下面这条命令可以检出特定Tag对应的代码</description>
-			<content type="html"><![CDATA[
-
-<h2 id="为什么搭建私有库">为什么搭建私有库</h2>
-
-<p>私有库可以保证代码的安全性，亦可以将复用性强的代码、控件封装成模块，提供给部门或公司的人员用。</p>
-
-<h2 id="搭建过程">搭建过程</h2>
-
-<p>首先需要创建一个私有git仓库，用来存放描述文件，可以使用bitbucket，假设创建了一个名为REPO_NAME的私有仓库。然后创建一个可复用的项目叫<code>HexColors</code>, 是一个swift中使用十六进制颜色的扩展，放到了bitbucket上。并且打了tag，<code>HexColors.podspec</code>文件也已经创建好了，整个过程和创建开源库没有什么区别。</p>
-
-<p>关联私有库地址</p>
-
-<pre><code>pod repo add REPO_NAME SOURCE_URL
-</code></pre>
-
-<p>验证是否配置正确</p>
-
-<pre><code>cd ~/.cocoapods/repos/REPO_NAME
-pod repo lint .
-</code></pre>
-
-<p>将刚刚创建好的pod描述文件，推至私有仓库</p>
-
-<pre><code>pod repo push REPO_NAME SPEC_NAME.podspec
-</code></pre>
-
-<p>此时，你的私有仓库应该是这个结构</p>
-
-<pre><code>.
-├── Specs
-    └── [SPEC_NAME]
-        └── [VERSION]
-            └── [SPEC_NAME].podspec
-</code></pre>
-
-<h2 id="使用">使用</h2>
-
-<p>切到要使用的项目，这里我还用我的YNPodDemo，在Podfile里加上这样一行，来指定私有和共开仓库</p>
-
-<pre><code># Private Specs
-source 'URL_TO_REPOSITORY'
-# Public Specs
-source 'https://github.com/CocoaPods/Specs.git'
-</code></pre>
-
-<p>然后添加HexColors</p>
-
-<pre><code>pod 'HexColors', '~&gt;0.0.1'
-</code></pre>
-
-<p>之后就跟使用开源库一样了</p>
-
-<pre><code>pod install
-</code></pre>
-
-<h2 id="ynpoddemo-https-github-com-xuyunan-ynpoddemo"><a href="https://github.com/xuyunan/YNPodDemo">YNPodDemo</a></h2>
-
-<p>这个Demo打了三个tag:</p>
-
-<ul>
-<li>0.1 测试使用Cocoapods</li>
-<li>0.2 测试使用自己创建的开源库</li>
-<li>0.3 测试使用自己创建的私有库</li>
-</ul>
-
-<p>使用下面这条命令可以检出特定Tag对应的代码</p>
-
-<pre><code>git clone --branch &lt;tag_name&gt; &lt;repo_url&gt;
 </code></pre>
 ]]></content>
 		</item>
