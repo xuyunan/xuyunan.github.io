@@ -7,10 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Wed, 22 May 2019 16:58:12 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 23 May 2019 09:32:00 +0800</lastBuildDate>
     
 	<atom:link href="https://xuyunan.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>iOS中的锁(五)-OSSpinLock, os_unfair_lock</title>
+      <link>https://xuyunan.github.io/posts/ios-lock-osspinlock/</link>
+      <pubDate>Thu, 23 May 2019 09:32:00 +0800</pubDate>
+      
+      <guid>https://xuyunan.github.io/posts/ios-lock-osspinlock/</guid>
+      <description>OSSpinLock 是一种自旋锁, 和互斥锁类似，都是为了保证线程安全的锁。但二者的区别是不一样的，对于互斥锁，当一个线程获得这个锁之后，其他想要获得此锁的线程将会被阻塞，直到该锁被释放。但自旋锁不一样，当一个线程获得锁之后，其他线程将会一直循环在哪里查看是否该锁被释放。所以，此锁比较适用于锁的持有者保存时间较短的情况下。
+spinLock = OS_SPINLOCK_INIT; OSSpinLockLock(&amp;amp;spinLock); sleep(4); OSSpinLockUnlock(&amp;amp;spinLock); 为什么说这种自旋锁不再安全了?
+优先级翻转的问题
+新版 iOS 中，系统维护了 5 个不同的线程优先级/QoS: background，utility，default，user-initiated，user-interactive。高优先级线程始终会在低优先级线程前执行，一个线程不会受到比它更低优先级线程的干扰。这种线程调度算法会产生潜在的优先级反转问题，从而破坏了 spin lock。
+具体来说，如果一个低优先级的线程获得锁并访问共享资源，这时一个高优先级的线程也尝试获得这个锁，它会处于 spin lock 的忙等状态从而占用大量 CPU。此时低优先级线程无法与高优先级线程争夺 CPU 时间，从而导致任务迟迟完不成、无法释放 lock。这并不只是理论上的问题，libobjc 已经遇到了很多次这个问题了，于是苹果的工程师停用了 OSSpinLock。
+iOS10以后，苹果给出了新的api, 当然也可以通过前面几章提到的各种锁
+os_unfair_lock_t unfairLock = &amp;amp;(OS_UNFAIR_LOCK_INIT); os_unfair_lock_lock(unfairLock); sleep(4); os_unfair_lock_unlock(unfairLock); 参考 不再安全的 OSSpinLock</description>
+    </item>
     
     <item>
       <title>iOS中的锁(四)-NSLock, NSRecursiveLock, NSConditionLock</title>
@@ -134,19 +149,6 @@ let filePath = Bundle.main.path(forResource: &amp;#34;h5/index&amp;#34;, ofType:
  嵌入JavaScript代码 通过WKUserScript注入JavaScript代码
 let contentController = WKUserContentController() let scriptSource = &amp;#34;document.body.style.backgroundColor = `red`;&amp;#34; let script = WKUserScript(source: scriptSource, injectionTime: .atDocumentEnd, forMainFrameOnly: true) contentController.addUserScript(script) let config = WKWebViewConfiguration() config.userContentController = contentController 初始化是有个三个参数
  source: JavaScript代码字符串 injectionTime: 注入的时机，.</description>
-    </item>
-    
-    <item>
-      <title>WKWebView(一)-简介</title>
-      <link>https://xuyunan.github.io/posts/wkwebview/</link>
-      <pubDate>Tue, 26 Mar 2019 17:01:25 +0800</pubDate>
-      
-      <guid>https://xuyunan.github.io/posts/wkwebview/</guid>
-      <description>简介 UIWebView是我们从iOS2.0就开始使用的web组件, 但是从iOS8.0以后, 苹果建议我们使用WKWebView, 那么他们之间有什么不同呢? WKWebView又怎么使用呢?
-UIWebView是UIKit组件, 由于在项目刚开始构建的时候就已经默认引入了UIKit组件, 所以你可以任何地方声明UIWebView来使用都可以, 包括IB; WKWebView是WebKit组件, 在使用的时候要提前引入import WebKit
-关于scalesPageToFit WKWebView不再包含scalesPageToFit属性, 但是可以通过在header中添加meta属性来控制
-// width=device-width &amp;lt;meta name=&amp;#34;viewport&amp;#34; content=&amp;#34;width=device-width,initial-scale=1, user-scalable=no&amp;#34; /&amp;gt;  如果HTML文件不是本地文件，我们也可以通过WKUserScript将meta注入进去
-let javaScript = &amp;#34;&amp;#34;&amp;#34; var meta = document.createElement(&amp;#39;meta&amp;#39;); meta.setAttribute(&amp;#39;name&amp;#39;, &amp;#39;viewport&amp;#39;); meta.setAttribute(&amp;#39;content&amp;#39;, &amp;#39;width=device-width&amp;#39;); document.getElementsByTagName(&amp;#39;head&amp;#39;)[0].appendChild(meta); &amp;#34;&amp;#34;&amp;#34; let userScript = WKUserScript(source: javaScript, injectionTime: .atDocumentEnd, forMainFrameOnly: true) let userController = WKUserContentController() userController.addUserScript(userScript) let webConfiguration = WKWebViewConfiguration() webConfiguration.userContentController = userController webView = WKWebView(frame: .zero, configuration: webConfiguration) // let myURL = URL(fileURLWithPath: Bundle.</description>
     </item>
     
   </channel>

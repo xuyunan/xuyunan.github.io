@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://xuyunan.github.io/posts/ios-lock-osspinlock/</loc>
+    <lastmod>2019-05-23T09:32:00+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://xuyunan.github.io/posts/ios-lock-nslock/</loc>
     <lastmod>2019-05-22T16:58:12+08:00</lastmod>
   </url>
@@ -85,13 +90,13 @@
   
   <url>
     <loc>https://xuyunan.github.io/tags/lock/</loc>
-    <lastmod>2019-05-22T16:58:12+08:00</lastmod>
+    <lastmod>2019-05-23T09:32:00+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://xuyunan.github.io/posts/</loc>
-    <lastmod>2019-05-22T16:58:12+08:00</lastmod>
+    <lastmod>2019-05-23T09:32:00+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -109,7 +114,7 @@
   
   <url>
     <loc>https://xuyunan.github.io/</loc>
-    <lastmod>2019-05-22T16:58:12+08:00</lastmod>
+    <lastmod>2019-05-23T09:32:00+08:00</lastmod>
     <priority>0</priority>
   </url>
   

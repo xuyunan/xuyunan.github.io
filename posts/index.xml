@@ -7,8 +7,43 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>en-us</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Wed, 22 May 2019 16:58:12 +0800</lastBuildDate>
+		<lastBuildDate>Thu, 23 May 2019 09:32:00 +0800</lastBuildDate>
 		<atom:link href="https://xuyunan.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>iOS中的锁(五)-OSSpinLock, os_unfair_lock</title>
+			<link>https://xuyunan.github.io/posts/ios-lock-osspinlock/</link>
+			<pubDate>Thu, 23 May 2019 09:32:00 +0800</pubDate>
+			
+			<guid>https://xuyunan.github.io/posts/ios-lock-osspinlock/</guid>
+			<description>OSSpinLock 是一种自旋锁, 和互斥锁类似，都是为了保证线程安全的锁。但二者的区别是不一样的，对于互斥锁，当一个线程获得这个锁之后，其他想要获得此锁的线程将会被阻塞，直到该锁被释放。但自旋锁不一样，当一个线程获得锁之后，其他线程将会一直循环在哪里查看是否该锁被释放。所以，此锁比较适用于锁的持有者保存时间较短的情况下。
+spinLock = OS_SPINLOCK_INIT; OSSpinLockLock(&amp;amp;spinLock); sleep(4); OSSpinLockUnlock(&amp;amp;spinLock); 为什么说这种自旋锁不再安全了?
+优先级翻转的问题
+新版 iOS 中，系统维护了 5 个不同的线程优先级/QoS: background，utility，default，user-initiated，user-interactive。高优先级线程始终会在低优先级线程前执行，一个线程不会受到比它更低优先级线程的干扰。这种线程调度算法会产生潜在的优先级反转问题，从而破坏了 spin lock。
+具体来说，如果一个低优先级的线程获得锁并访问共享资源，这时一个高优先级的线程也尝试获得这个锁，它会处于 spin lock 的忙等状态从而占用大量 CPU。此时低优先级线程无法与高优先级线程争夺 CPU 时间，从而导致任务迟迟完不成、无法释放 lock。这并不只是理论上的问题，libobjc 已经遇到了很多次这个问题了，于是苹果的工程师停用了 OSSpinLock。
+iOS10以后，苹果给出了新的api, 当然也可以通过前面几章提到的各种锁
+os_unfair_lock_t unfairLock = &amp;amp;(OS_UNFAIR_LOCK_INIT); os_unfair_lock_lock(unfairLock); sleep(4); os_unfair_lock_unlock(unfairLock); 参考 不再安全的 OSSpinLock</description>
+			<content type="html"><![CDATA[<p>OSSpinLock 是一种自旋锁, 和互斥锁类似，都是为了保证线程安全的锁。但二者的区别是不一样的，对于互斥锁，当一个线程获得这个锁之后，其他想要获得此锁的线程将会被阻塞，直到该锁被释放。但自旋锁不一样，当一个线程获得锁之后，其他线程将会一直循环在哪里查看是否该锁被释放。所以，此锁比较适用于锁的持有者保存时间较短的情况下。</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="n">spinLock</span> <span class="o">=</span> <span class="n">OS_SPINLOCK_INIT</span><span class="p">;</span>
+<span class="n">OSSpinLockLock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">spinLock</span><span class="p">);</span>
+<span class="n">sleep</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+<span class="n">OSSpinLockUnlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">spinLock</span><span class="p">);</span></code></pre></div>
+<p>为什么说这种自旋锁不再安全了?</p>
+
+<p>优先级翻转的问题</p>
+
+<p>新版 iOS 中，系统维护了 5 个不同的线程优先级/QoS: background，utility，default，user-initiated，user-interactive。高优先级线程始终会在低优先级线程前执行，一个线程不会受到比它更低优先级线程的干扰。这种线程调度算法会产生潜在的优先级反转问题，从而破坏了 spin lock。</p>
+
+<p>具体来说，如果一个低优先级的线程获得锁并访问共享资源，这时一个高优先级的线程也尝试获得这个锁，它会处于 spin lock 的忙等状态从而占用大量 CPU。此时低优先级线程无法与高优先级线程争夺 CPU 时间，从而导致任务迟迟完不成、无法释放 lock。这并不只是理论上的问题，libobjc 已经遇到了很多次这个问题了，于是苹果的工程师停用了 OSSpinLock。</p>
+
+<p>iOS10以后，苹果给出了新的api, 当然也可以通过前面几章提到的各种锁</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="n">os_unfair_lock_t</span> <span class="n">unfairLock</span> <span class="o">=</span> <span class="o">&amp;</span><span class="p">(</span><span class="n">OS_UNFAIR_LOCK_INIT</span><span class="p">);</span>
+<span class="n">os_unfair_lock_lock</span><span class="p">(</span><span class="n">unfairLock</span><span class="p">);</span>
+<span class="n">sleep</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+<span class="n">os_unfair_lock_unlock</span><span class="p">(</span><span class="n">unfairLock</span><span class="p">);</span></code></pre></div>
+<p>参考 <a href="https://blog.ibireme.com/2016/01/16/spinlock_is_unsafe_in_ios/">不再安全的 OSSpinLock</a></p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>iOS中的锁(四)-NSLock, NSRecursiveLock, NSConditionLock</title>
@@ -821,80 +856,6 @@ let javaScript = &amp;#34;&amp;#34;&amp;#34; var meta = document.createElement(&
 <p>参考资料</p>
 
 <p><a href="https://developer.apple.com/documentation/uikit/uiwebview">uiwebview</a> <a href="https://developer.apple.com/documentation/webkit/wkwebview">wkwebview</a><br /><a href="https://stackoverflow.com/questions/26295277/wkwebview-equivalent-for-uiwebviews-scalespagetofit">stackoverflow.com</a><br /><a href="https://medium.com/@FixieLabs/uiwebview-vs-wkwebview-migremos-8539b940f73b">medium.com</a><br /><a href="https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=2653578513&amp;idx=1&amp;sn=961bf5394eecde40a43060550b81b0bb&amp;chksm=84b3b716b3c43e00ee39de8cf12ff3f8d475096ffaa05de9c00ff65df62cd73aa1cff606057d&amp;mpshare=1&amp;scene=1&amp;srcid=0203vWJWfMGMWwf5NZ8N1ibS&amp;key=7986e1e970a89067a86106b2930c5f6fae92da1b552eeb4696133c44e4169fb458d9a94ff0469f97f76e0a87fcfb05a375902d563045184f88550caaca3d47f3ddb0004c0133e68eb0c719bcbe514460&amp;ascene=0&amp;uin=MTM2NTIyOTI0MA==&amp;devicetype=iMac+MacBookPro11,5+OSX+OSX+10.12.3+build(16D32)&amp;version=12010310&amp;nettype=WIFI&amp;fontScale=100&amp;pass_ticket=aq4MxrhuXuqAWgcklzpe0lU/Eo6zKVJheDZdgcMAeJaVUSaI3npVIEglSZC6GJg4">mp.weixin.qq.com</a></p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>Swift和OC混用</title>
-			<link>https://xuyunan.github.io/posts/swift-oc-mix-and-match/</link>
-			<pubDate>Wed, 07 Jun 2017 22:00:00 +0800</pubDate>
-			
-			<guid>https://xuyunan.github.io/posts/swift-oc-mix-and-match/</guid>
-			<description> 前言 你有一个使用Objective-c语言写的项目，想要混用部分Swift代码，于是你创建了一个Swift文件，就在此时，Xcode提示会生成一个跟你项目名称相关联的桥接文件ProductModuleName-Bridging-Header.h, 我们暂且叫它OC桥接文件, 其实Xcode还创建了另外一个桥接文件，叫ProductModuleName-Swift.h, 这个文件在列表里看不到而已, 我们暂且把它叫做Swift桥接文件。
-Swift使用OC代码 想要在Swift中使用OC代码，我们只需要做两件事情
-1、将要使用的OC文件, 在OC桥接文件导入
-#import &amp;quot;XYZCustomCell.h&amp;quot; #import &amp;quot;XYZCustomView.h&amp;quot; #import &amp;quot;XYZCustomViewController.h”  2、确保Build Settings里, Objective-C Bridging Header这个选项里有正确的桥接文件相对地址, 一般系统都帮你填好了, 类似ProductModuleName/ProductModuleName-Bridging-Header.h
-同一个target下不需要导入任何代码即可使用, 不用target, 要导入模块名.
-OC使用Swift代码 1、Swift桥接文件是Xcode自动处理的，我们只需要在写Swift代码的时候稍微主要下就可以了，那么具体要注意什么?
-使用public或者open标记的代码，将会无条件的引入到桥接文件中; 关于被internal标记的代码，只有在项目中有OC桥接文件的情况下，才会被引入到Swift桥接文件中，之后暴露给OC代码; private和fileprivate标记的代码是不会被OC代码所看到的。
- 如果被private和fileprivate标记的代码块里含有@IBAction, @IBOutlet, or @objc, 那么这些代码也将会暴露给OC。
- 2、如果不再一个模块里，需要确保Build Settings里, Defines Module这个选项的值为YES, 才能混用
-使用Swift代码时, 需要导入Swift桥接文件
-#import &amp;quot;ProductModuleName-Swift.h&amp;quot;  如果不在一个模块，怎么办? 如果混用时不再一个模块, 需要导入模块名
-1、将模块引入Swift代码中
-import FrameworkName  2、将模块引入OC代码中
-@import FrameworkName;  </description>
-			<content type="html"><![CDATA[
-
-<h2 id="前言">前言</h2>
-
-<p>你有一个使用Objective-c语言写的项目，想要混用部分Swift代码，于是你创建了一个Swift文件，就在此时，Xcode提示会生成一个跟你项目名称相关联的桥接文件ProductModuleName-Bridging-Header.h, 我们暂且叫它<strong>OC桥接文件</strong>, 其实Xcode还创建了另外一个桥接文件，叫ProductModuleName-Swift.h, 这个文件在列表里看不到而已, 我们暂且把它叫做<strong>Swift桥接文件</strong>。</p>
-
-<h2 id="swift使用oc代码">Swift使用OC代码</h2>
-
-<p>想要在Swift中使用OC代码，我们只需要做两件事情</p>
-
-<p>1、将要使用的OC文件, 在<strong>OC桥接文件</strong>导入</p>
-
-<pre><code>#import &quot;XYZCustomCell.h&quot;
-#import &quot;XYZCustomView.h&quot;
-#import &quot;XYZCustomViewController.h”
-</code></pre>
-
-<p>2、确保Build Settings里, Objective-C Bridging Header这个选项里有正确的桥接文件相对地址, 一般系统都帮你填好了, 类似ProductModuleName/ProductModuleName-Bridging-Header.h</p>
-
-<p>同一个target下不需要导入任何代码即可使用, 不用target, 要导入模块名.</p>
-
-<h2 id="oc使用swift代码">OC使用Swift代码</h2>
-
-<p>1、<strong>Swift桥接文件</strong>是Xcode自动处理的，我们只需要在写Swift代码的时候稍微主要下就可以了，那么具体要注意什么?</p>
-
-<p>使用public或者open标记的代码，将会无条件的引入到桥接文件中; 关于被internal标记的代码，只有在项目中有<strong>OC桥接文件</strong>的情况下，才会被引入到<strong>Swift桥接文件</strong>中，之后暴露给OC代码; private和fileprivate标记的代码是不会被OC代码所看到的。</p>
-
-<blockquote>
-<p>如果被private和fileprivate标记的代码块里含有@IBAction, @IBOutlet, or @objc, 那么这些代码也将会暴露给OC。</p>
-</blockquote>
-
-<p>2、如果不再一个模块里，需要确保Build Settings里, Defines Module这个选项的值为YES, 才能混用</p>
-
-<p>使用Swift代码时, 需要导入<strong>Swift桥接文件</strong></p>
-
-<pre><code>#import &quot;ProductModuleName-Swift.h&quot;
-</code></pre>
-
-<h2 id="如果不在一个模块-怎么办">如果不在一个模块，怎么办?</h2>
-
-<p>如果混用时不再一个模块, 需要导入模块名</p>
-
-<p>1、将模块引入Swift代码中</p>
-
-<pre><code>import FrameworkName
-</code></pre>
-
-<p>2、将模块引入OC代码中</p>
-
-<pre><code>@import FrameworkName;
-</code></pre>
 ]]></content>
 		</item>
 		
