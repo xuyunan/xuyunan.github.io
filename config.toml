@@ -1,0 +1,6 @@
+baseURL = 'https://xuyunan.github.io/'
+languageCode = 'zh-cn'
+title = "Tommy's blog"
+theme = 'hugo-tania'
+
+disqusShortname = "xuyunan"
