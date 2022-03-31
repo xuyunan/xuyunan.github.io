@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>react on 我的博客</title><link>https://xuyunan.github.io/tags/react/</link><description>Recent content in react on 我的博客</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Thu, 02 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://xuyunan.github.io/tags/react/atom.xml" rel="self" type="application/rss+xml"/><item><title>React--使用Hook和Context创建全局提示框</title><link>https://xuyunan.github.io/2021-12-02-alert-by-hook-and-context/</link><pubDate>Thu, 02 Dec 2021 00:00:00 +0000</pubDate><guid>https://xuyunan.github.io/2021-12-02-alert-by-hook-and-context/</guid><description>做一个全局的提示框，是非常有必要的，在使用的地方直接调用，而非在每个页面都插入一个提示框组件，可以使用这种技术的还有modal、notfication、dialog、spinner。
+创建应用 # 环境准备，安装node、npm 或 yarn
+npx create-react-app react-alert cd react-alert npm start 创建alert # 创建context文件
+mkdir src/context touch src/context/alert-context.js 创建完成之后的目录
+src ├ ... ├── context │ └── alert-context.js 文件创建好了之后，接下来就要往里填充内容，修改alert-context.js, 先导入依赖
+import React, { useState, createContext, useContext, useEffect } from &amp;quot;react&amp;quot;; 创建context对象
+const AlertContext = createContext(); 定义alert组件
+const Alert = ({ onClick }) =&amp;gt; { return ( &amp;lt;div className=&amp;quot;alert-wrapper&amp;quot;&amp;gt; &amp;lt;div className=&amp;quot;alert&amp;quot;&amp;gt; &amp;lt;div&amp;gt;提示信息&amp;lt;/div&amp;gt; &amp;lt;button onClick={onClick}&amp;gt;关闭&amp;lt;/button&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; ); }; 创建context provider</description></item></channel></rss>

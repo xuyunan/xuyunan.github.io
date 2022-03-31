@@ -1,0 +1,1162 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>我的博客</title><description>记录一些有用的知识</description><link>https://xuyunan.github.io</link><language>en</language><copyright>Copyright 2022, Ronalds Vilcins</copyright><lastBuildDate>Fri, 18 Feb 2022 00:00:00 +0000</lastBuildDate><generator>Hugo - gohugo.io</generator><docs>http://cyber.harvard.edu/rss/rss.html</docs><atom:link href="https://ronaldsvilcins.com/atom.xml" rel="self" type="application/atom+xml"/><item><title>Web优化加载速度，优化打包大小</title><link>https://xuyunan.github.io/2022-02-18-web-performance-optimization/</link><description>&lt;h2 id="按需引入组件库-bizcharts">按需引入组件库, BizCharts &lt;a href="#%e6%8c%89%e9%9c%80%e5%bc%95%e5%85%a5%e7%bb%84%e4%bb%b6%e5%ba%93-bizcharts" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>直接引入方式 import { Chart, Interval, Tooltip } from &amp;ldquo;bizcharts&amp;rdquo;;&lt;br>
+按需引入方式&lt;/p>
+&lt;pre>&lt;code class="language-javascript">import { TooltipItem } from &amp;quot;bizcharts/lib/interface&amp;quot;;
+import Chart from 'bizcharts/lib/components/Chart';
+import Tooltip from 'bizcharts/lib/components/Tooltip';
+import Axis from 'bizcharts/lib/components/Axis';
+import Interval from 'bizcharts/lib/geometry/Interval';
+&lt;/code>&lt;/pre>
+&lt;p>由于项目中我只使用了柱状图和饼图两个组件, 所以大小由bizcharts 3.72M缩减至643KB. (其中没有计算data-set.js文件，data-set占619KB)&lt;/p>
+&lt;p>如果你也想分析下项目文件大小，也可以试试 &lt;a href="https://create-react-app.dev/docs/analyzing-the-bundle-size/">Source map explorer&lt;/a>&lt;/p>
+&lt;h2 id="关闭sourcemap功能">关闭sourcemap功能 &lt;a href="#%e5%85%b3%e9%97%adsourcemap%e5%8a%9f%e8%83%bd" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>将package.json中的 &amp;ldquo;build&amp;rdquo;: &amp;ldquo;react-scripts build&amp;rdquo;,
+替换成 &amp;ldquo;build&amp;rdquo;: &amp;ldquo;GENERATE_SOURCEMAP=false react-scripts build&amp;rdquo;,&lt;/p>
+&lt;p>这样就避免生成类似&lt;code>2.feb6b4a0.chunk.js.map&lt;/code>的map文件，2.9M的代码，map文件近10.9M, 关闭sourcemap功能，将大大缩减页面加载时间.&lt;/p>
+&lt;h2 id="nginx开启gzip压缩">Nginx开启gzip压缩 &lt;a href="#nginx%e5%bc%80%e5%90%afgzip%e5%8e%8b%e7%bc%a9" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>开启之后，2.9M的代码，可压缩至796KB，压缩了近77%的大小&lt;/p>
+&lt;p>gzip配置示例如下&lt;/p>
+&lt;pre>&lt;code>location / {
+try_files $uri $uri/ /index.html;
+...
+}
+gzip on;
+gzip_vary on;
+gzip_min_length 1024;
+gzip_proxied expired no-cache no-store private auth;
+gzip_types text/plain text/css text/xml text/javascript application/javascript application/x-javascript application/xml;
+gzip_disable &amp;quot;MSIE [1-6]\.&amp;quot;;
+&lt;/code>&lt;/pre>
+&lt;p>注意不要忘记在gzip_typs添加application/javascript&lt;/p>
+&lt;p>如需更详细的配置，可至官网查看 &lt;a href="http://nginx.org/en/docs/http/ngx_http_gzip_module.html">Module ngx_http_gzip_module&lt;/a>&lt;/p>
+&lt;p>这里也有一篇比较详细的文章，可以参考 &lt;a href="http://www.yaohaixiao.com/blog/how-to-configure-gzip-compression-with-nginx/">如何在 Nginx 服务器中配置 GZip 压缩？
+&lt;/a>&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2022-02-18-web-performance-optimization/</guid><pubDate>Fri, 18 Feb 2022 00:00:00 +0000</pubDate></item><item><title>对于NGINX的日志文件大小控制</title><link>https://xuyunan.github.io/2022-01-01-nginx-access-log-control/</link><description>&lt;h2 id="问题">问题 &lt;a href="#%e9%97%ae%e9%a2%98" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>新年伊始，系统就报起了磁盘即将被占满的警告，经排查是原因为nginx日志文件access.log文件太大了，临时先清空下文件 &lt;code>echo &amp;quot;&amp;quot; &amp;gt; access.log&lt;/code>&lt;/p>
+&lt;p>nginx有两个日志文件，一个是access.log，会记录每次成功的请求信息，包括ip地址，时间，浏览器等信息，格式可以通过在nginx.conf中的log_format配置；一个是error.log，会记录异常的信息。 关于磁盘大小报警，如何排查，可以通过du命令，可以参考 &lt;a href="https://www.tecmint.com/find-top-large-directories-and-files-sizes-in-linux/">How to Find Out Top Directories and Files (Disk Space) in Linux&lt;/a>&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;h2 id="如何解决">如何解决 &lt;a href="#%e5%a6%82%e4%bd%95%e8%a7%a3%e5%86%b3" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>通过logrotate来配置记录日志的策略，logrotate是基于crontab定时任务的程序，一般的linux系统都已经默认安装了。
+建立/etc/logrotate.d/nginx配置文件，内容如下&lt;/p>
+&lt;pre>&lt;code class="language-bash">/usr/local/nginx/logs/access_log {
+rotate 7
+size 5k
+dateext
+dateformat -%Y-%m-%d
+missingok
+compress
+sharedscripts
+postrotate
+test -r /usr/local/nginx/logs/nginx.pid &amp;amp;&amp;amp; kill -USR1 `cat /usr/local/nginx/logs/nginx.pid`
+endscript
+}
+&lt;/code>&lt;/pre>
+&lt;p>其中:&lt;br>
+rotate 7, 表示一次将存储7个归档日志。对于第8个归档，时间最久的归档将被删除
+postrotate, 最通常的作用是让应用重启，以便切换到新的日志文件，注意并不是nginx重启。&lt;/p>
+&lt;p>配置好之后，添加定时任务去执行&lt;/p>
+&lt;pre>&lt;code class="language-bash">crontab -e #添加以下代码
+0 0 * * * /usr/sbin/logrotate -vf /etc/logrotate.d/nginx #每天凌晨定时执行脚本 需要放到root用户下执行
+&lt;/code>&lt;/pre>
+&lt;h2 id="参考">参考 &lt;a href="#%e5%8f%82%e8%80%83" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>&lt;a href="https://serverfault.com/questions/427144/how-to-limit-nginx-access-log-file-size-and-compress">How to limit nginx access log file size and compress?&lt;/a>&lt;br>
+&lt;a href="https://unix.stackexchange.com/questions/259091/nginx-log-rotation-doesnt-seem-to-be-working-correctly">Nginx Log Rotation Doesn&amp;rsquo;t Seem to Be Working Correctly&lt;/a>
+&lt;a href="https://www.cnblogs.com/zhaoyingjie/p/14649006.html">nginx配置logrotate 配置&lt;/a>&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2022-01-01-nginx-access-log-control/</guid><pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate></item><item><title>React--使用Hook和Context创建全局提示框</title><link>https://xuyunan.github.io/2021-12-02-alert-by-hook-and-context/</link><description>&lt;p>做一个全局的提示框，是非常有必要的，在使用的地方直接调用，而非在每个页面都插入一个提示框组件，可以使用这种技术的还有modal、notfication、dialog、spinner。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;h2 id="创建应用">创建应用 &lt;a href="#%e5%88%9b%e5%bb%ba%e5%ba%94%e7%94%a8" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>环境准备，安装node、npm 或 yarn&lt;/p>
+&lt;pre>&lt;code class="language-bash">npx create-react-app react-alert
+cd react-alert
+npm start
+&lt;/code>&lt;/pre>
+&lt;h2 id="创建alert">创建alert &lt;a href="#%e5%88%9b%e5%bb%baalert" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>创建context文件&lt;/p>
+&lt;pre>&lt;code class="language-bash">mkdir src/context
+touch src/context/alert-context.js
+&lt;/code>&lt;/pre>
+&lt;p>创建完成之后的目录&lt;/p>
+&lt;pre>&lt;code class="language-bash">src
+├ ...
+├── context
+│   └── alert-context.js
+&lt;/code>&lt;/pre>
+&lt;p>文件创建好了之后，接下来就要往里填充内容，修改alert-context.js, 先导入依赖&lt;/p>
+&lt;pre>&lt;code class="language-javascript">import React, { useState, createContext, useContext, useEffect } from &amp;quot;react&amp;quot;;
+&lt;/code>&lt;/pre>
+&lt;p>创建context对象&lt;/p>
+&lt;pre>&lt;code class="language-javascript">const AlertContext = createContext();
+&lt;/code>&lt;/pre>
+&lt;p>定义alert组件&lt;/p>
+&lt;pre>&lt;code class="language-javascript">const Alert = ({ onClick }) =&amp;gt; {
+return (
+&amp;lt;div className=&amp;quot;alert-wrapper&amp;quot;&amp;gt;
+&amp;lt;div className=&amp;quot;alert&amp;quot;&amp;gt;
+&amp;lt;div&amp;gt;提示信息&amp;lt;/div&amp;gt;
+&amp;lt;button onClick={onClick}&amp;gt;关闭&amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+);
+};
+&lt;/code>&lt;/pre>
+&lt;p>创建context provider&lt;/p>
+&lt;pre>&lt;code class="language-javascript"> const AlertProvider = (props) =&amp;gt; {
+const [isDisplaying, setIsDisplaying] = useState(false);
+const show = () =&amp;gt; setIsDisplaying(true);
+const dismiss = () =&amp;gt; setIsDisplaying(false);
+const onClick = () =&amp;gt; setIsDisplaying(false);
+return (
+&amp;lt;AlertContext.Provider value={{ show, dismiss }} {...props}&amp;gt;
+{props.children}
+{isDisplaying &amp;amp;&amp;amp; &amp;lt;Alert onClick={onClick} /&amp;gt;}
+&amp;lt;/AlertContext.Provider&amp;gt;
+);
+};
+&lt;/code>&lt;/pre>
+&lt;p>AlertProvider创建完成，一般我们会用其包裹应用入口组件，一般是&lt;code>&amp;lt;App /&amp;gt;&lt;/code> 。但是，使用前需要导出，现在我们创建一个自定义 hook，将外部使用到的内容导出&lt;/p>
+&lt;pre>&lt;code class="language-javascript">const useAlert = () =&amp;gt; {
+return useContext(AlertContext);
+};
+export default { AlertContext, useAlert };
+&lt;/code>&lt;/pre>
+&lt;h2 id="使用alert">使用alert &lt;a href="#%e4%bd%bf%e7%94%a8alert" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>下面就是如何使用以上制作的组件，首先配置AlertProvider，修改index.js&lt;/p>
+&lt;pre>&lt;code class="language-javascript">import { AlertProvider } from &amp;quot;./context/alert-context&amp;quot;;
+// ...
+ReactDOM.render(
+&amp;lt;AlertProvider&amp;gt;
+&amp;lt;App /&amp;gt;
+&amp;lt;/AlertProvider&amp;gt;,
+document.getElementById(&amp;quot;root&amp;quot;)
+);
+&lt;/code>&lt;/pre>
+&lt;p>然后，在需要显示提示框，也就是需要调用show，dismiss的地方引入userAlert，修改App.js，在其中添加一个测试按钮&lt;/p>
+&lt;pre>&lt;code class="language-javascript">import { useAlert } from './context/alert-context';
+// ...
+const alert = useAlert();
+const onClick = () =&amp;gt; alert.show();
+// ...
+&amp;lt;button onClick={onClick}&amp;gt;提示&amp;lt;/button&amp;gt;;
+&lt;/code>&lt;/pre>
+&lt;p>以上就是基本的创建和使用，接下来可以对alert进行一点改造，使其更加完善&lt;/p>
+&lt;h2 id="补充给show添加参数">补充，给show添加参数 &lt;a href="#%e8%a1%a5%e5%85%85%e7%bb%99show%e6%b7%bb%e5%8a%a0%e5%8f%82%e6%95%b0" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>如果想让alert更加灵活，我们需要在show函数添加params 参数，最终将params传入alert，参数内容可以是title、icon等信息，修改alert-context.js&lt;/p>
+&lt;pre>&lt;code class="language-javascript">//...
+const [params, setParams] = useState();
+//...
+const show = (params) =&amp;gt; {
+params &amp;amp;&amp;amp; setParams(params);
+setIsDisplaying(true);
+};
+// ...
+{isDisplaying &amp;amp;&amp;amp; &amp;lt;Alert onClick={onClick} {...params} /&amp;gt;;}
+&lt;/code>&lt;/pre>
+&lt;h2 id="补充按esc键隐藏提示框">补充，按ESC键，隐藏提示框 &lt;a href="#%e8%a1%a5%e5%85%85%e6%8c%89esc%e9%94%ae%e9%9a%90%e8%97%8f%e6%8f%90%e7%a4%ba%e6%a1%86" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>使用useEffect, 在组件挂载时绑定ESC键，组件卸载时移除键绑定，在alert组件添加&lt;/p>
+&lt;pre>&lt;code class="language-javascript">useEffect(() =&amp;gt; {
+const bind = (e) =&amp;gt; {
+if (e.keyCode !== 27) return;
+if (document.activeElement &amp;amp;&amp;amp; [&amp;quot;INPUT&amp;quot;, &amp;quot;SELECT&amp;quot;].includes(document.activeElement.tagName)) return;
+onClick &amp;amp;&amp;amp; onClick();
+};
+document.addEventListener(&amp;quot;keyup&amp;quot;, bind);
+return () =&amp;gt; document.removeEventListener(&amp;quot;keyup&amp;quot;, bind);
+}, []);
+&lt;/code>&lt;/pre>
+&lt;p>至此，一个全局的提示框就处理好了，至于样式，每个应用的风格各不相同，可以自由发挥。&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2021-12-02-alert-by-hook-and-context/</guid><pubDate>Thu, 02 Dec 2021 00:00:00 +0000</pubDate></item><item><title>iOS中的锁(五)--OSSpinLock, os_unfair_lock</title><link>https://xuyunan.github.io/2019-06-23-ios-lock-osspinlock/</link><description>&lt;p>OSSpinLock 是一种自旋锁, 和互斥锁类似，都是为了保证线程安全的锁。但二者的区别是不一样的，对于互斥锁，当一个线程获得这个锁之后，其他想要获得此锁的线程将会被阻塞，直到该锁被释放。但自旋锁不一样，当一个线程获得锁之后，其他线程将会一直循环在哪里查看是否该锁被释放。所以，此锁比较适用于锁的持有者保存时间较短的情况下。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;pre>&lt;code class="language-objectivec">spinLock = OS_SPINLOCK_INIT;
+OSSpinLockLock(&amp;amp;spinLock);
+sleep(4);
+OSSpinLockUnlock(&amp;amp;spinLock);
+&lt;/code>&lt;/pre>
+&lt;p>为什么说这种自旋锁不再安全了?&lt;/p>
+&lt;p>优先级翻转的问题&lt;/p>
+&lt;p>新版 iOS 中，系统维护了 5 个不同的线程优先级/QoS: background，utility，default，user-initiated，user-interactive。高优先级线程始终会在低优先级线程前执行，一个线程不会受到比它更低优先级线程的干扰。这种线程调度算法会产生潜在的优先级反转问题，从而破坏了 spin lock。&lt;/p>
+&lt;p>具体来说，如果一个低优先级的线程获得锁并访问共享资源，这时一个高优先级的线程也尝试获得这个锁，它会处于 spin lock 的忙等状态从而占用大量 CPU。此时低优先级线程无法与高优先级线程争夺 CPU 时间，从而导致任务迟迟完不成、无法释放 lock。这并不只是理论上的问题，libobjc 已经遇到了很多次这个问题了，于是苹果的工程师停用了 OSSpinLock。&lt;/p>
+&lt;p>iOS10以后，苹果给出了新的api, 当然也可以通过前面几章提到的各种锁&lt;/p>
+&lt;pre>&lt;code class="language-objectivec">os_unfair_lock_t unfairLock = &amp;amp;(OS_UNFAIR_LOCK_INIT);
+os_unfair_lock_lock(unfairLock);
+sleep(4);
+os_unfair_lock_unlock(unfairLock);
+&lt;/code>&lt;/pre>
+&lt;p>参考&lt;/p>
+&lt;p>&lt;a href="https://blog.ibireme.com/2016/01/16/spinlock_is_unsafe_in_ios/">不再安全的 OSSpinLock&lt;/a>&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2019-06-23-ios-lock-osspinlock/</guid><pubDate>Sun, 23 Jun 2019 00:00:00 +0000</pubDate></item><item><title>iOS中的锁(四)-NSLock, NSRecursiveLock, NSConditionLock</title><link>https://xuyunan.github.io/2019-06-22-ios-lock-nslock/</link><description>&lt;p>这几种锁都是对pthread_mutex的封装&lt;/p>
+&lt;p>NSLock 遵循 NSLocking 协议. lock 加锁，unlock 解锁，tryLock 尝试加锁，如果失败的话返回 NO，lockBeforeDate: 是在指定Date之前尝试加锁，如果在指定时间之前都不能加锁，则返回NO&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;pre>&lt;code class="language-objectivec">[self.lock lock];
+// todo
+[self.lock unlock];
+&lt;/code>&lt;/pre>
+&lt;p>NSRecursiveLock 是通过pthread_mutex封装的递归锁, 同一个线程可以多次获取同一个递归锁，不会产生死锁，加锁锁解锁次数也必须相同.&lt;/p>
+&lt;pre>&lt;code class="language-objectivec">- (void)recursiveFunc:(NSInteger)value
+{
+　　[theLock lock];
+　　if (value != 0) {
+　　　　--value;
+　　　　[self recursiveFunc:value];
+　　}
+　　[theLock unlock];
+}
+&lt;/code>&lt;/pre>
+&lt;p>NSConditionLock 即条件锁，可以设置自定义的条件来获得锁和释放锁. 比如&lt;/p>
+&lt;pre>&lt;code class="language-objectivec">- (void)produce
+{
+　　while (1) {
+[theLock lockWhenCondition:NO_DATA];
+　　　　// create data
+　　　　[theLock unlockWithCondition:HAS_DATA];
+　　}
+}
+- (void)consume
+{
+　　while (1) {
+　　　　if ([theLock tryLockWhenCondition:HAS_DATA]) {
+　　　　　　// display data
+　　　　　　[theLock unlockWithCondition:NO_DATA];
+　　　　}
+　　　　sleep(1.0); // sleep a while
+　　}
+}
+&lt;/code>&lt;/pre></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2019-06-22-ios-lock-nslock/</guid><pubDate>Sat, 22 Jun 2019 00:00:00 +0000</pubDate></item><item><title>iOS中的锁(三)--semaphore</title><link>https://xuyunan.github.io/2019-06-12-ios-lock-semaphore/</link><description>&lt;p>通过dispatch_semaphore控制并发, 实现锁机制。 dispatch_semaphore是用来控制并发数的，类似往篮子里放鸡蛋拿鸡蛋，停车场的车辆入库出库。 通过控制信号量值为0或者1，来实现锁。 dispatch_semaphore_wait会使信号量-1，dispatch_semaphore_signal会使信号量+1，信号量为0时线程等待，为1时方可继续执行。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;pre>&lt;code class="language-objectivec">dispatch_semaphore_t signal = dispatch_semaphore_create(1);
+// Thread 1
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+NSLog(@&amp;quot;Thread 1 waiting&amp;quot;);
+dispatch_semaphore_wait(signal, DISPATCH_TIME_FOREVER); // 信号量 -1
+NSLog(@&amp;quot;Thread 1 start doing something&amp;quot;);
+[NSThread sleepForTimeInterval:4];
+NSLog(@&amp;quot;Thread 1 done&amp;quot;);
+dispatch_semaphore_signal(signal); // 信号量 +1
+NSLog(@&amp;quot;Thread 1 signal&amp;quot;);
+});
+// Thread 2
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+NSLog(@&amp;quot;Thread 2 waiting&amp;quot;);
+dispatch_semaphore_wait(signal, DISPATCH_TIME_FOREVER);
+NSLog(@&amp;quot;Thread 2 start doing something&amp;quot;);
+[NSThread sleepForTimeInterval:5];
+NSLog(@&amp;quot;Thread 2 done&amp;quot;);
+dispatch_semaphore_signal(signal);
+NSLog(@&amp;quot;Thread 2 signal&amp;quot;);
+});
+&lt;/code>&lt;/pre>
+&lt;p>如果要控制一个事件的超时时间，可以通过dispatch_semaphore_wait的第二个参数来控制。&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2019-06-12-ios-lock-semaphore/</guid><pubDate>Wed, 12 Jun 2019 00:00:00 +0000</pubDate></item><item><title>iOS中的锁(二)--synchronized</title><link>https://xuyunan.github.io/2019-06-11-ios-lock-synchronized/</link><description>&lt;p>11年刚入道的时候，只会用这么一种锁，简单方便&lt;/p>
+&lt;pre>&lt;code class="language-objectivec">@synchronized (obj) { }
+&lt;/code>&lt;/pre>
+&lt;!-- raw HTML omitted -->
+&lt;p>我们在main函数里写段简单的代码，然后用clang命令看看它的具体实现&lt;/p>
+&lt;pre>&lt;code class="language-cpp">id _rethrow = 0; id _sync_obj = (id)obj; objc_sync_enter(_sync_obj);
+try {
+struct _SYNC_EXIT {
+_SYNC_EXIT(id arg) : sync_exit(arg) {}
+~_SYNC_EXIT() {objc_sync_exit(sync_exit);}
+id sync_exit;
+} _sync_exit(_sync_obj);
+// TODO:
+} catch (id e) {
+_rethrow = e;
+}
+&lt;/code>&lt;/pre>
+&lt;p>从上面我们可以看出&lt;/p>
+&lt;p>1、使用的是objc_sync_enter和objc_sync_exit来加锁和解锁&lt;br>
+2、创建了一个结构体，充当了一个defer的角色, 当前代码块执行完之后会执行析构函数, 以释放锁资源&lt;/p>
+&lt;p>关于锁的两个函数声明我们可以在usr/include/objc/objc-sync.h中找到(cmd+shift+p搜索objc-sync.h)&lt;/p>
+&lt;pre>&lt;code class="language-cpp">/**
+* Begin synchronizing on 'obj'.
+* Allocates recursive pthread_mutex associated with 'obj' if needed.
+*
+* @param obj The object to begin synchronizing on.
+*
+* @return OBJC_SYNC_SUCCESS once lock is acquired.
+*/
+OBJC_EXPORT int
+objc_sync_enter(id _Nonnull obj)
+OBJC_AVAILABLE(10.3, 2.0, 9.0, 1.0, 2.0);
+/**
+* End synchronizing on 'obj'.
+*
+* @param obj The object to end synchronizing on.
+*
+* @return OBJC_SYNC_SUCCESS or OBJC_SYNC_NOT_OWNING_THREAD_ERROR
+*/
+OBJC_EXPORT int
+objc_sync_exit(id _Nonnull obj)
+OBJC_AVAILABLE(10.3, 2.0, 9.0, 1.0, 2.0);
+&lt;/code>&lt;/pre>
+&lt;p>注释中有提到使用的是pthread_mutex的递归锁, 我尝试着找了一下.m的实现, 但是网上版本太多了, 最后通过注释搜索, 找到了与该版本匹配的实现文件， 下面也贴出了重要的函数实现&lt;/p>
+&lt;p>&lt;a href="https://opensource.apple.com/source/objc4/objc4-371/runtime/objc-sync.h">objc4-371 objc-sync.h&lt;/a>&lt;br>
+&lt;a href="https://opensource.apple.com/source/objc4/objc4-371/runtime/objc-sync.m">objc4-371 objc-sync.m&lt;/a>&lt;/p>
+&lt;pre>&lt;code class="language-cpp">static pthread_mutexattr_t* recursiveAttributes()
+{
+// 略略略...
+err = pthread_mutexattr_settype(&amp;amp;sRecursiveLockAttr, PTHREAD_MUTEX_RECURSIVE);
+// 略略略...
+return &amp;amp;sRecursiveLockAttr;
+}
+// Begin synchronizing on 'obj'.
+// Allocates recursive pthread_mutex associated with 'obj' if needed.
+// Returns OBJC_SYNC_SUCCESS once lock is acquired.
+int objc_sync_enter(id obj)
+{
+// 略略略...
+result = pthread_mutex_lock(&amp;amp;data-&amp;gt;mutex);
+// 略略略...
+return result;
+}
+// End synchronizing on 'obj'.
+// Returns OBJC_SYNC_SUCCESS or OBJC_SYNC_NOT_OWNING_THREAD_ERROR
+int objc_sync_exit(id obj)
+{
+// 略略略...
+result = pthread_mutex_unlock(&amp;amp;data-&amp;gt;mutex);
+// 略略略...
+return result;
+}
+&lt;/code>&lt;/pre>
+&lt;p>这下就很明了了, synchronized其实就是通过pthread_mutex_lock创建的递归锁(PTHREAD_MUTEX_RECURSIVE), 值得注意的是swift已经没有这个语法糖了, 不过可以通过尾随闭包的简写形式实现&lt;/p>
+&lt;pre>&lt;code class="language-cpp">// 实现
+func synchronized(lock: AnyObject, closure: () -&amp;gt; ()) {
+objc_sync_enter(lock)
+closure()
+objc_sync_exit(lock)
+}
+// 使用
+synchronized(anObj) {
+// TODO:
+}
+&lt;/code>&lt;/pre>
+&lt;p>参考链接 &lt;a href="https://swifter.tips/lock/">https://swifter.tips/lock/&lt;/a>&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2019-06-11-ios-lock-synchronized/</guid><pubDate>Tue, 11 Jun 2019 00:00:00 +0000</pubDate></item><item><title>iOS中的锁(一)--pthread_mutex_lock</title><link>https://xuyunan.github.io/2019-06-10-ios-lock-pthread_mutex/</link><description>&lt;p>底层pthread级别加锁, 使用c语言的api, 可用作互斥锁、递归锁, 使用api前，需要导入头文件&lt;/p>
+&lt;pre>&lt;code class="language-objectivec">#import &amp;lt;pthread.h&amp;gt;
+&lt;/code>&lt;/pre>
+&lt;!-- raw HTML omitted -->
+&lt;p>互斥锁&lt;/p>
+&lt;pre>&lt;code class="language-cpp">static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_lock(&amp;amp;mutex);
+// TODO:
+pthread_mutex_unlock(&amp;amp;mutex);
+&lt;/code>&lt;/pre>
+&lt;p>递归锁，允许同一个线程多次递归访问被锁资源，加锁和解锁必须成对出现，使得最终锁能够被解开，其它线程能够访问资源.&lt;/p>
+&lt;pre>&lt;code class="language-cpp">pthread_mutexattr_t attr;
+pthread_mutex_t mutex;
+pthread_mutexattr_settype(&amp;amp;attr, PTHREAD_MUTEX_RECURSIVE);
+pthread_mutex_init(&amp;amp;mutex, &amp;amp;attr);
+// 下面一段有可能被通一个线程，在一个或多个方法中多次调用
+pthread_mutex_lock(&amp;amp;mutex);
+// TODO:
+pthread_mutex_unlock(&amp;amp;mutex);
+&lt;/code>&lt;/pre>
+&lt;p>类似PTHREAD_MUTEX_RECURSIVE影响锁行为的总共有三种类型&lt;/p>
+&lt;pre>&lt;code class="language-cpp">// 如果相同的线程不尝试先解锁，而再次加锁互斥对象，会造成死锁
+#define PTHREAD_MUTEX_NORMAL 0
+// 如果相同的线程试图不先解锁互斥对象而再一次锁定同一个互斥对象，会返回一个非零值的错误，避免死锁
+#define PTHREAD_MUTEX_ERRORCHECK 1
+// 递归地使用pthread_mutex_lock加锁互斥对象，不会造成死锁
+#define PTHREAD_MUTEX_RECURSIVE 2
+#define PTHREAD_MUTEX_DEFAULT PTHREAD_MUTEX_NORMAL
+&lt;/code>&lt;/pre></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2019-06-10-ios-lock-pthread_mutex/</guid><pubDate>Mon, 10 Jun 2019 00:00:00 +0000</pubDate></item><item><title>Objective-C Runtime Programming Guide</title><link>https://xuyunan.github.io/2019-06-07-oc-runtime/</link><description>&lt;p>以下内容根据官方文档和其他博客整理而得, 由于文档版本较旧, 有些api已经过时, 比如标记OBJC2_UNAVAILABLE的api, 此文档仅作了解, 在使用过程中, 还需多看代码注释和文档, 多动手测试.&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;h2 id="运行时版本与平台">运行时版本与平台 &lt;a href="#%e8%bf%90%e8%a1%8c%e6%97%b6%e7%89%88%e6%9c%ac%e4%b8%8e%e5%b9%b3%e5%8f%b0" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>老版本对应Objective-C 1.0, 新版本随Objective-C 2.0一起发布. 两个版本有什么区别呢?&lt;/p>
+&lt;ul>
+&lt;li>在老版本中，如果你改变了一个类的实例变量，就需要重新编译所有继承自它的类&lt;/li>
+&lt;li>在新版本中，则不需要重新编译继承自它的类&lt;/li>
+&lt;/ul>
+&lt;p>什么应用程序是运行在新版本中呢?&lt;/p>
+&lt;p>iPhone应用程序和Mac OS X 10.5以后的64位应用程序使用的是新版本. 其它(Mac OS X的32位应用程序)使用的是旧版本.&lt;/p>
+&lt;h2 id="与运行时的交互">与运行时的交互 &lt;a href="#%e4%b8%8e%e8%bf%90%e8%a1%8c%e6%97%b6%e7%9a%84%e4%ba%a4%e4%ba%92" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>oc中我们时时刻刻在跟运行时打交道，可以通过以下三种形式和运行时接触.&lt;/p>
+&lt;ol>
+&lt;li>Objective-C源代码&lt;/li>
+&lt;/ol>
+&lt;p>oc是个动态语言，要依托于运行时才能执行，当我们写源代码时，其实已经在和运行时打交道了，比如对象方法调用，在运行时会被解释成objc_msgSend.&lt;/p>
+&lt;ol start="2">
+&lt;li>NSObject的方法&lt;/li>
+&lt;/ol>
+&lt;pre>&lt;code class="language-objectivec">- (BOOL)isKindOfClass:(Class)aClass; // 检测是否是某类的子类
+- (BOOL)isMemberOfClass:(Class)aClass; // 检测是否是某类的成员
+- (BOOL)conformsToProtocol:(Protocol *)aProtocol; // 检测是否实现了协议
+- (BOOL)respondsToSelector:(SEL)aSelector; // 检测是否含有方法
+- (IMP)methodForSelector:(SEL)aSelector; // 返回一个指向方法实现的指针
+&lt;/code>&lt;/pre>
+&lt;p>这些方法恰恰是运用了运行时的能力.&lt;/p>
+&lt;ol start="3">
+&lt;li>运行时方法&lt;/li>
+&lt;/ol>
+&lt;p>运行时系统是一个动态共享库，在头文件中，有很多的方法和数据结构，头文件位于/usr/include/objc&lt;/p>
+&lt;h2 id="发送消息">发送消息 &lt;a href="#%e5%8f%91%e9%80%81%e6%b6%88%e6%81%af" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>objc_msgSend&lt;/p>
+&lt;p>方法调用[receiver message]在运行时会被解释成&lt;/p>
+&lt;pre>&lt;code class="language-cpp">objc_msgSend(receiver, selector) // 无参数情况下
+objc_msgSend(receiver, selector, arg1, arg2, ...) // 有参数情况下
+&lt;/code>&lt;/pre>
+&lt;p>receiver是调用函数的对象，selector是message方法的选择器，通过它运行时可以找到对应的函数实现.&lt;/p>
+&lt;p>对象执行方法的具体过程&lt;/p>
+&lt;p>对象在运行时会被解释成结构体objc_object, 类会被解释成objc_class, objc_object里面只有一个isa指针, isa指针指向objc_class, objc_class里面保存着类的变量和方法等信息, 以下代码都能在/usr/include/objc/runtime.h中找到, 头文件中还有两个比较重要的是SEL和IMP, SEL也是一个结构体指针, 是方法的选择器，IMP是方法的实现, objc_class中有一个dispatch table, 在table里SEL和IMP一一对应.&lt;/p>
+&lt;pre>&lt;code class="language-cpp">/// An opaque type that represents an Objective-C class.
+typedef struct objc_class *Class;
+/// Represents an instance of a class.
+struct objc_object {
+Class _Nonnull isa OBJC_ISA_AVAILABILITY;
+};
+/// A pointer to an instance of a class.
+typedef struct objc_object *id;
+&lt;/code>&lt;/pre>
+&lt;pre>&lt;code class="language-cpp">struct objc_class {
+Class _Nonnull isa OBJC_ISA_AVAILABILITY;
+#if !__OBJC2__
+Class _Nullable super_class OBJC2_UNAVAILABLE;
+const char * _Nonnull name OBJC2_UNAVAILABLE;
+long version OBJC2_UNAVAILABLE;
+long info OBJC2_UNAVAILABLE;
+long instance_size OBJC2_UNAVAILABLE;
+struct objc_ivar_list * _Nullable ivars OBJC2_UNAVAILABLE;
+struct objc_method_list * _Nullable * _Nullable methodLists OBJC2_UNAVAILABLE;
+struct objc_cache * _Nonnull cache OBJC2_UNAVAILABLE;
+struct objc_protocol_list * _Nullable protocols OBJC2_UNAVAILABLE;
+#endif
+} OBJC2_UNAVAILABLE;
+/* Use `Class` instead of `struct objc_class *` */
+&lt;/code>&lt;/pre>
+&lt;pre>&lt;code class="language-cpp">/// An opaque type that represents a method selector.
+typedef struct objc_selector *SEL;
+/// A pointer to the function of a method implementation.
+#if !OBJC_OLD_DISPATCH_PROTOTYPES
+typedef void (*IMP)(void /* id, SEL, ... */ );
+#else
+typedef id _Nullable (*IMP)(id _Nonnull, SEL _Nonnull, ...);
+#endif
+&lt;/code>&lt;/pre>
+&lt;p>当一个对象调用方法时, objc_object会通过isa指针找到当前的类objc_class, 检查cache中是否已经缓存了方法，没缓存就再在方法列表中找，找不到就会顺着super_class往父类查找, 然后在按照同样的方法，直到NSObject, 一旦定位到选择器之后，从dispatch table中找出方法的实现IMP, 然后执行.&lt;/p>
+&lt;p>查找过程&lt;/p>
+&lt;p>
+&lt;img
+src="https://xuyunan.github.io/images/ios-messaging-framework.png"
+alt="messaging framework"
+loading="lazy"
+decoding="async"
+width="952"
+height="1242"
+class="full-width"
+/>
+&lt;/p>
+&lt;h4 id="隐藏的参数">隐藏的参数 &lt;a href="#%e9%9a%90%e8%97%8f%e7%9a%84%e5%8f%82%e6%95%b0" class="hash g">#&lt;/a>&lt;/h4>
+&lt;p>在方法调用过程中, 有两个隐藏的参数&lt;/p>
+&lt;p>self 这个就比较常见了,
+_cmd, 就是当前方法的选择器, 类型为SEL, 结构体指针, 我们可以打印出来看看&lt;/p>
+&lt;pre>&lt;code class="language-objectivec">NSLog(@&amp;quot;_cmd: %@&amp;quot;, NSStringFromSelector(_cmd));
+&lt;/code>&lt;/pre>
+&lt;h4 id="获取方法地址">获取方法地址 &lt;a href="#%e8%8e%b7%e5%8f%96%e6%96%b9%e6%b3%95%e5%9c%b0%e5%9d%80" class="hash g">#&lt;/a>&lt;/h4>
+&lt;pre>&lt;code class="language-cpp">void (*setter)(id, SEL, BOOL);
+int i;
+setter = (void (*)(id, SEL, BOOL))[target methodForSelector:@selector(setFilled:)];
+for ( i = 0; i &amp;lt; 1000, i++ )
+setter(targetList[i], @selector(setFilled:), YES);
+&lt;/code>&lt;/pre>
+&lt;p>通过methodForSelector可以获取一个指向函数实现的指针IMP, 然后执行它, 这样可以节省不少消息传递开销, 一般情况下我们都不需要这么做, 像上面这样, 同一个方法频繁执行时, 我们才考虑这么优化.&lt;/p>
+&lt;h2 id="动态方法解析">动态方法解析 &lt;a href="#%e5%8a%a8%e6%80%81%e6%96%b9%e6%b3%95%e8%a7%a3%e6%9e%90" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>有时候我们需要动态提供方法的实现, 像使用了@dynamic的属性, 该关键字告诉编译器, 属性相关的方法会在运行时动态提供(setter, getter).&lt;/p>
+&lt;pre>&lt;code class="language-swift">@dynamic propertyName;
+&lt;/code>&lt;/pre>
+&lt;p>可以通过实现resolveInstanceMethod:来给类添加实例方法实现, 通过实现resolveClassMethod:来给类添加类方法实现. OC方法就是有至少两个参数(self, _cmd)的简单c函数, 我们使用class_addMethod函数来添加一个方法, 函数如下:&lt;/p>
+&lt;pre>&lt;code class="language-cpp">void dynamicMethodIMP(id self, SEL _cmd) {
+// implementation ....
+}
+&lt;/code>&lt;/pre>
+&lt;p>通过resolveInstanceMethod:将方法resolveThisMethodDynamically动态的添加到类中&lt;/p>
+&lt;pre>&lt;code class="language-objectivec">@implementation MyClass
++ (BOOL)resolveInstanceMethod:(SEL)aSEL
+{
+if (aSEL == @selector(resolveThisMethodDynamically)) {
+class_addMethod([self class], aSEL, (IMP) dynamicMethodIMP, &amp;quot;v@:&amp;quot;);
+return YES;
+}
+return [super resolveInstanceMethod:aSEL];
+}
+@end
+&lt;/code>&lt;/pre>
+&lt;p>动态加载&lt;/p>
+&lt;p>OC可以再运行时动态加载和链接新的类和类别, 这些代码被合并进程序，和启动时加载的类和类别同等对待. 原文中还有关于objc/objc-load.h, objc_loadModules的描述, 但是在iOS中，并不支持, macOS才支持.&lt;/p>
+&lt;h2 id="消息转发">消息转发 &lt;a href="#%e6%b6%88%e6%81%af%e8%bd%ac%e5%8f%91" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>当我们给一个对象发送消息时, 若该对象不能处理该消息, 比如, 方法该对象没有该方法, 此时我们有两种方式将此消息转发到其它有能力处理的对象上.&lt;/p>
+&lt;p>forwardingTargetForSelector:&lt;/p>
+&lt;pre>&lt;code class="language-objectivec">- (id)forwardingTargetForSelector:(SEL)aSelector
+{
+if ([self.cat respondsToSelector:aSelector]) {
+return self.cat;
+} else {
+return nil;
+}
+}
+&lt;/code>&lt;/pre>
+&lt;p>当forwardingTargetForSelector:没有实现, 或者返回nil时, 使用forwardInvocation:, 在使用该方法转发消息是, 需要同时实现methodSignatureForSelector:对选择器进行签名, 消息转发机制使用从这个方法中返回的信息来创建NSInvocation对象.&lt;/p>
+&lt;pre>&lt;code class="language-objectivec">// [Cat respondsToSelector:anInvocation.selector] 处理Cat类方法
+// [Cat instancesRespondToSelector:anInvocation.selector] 处理Cat实例方法
+// [Cat instancesRespondToSelector:anInvocation.selector] 等价于 [self.cat respondsToSelector:aSelector]
+- (void)forwardInvocation:(NSInvocation *)anInvocation
+{
+if ([Cat instancesRespondToSelector:anInvocation.selector]) {
+[anInvocation invokeWithTarget:self.cat];
+} else {
+[super forwardInvocation:anInvocation];
+}
+}
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector
+{
+NSMethodSignature *sign = [super methodSignatureForSelector:aSelector];
+if (!sign) {
+if ([Cat instancesRespondToSelector:aSelector]) {
+sign = [Cat instanceMethodSignatureForSelector:aSelector];
+}
+}
+return sign;
+}
+&lt;/code>&lt;/pre>
+&lt;p>:::tip
+forwardInvocation:在swift中是不支持的, 有关的api都已经被标示为UNAVAILABLE
+:::&lt;/p>
+&lt;p>思考多重继承&lt;/p>
+&lt;p>虽然OC不支持多重继承, 但是通过以上的功能, 我们可以模拟出多重继承的效果, 用一个类, 接收处理多个类的事件, 然后将事件通过消息转发分散到其它类中处理.&lt;/p>
+&lt;h2 id="类型编码">类型编码 &lt;a href="#%e7%b1%bb%e5%9e%8b%e7%bc%96%e7%a0%81" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>为协助运行时系统，编译器会将每个方法中的返回值和参数类型编码成字符串并且和方法选择器联系起来, 给一个类型, @encode()会返回对应的编码字符串, 使用方法就像c语言的sizeof一样.&lt;/p>
+&lt;pre>&lt;code class="language-cpp">char *buf1 = @encode(int **); // ^^i
+char *buf2 = @encode(long); // q
+char *buf3 = @encode(void); // v
+char *buf4 = @encode(NSObject); // {NSObject=#}
+char *buf5 = @encode(NSObject *); // @
+char *buf6 = @encode(Class); // #
+// NSLog(@&amp;quot;%s&amp;quot;, buf1);
+&lt;/code>&lt;/pre>
+&lt;p>函数的类型编码，我们也可以通过运行时函数获取&lt;/p>
+&lt;pre>&lt;code class="language-cpp">const char * _Nullable method_getTypeEncoding(Method _Nonnull m)
+&lt;/code>&lt;/pre>
+&lt;p>例如函数 void function(id self, SEL _cmd)的类型编码为”v@:”&lt;/p>
+&lt;p>想要查看其它类型编码, 可以到官方编码表查找 Table: Objective-C type encodings&lt;/p>
+&lt;p>参考&lt;/p>
+&lt;p>&lt;a href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40008048-CH1-SW1">Objective-C Runtime Programming Guide&lt;/a>&lt;br>
+&lt;a href="https://176zane.github.io/2017/11/03/%E3%80%90%E7%BF%BB%E8%AF%91%E3%80%91Objective-C%20Runtime%20Programming%20Guide/">【翻译】Objective-C Runtime Programming Guide&lt;/a>&lt;br>
+&lt;a href="https://danisfabric.gitbooks.io/objective-c-runtime-programming-guide/content/">Objective-C Runtime Programming Guide中文版&lt;/a>&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2019-06-07-oc-runtime/</guid><pubDate>Fri, 07 Jun 2019 00:00:00 +0000</pubDate></item><item><title>关于__block的实现</title><link>https://xuyunan.github.io/2019-05-30-__block/</link><description>&lt;p>我们都知道, 如果要在block中修改外部的变量, 要使用__block来修饰, 那么为什么这么做呢, 里面的原理是什么?&lt;/p>
+&lt;p>经过实践查阅源码后，我们可以了解到:&lt;/p>
+&lt;p>block底层是一个struct, block的参数对应着struct的构造函数参数, block代码块对应着一个函数. 这个函数的参数是当前block.
+不加__block，外部变量copy到block内部，底层是通过struct构造函数将值传递进去，因为是值传递，所以修改不了外面的值.
+加了__block，外面的变量的引用，通过struct的构造函数传递进去，内部持有了这个引用，是个引用传递，所以可以修改外面的值.&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;p>测试的原始block&lt;/p>
+&lt;pre>&lt;code class="language-objectivec">// __block NSInteger num = 10;
+NSInteger num = 10;
+void (^add)(void) = ^void(void) {
+NSLog(@&amp;quot;%ld&amp;quot;, num);
+};
+&lt;/code>&lt;/pre>
+&lt;p>不加__block, clang rewrite之后的源码&lt;/p>
+&lt;pre>&lt;code class="language-cpp">struct __main_block_impl_0 {
+struct __block_impl impl;
+struct __main_block_desc_0* Desc;
+NSInteger num;
+__main_block_impl_0(void *fp, struct __main_block_desc_0 *desc, NSInteger _num, int flags=0) : num(_num) {
+impl.isa = &amp;amp;_NSConcreteStackBlock;
+impl.Flags = flags;
+impl.FuncPtr = fp;
+Desc = desc;
+}
+};
+static void __main_block_func_0(struct __main_block_impl_0 *__cself) {
+NSInteger num = __cself-&amp;gt;num; // bound by copy
+NSLog((NSString *)&amp;amp;__NSConstantStringImpl__var_folders_bm_939gjfvj42b5bzxh93zwnxcm0000gn_T_main_db5d50_mi_0, num);
+}
+&lt;/code>&lt;/pre>
+&lt;p>加了__blcok, clang rewrite之后的源码&lt;/p>
+&lt;pre>&lt;code class="language-cpp">struct __Block_byref_num_0 {
+void *__isa;
+__Block_byref_num_0 *__forwarding;
+int __flags;
+int __size;
+NSInteger num;
+};
+struct __main_block_impl_0 {
+struct __block_impl impl;
+struct __main_block_desc_0* Desc;
+__Block_byref_num_0 *num; // by ref
+__main_block_impl_0(void *fp, struct __main_block_desc_0 *desc, __Block_byref_num_0 *_num, int flags=0) : num(_num-&amp;gt;__forwarding) {
+impl.isa = &amp;amp;_NSConcreteStackBlock;
+impl.Flags = flags;
+impl.FuncPtr = fp;
+Desc = desc;
+}
+};
+static void __main_block_func_0(struct __main_block_impl_0 *__cself) {
+__Block_byref_num_0 *num = __cself-&amp;gt;num; // bound by ref
+NSLog((NSString *)&amp;amp;__NSConstantStringImpl__var_folders_bm_939gjfvj42b5bzxh93zwnxcm0000gn_T_main_3ba1e4_mi_0, (num-&amp;gt;__forwarding-&amp;gt;num));
+}
+&lt;/code>&lt;/pre></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2019-05-30-__block/</guid><pubDate>Thu, 30 May 2019 00:00:00 +0000</pubDate></item><item><title>Block内存存放探究</title><link>https://xuyunan.github.io/2019-05-28-block/</link><description>&lt;h2 id="block简介">Block简介 &lt;a href="#block%e7%ae%80%e4%bb%8b" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>block可以说是一种匿名函数，但是又以对象的形式存在，内部使用结构体实现，我们可以将一个block作为参数传给其它的函数或者block. 一个简单的block如下:&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;pre>&lt;code class="language-objectivec">^(NSInteger param) {
+NSLog(@&amp;quot;%d&amp;quot;, param);
+};
+&lt;/code>&lt;/pre>
+&lt;p>其它block写法参考: &lt;a href="http://fuckingblocksyntax.com/">fuckingblocksyntax.com&lt;/a>&lt;/p>
+&lt;h2 id="block类型">Block类型 &lt;a href="#block%e7%b1%bb%e5%9e%8b" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>我们都知道block有三种类型&lt;/p>
+&lt;ol>
+&lt;li>NSGlobalBlock, 全局block&lt;/li>
+&lt;li>NSStackBlock, 栈区block&lt;/li>
+&lt;li>NSMallocBlock, 堆区block&lt;/li>
+&lt;/ol>
+&lt;p>那么是什么条件决定了block的种类呢? 也就是说是什么条件决定了block存在的内存区域呢? 下面就通过实践来探索下结果.&lt;/p>
+&lt;p>:::tip
+iOS的内存存储区域: 栈区、堆区、全局/静态区、常量区、代码区
+:::&lt;/p>
+&lt;h2 id="block实例">Block实例 &lt;a href="#block%e5%ae%9e%e4%be%8b" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>我们声明一个block，什么都不关联，看看默认情况下是什么类型&lt;/p>
+&lt;pre>&lt;code class="language-objectivec">NSLog(@&amp;quot;%@&amp;quot;, ^(NSInteger a) {
+});
+// TestBlockMemory[4885:374356] &amp;lt;__NSGlobalBlock__: 0x1000010c0&amp;gt;
+&lt;/code>&lt;/pre>
+&lt;p>通过实例我们可以看出，最最简单的block是NSGlobalBlock类型，存在全局区.&lt;/p>
+&lt;p>当block引用了外部变量&lt;/p>
+&lt;pre>&lt;code class="language-objectivec">NSInteger num = 10;
+NSLog(@&amp;quot;%@&amp;quot;, ^(NSInteger a) {
+return a + num;
+});
+// TestBlockMemory[4918:378440] &amp;lt;__NSStackBlock__: 0x7ffeefbff4b8&amp;gt;
+&lt;/code>&lt;/pre>
+&lt;p>首先测试的是引用了一个局部变量，结果为NSStackBlock, 在栈区, 如果引用全局变量呢?&lt;/p>
+&lt;pre>&lt;code class="language-objectivec">static NSInteger num = 10;
+NSLog(@&amp;quot;%@&amp;quot;, ^(NSInteger a) {
+return a + num;
+});
+// TestBlockMemory[4941:379770] &amp;lt;__NSGlobalBlock__: 0x1000010d8&amp;gt;
+&lt;/code>&lt;/pre>
+&lt;p>看的出，引用全局变量后并没有像局部变量那样改变了block原始类型，依然是NSGlobalBlock类型. 在全局区.&lt;/p>
+&lt;p>block赋值操作&lt;/p>
+&lt;pre>&lt;code class="language-objectivec">NSInteger num = 10;
+NSInteger (^addNum)(NSInteger a) = ^NSInteger(NSInteger a) {
+return a + num;
+};
+NSLog(@&amp;quot;%@&amp;quot;, addNum);
+// TestBlockMemory[5002:387216] &amp;lt;__NSMallocBlock__: 0x10055a710&amp;gt;
+&lt;/code>&lt;/pre>
+&lt;p>终于出现了堆区&lt;/p>
+&lt;pre>&lt;code class="language-objectivec">static NSInteger num = 10;
+NSInteger (^addNum)(NSInteger a) = ^NSInteger(NSInteger a) {
+return a + num;
+};
+NSLog(@&amp;quot;%@&amp;quot;, addNum);
+// TestBlockMemory[5025:388490] &amp;lt;__NSGlobalBlock__: 0x100001058&amp;gt;
+&lt;/code>&lt;/pre>
+&lt;p>虽然有了赋值操作，但是引用的是全局变量，block又变回了全局类型.&lt;/p>
+&lt;h2 id="总结">总结 &lt;a href="#%e6%80%bb%e7%bb%93" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>通过以上这些示例，可以得出结论&lt;/p>
+&lt;ol>
+&lt;li>当block刚创建好时，不引用变量或者引用的是全局变量，不进行赋值时是NSGlobalBlock类型，全局区block.&lt;/li>
+&lt;li>当block引用了外部局部变量，不进行赋值操作时是NSStackBlock类型，栈区block.&lt;/li>
+&lt;li>当block引用了外部局部变量，且进行了赋值操作时是NSMallocBlock类型，堆区block.&lt;/li>
+&lt;/ol>
+&lt;p>其实block在哪个区都是有它特定的意义的，当系统不知道你怎么使用时，就把它放到全局区；系统能明确管理的时候，就把它放到栈区; 当你进行了赋值操作，系统可能认为你在将来某个点会用到这个block，于是就放到堆区，延长它的生命周期.&lt;/p>
+&lt;p>接下来&lt;/p>
+&lt;p>如果想更深入的了解block，可以通过clang命令来将oc代码转为c++代码，看内部是如何实现的，执行命令之后会在当前目录产生一个cpp源代码文件&lt;/p>
+&lt;pre>&lt;code class="language-bash">clang -rewrite-objc main.m
+&lt;/code>&lt;/pre></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2019-05-28-block/</guid><pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate></item><item><title>WKWebView(二)--和原生交互</title><link>https://xuyunan.github.io/2019-05-27-wkwebview-2/</link><description>&lt;h2 id="简介">简介 &lt;a href="#%e7%ae%80%e4%bb%8b" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>随意移动互联网的飞速发展，移动应用技术的方案也变得丰富起来了&lt;/p>
+&lt;p>1、纯原生开发 Objective-C、Swift、Java、Kotlin &lt;br>
+2、原生+跨平台混合开发 ReactNative、Flutter&lt;br>
+3、原生+H5混合开发✔️&lt;/p>
+&lt;p>更是随着科技的发展，5G的到来，网速越来越快，H5页面在移动应用上表现的越来越优秀，很多时候我们不得不选择原生+H5的混合开发方案，以便能够快速适应产品需求。接下来我们就看看iOS最新的web组件WKWebView如何与原生交互共存的。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;p>下面的场景需要我们加载一个简单的本地html文件来测试&lt;/p>
+&lt;pre>&lt;code class="language-swift">let filePath = Bundle.main.path(forResource: &amp;quot;h5/index&amp;quot;, ofType: &amp;quot;html&amp;quot;)!
+let myURL = URL(fileURLWithPath: filePath)
+let myRequest = URLRequest(url: myURL)
+webView.load(myRequest)
+&lt;/code>&lt;/pre>
+&lt;p>:::tip
+当加载远程不安全的链接(http)时，需要在info.plist文件添加App Transport Security Settings-Allow Arbitrary Loads为YES
+:::&lt;/p>
+&lt;h2 id="嵌入javascript代码">嵌入JavaScript代码 &lt;a href="#%e5%b5%8c%e5%85%a5javascript%e4%bb%a3%e7%a0%81" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>通过WKUserScript注入JavaScript代码&lt;/p>
+&lt;pre>&lt;code class="language-swift">let contentController = WKUserContentController()
+let scriptSource = &amp;quot;document.body.style.backgroundColor = `red`;&amp;quot;
+let script = WKUserScript(source: scriptSource, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+contentController.addUserScript(script)
+let config = WKWebViewConfiguration()
+config.userContentController = contentController
+&lt;/code>&lt;/pre>
+&lt;p>初始化是有个三个参数&lt;/p>
+&lt;ul>
+&lt;li>source: JavaScript代码字符串&lt;/li>
+&lt;li>injectionTime: 注入的时机，.atDocumentStart document元素刚创建，其他资源还未加载完成时；.atDocumentEnd 文档加载完成时(图片等附属资源有可能还没有加载完成)
+forMainFrameOnly: 是否只在main frame起作用&lt;/li>
+&lt;li>JavaScript调用Native&lt;/li>
+&lt;/ul>
+&lt;p>调用原生分三个步骤&lt;/p>
+&lt;p>注册调用原生的事件userContentController.add(scriptMessageHandler, name: “share”)
+继承WKScriptMessageHandler协议，实现里面的方法，该方法用来接收js事件
+web触发事件window.webkit.messageHandlers.{name}.postMessage(params); name为事件名，params为事件参数, 在协议方法参数message.body中获取.&lt;/p>
+&lt;p>接收示例&lt;/p>
+&lt;pre>&lt;code class="language-swift">class YNScriptMessageHandler: NSObject, WKScriptMessageHandler {
+func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+switch message.name {
+case &amp;quot;share&amp;quot;:
+default:
+print(&amp;quot;default&amp;quot;)
+}
+}
+}
+&lt;/code>&lt;/pre>
+&lt;p>触发示例&lt;/p>
+&lt;pre>&lt;code class="language-javascript">window.webkit.messageHandlers.share.postMessage(params);
+&lt;/code>&lt;/pre>
+&lt;h2 id="native调用javascript">Native调用JavaScript &lt;a href="#native%e8%b0%83%e7%94%a8javascript" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>该方法是异步调用&lt;/p>
+&lt;pre>&lt;code class="language-swift">message.webView?.evaluateJavaScript(&amp;quot;shareCallback(1)&amp;quot;, completionHandler: { (result, error) in
+})
+&lt;/code>&lt;/pre>
+&lt;p>测试文件 index.html&lt;/p>
+&lt;pre>&lt;code class="language-html">&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head lang=&amp;quot;en&amp;quot;&amp;gt;
+&amp;lt;meta charset=&amp;quot;utf-8&amp;quot; /&amp;gt;
+&amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width,initial-scale=1, user-scalable=no&amp;quot; /&amp;gt;
+&amp;lt;title&amp;gt;h5&amp;lt;/title&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;div style=&amp;quot;margin-top: 20px&amp;quot;&amp;gt;
+&amp;lt;h2 style=&amp;quot;text-align: center&amp;quot;&amp;gt;iOS和JavaScript交互&amp;lt;/h1&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div&amp;gt;
+&amp;lt;input type=&amp;quot;button&amp;quot; value=&amp;quot;share&amp;quot; onclick=&amp;quot;shareHandler()&amp;quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;script&amp;gt;
+function shareHandler() {
+var info = {
+&amp;quot;title&amp;quot;: &amp;quot;标题&amp;quot;,
+&amp;quot;desc&amp;quot;: &amp;quot;内容&amp;quot;,
+&amp;quot;shareUrl&amp;quot;: &amp;quot;http://xuyunan.github.io&amp;quot;,
+&amp;quot;shareIcon&amp;quot;: &amp;quot;https://cdn.pixabay.com/photo/2019/03/12/18/00/kerala-4051412_1280.jpg&amp;quot;
+}
+window.webkit.messageHandlers.share.postMessage(info);
+}
+function shareCallback(result) {
+console.log(result);
+}
+&amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code>&lt;/pre>
+&lt;h2 id="参考">参考 &lt;a href="#%e5%8f%82%e8%80%83" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>&lt;a href="https://nshipster.cn/wkwebkit/">nshipster.cn&lt;/a>&lt;br>
+&lt;a href="https://medium.com/capital-one-tech/javascript-manipulation-on-ios-using-webkit-2b1115e7e405">JavaScript Manipulation on iOS Using WebKit&lt;/a>&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2019-05-27-wkwebview-2/</guid><pubDate>Mon, 27 May 2019 00:00:00 +0000</pubDate></item><item><title>WKWebView(一)--简介</title><link>https://xuyunan.github.io/2019-05-16-wkwebview-1/</link><description>&lt;h2 id="简介">简介 &lt;a href="#%e7%ae%80%e4%bb%8b" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>UIWebView是我们从iOS2.0就开始使用的web组件, 但是从iOS8.0以后, 苹果建议我们使用WKWebView, 那么他们之间有什么不同呢? WKWebView又怎么使用呢?&lt;/p>
+&lt;p>UIWebView是UIKit组件, 由于在项目刚开始构建的时候就已经默认引入了UIKit组件, 所以你可以任何地方声明UIWebView来使用都可以, 包括IB; WKWebView是WebKit组件, 在使用的时候要提前引入import WebKit&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;h2 id="关于scalespagetofit">关于scalesPageToFit &lt;a href="#%e5%85%b3%e4%ba%8escalespagetofit" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>WKWebView不再包含scalesPageToFit属性, 但是可以通过在header中添加meta属性来控制&lt;/p>
+&lt;pre>&lt;code class="language-html">// width=device-width
+&amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width,initial-scale=1, user-scalable=no&amp;quot; /&amp;gt;
+&lt;/code>&lt;/pre>
+&lt;p>如果HTML文件不是本地文件，我们也可以通过WKUserScript将meta注入进去&lt;/p>
+&lt;pre>&lt;code class="language-swift">let javaScript = &amp;quot;&amp;quot;&amp;quot;
+var meta = document.createElement('meta');
+meta.setAttribute('name', 'viewport');
+meta.setAttribute('content', 'width=device-width');
+document.getElementsByTagName('head')[0].appendChild(meta);
+&amp;quot;&amp;quot;&amp;quot;
+let userScript = WKUserScript(source: javaScript, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+let userController = WKUserContentController()
+userController.addUserScript(userScript)
+let webConfiguration = WKWebViewConfiguration()
+webConfiguration.userContentController = userController
+webView = WKWebView(frame: .zero, configuration: webConfiguration)
+// let myURL = URL(fileURLWithPath: Bundle.main.path(forResource: &amp;quot;h5/index&amp;quot;, ofType: &amp;quot;html&amp;quot;)!)
+let myURL = URL(string: &amp;quot;https://github.com&amp;quot;)!
+let myRequest = URLRequest(url: myURL)
+webView.load(myRequest)
+view = webView
+&lt;/code>&lt;/pre>
+&lt;h2 id="白屏问题">白屏问题 &lt;a href="#%e7%99%bd%e5%b1%8f%e9%97%ae%e9%a2%98" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>UIWebView内存过大，会导致app crash, 由于WKWebView是运行在另一个进程里，内存过大不会导致整个app crash, 但是会导致页面白屏, 庆幸的时候我们可以通过WKNavigationDelegate的回调方法来处理白屏事件，收到事件后, 我们可以弹框提示, 或者及时刷新页面.&lt;/p>
+&lt;pre>&lt;code class="language-swift">@available(iOS 9.0, *)
+optional public func webViewWebContentProcessDidTerminate(_ webView: WKWebView)
+&lt;/code>&lt;/pre>
+&lt;h2 id="cookies问题">Cookies问题 &lt;a href="#cookies%e9%97%ae%e9%a2%98" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>网上流传一种说法: WKWebView加载网页得到的Cookie会同步到NSHTTPCookieStorage中, 但接下来的请求不会自动携带Cookie. 但是目前测试下来，cookie是会带上的，WKWebView中登录github.com，然后杀掉进程，再次进入，依然是登录状态，通过safari的develop菜单，可以看到cookie的信息. 如果说真的不自动携带cookie, 我们也可以通过setValue:forHTTPHeaderField:和WKUserScript注入的形式，将cookie写入进去.&lt;/p>
+&lt;h2 id="参考资料">参考资料 &lt;a href="#%e5%8f%82%e8%80%83%e8%b5%84%e6%96%99" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>&lt;a href="https://developer.apple.com/documentation/uikit/uiwebview">uiwebview&lt;/a> &lt;a href="https://developer.apple.com/documentation/webkit/wkwebview">wkwebview&lt;/a>&lt;br>
+&lt;a href="https://stackoverflow.com/questions/26295277/wkwebview-equivalent-for-uiwebviews-scalespagetofit">stackoverflow.com&lt;/a>&lt;br>
+&lt;a href="https://medium.com/@FixieLabs/uiwebview-vs-wkwebview-migremos-8539b940f73b">medium.com&lt;/a>&lt;br>
+&lt;a href="https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;amp;mid=2653578513&amp;amp;idx=1&amp;amp;sn=961bf5394eecde40a43060550b81b0bb&amp;amp;chksm=84b3b716b3c43e00ee39de8cf12ff3f8d475096ffaa05de9c00ff65df62cd73aa1cff606057d&amp;amp;mpshare=1&amp;amp;scene=1&amp;amp;srcid=0203vWJWfMGMWwf5NZ8N1ibS&amp;amp;key=7986e1e970a89067a86106b2930c5f6fae92da1b552eeb4696133c44e4169fb458d9a94ff0469f97f76e0a87fcfb05a375902d563045184f88550caaca3d47f3ddb0004c0133e68eb0c719bcbe514460&amp;amp;ascene=0&amp;amp;uin=MTM2NTIyOTI0MA==&amp;amp;devicetype=iMac+MacBookPro11,5+OSX+OSX+10.12.3+build(16D32)&amp;amp;version=12010310&amp;amp;nettype=WIFI&amp;amp;fontScale=100&amp;amp;pass_ticket=aq4MxrhuXuqAWgcklzpe0lU/Eo6zKVJheDZdgcMAeJaVUSaI3npVIEglSZC6GJg4">mp.weixin.qq.com&lt;/a>&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2019-05-16-wkwebview-1/</guid><pubDate>Thu, 16 May 2019 00:00:00 +0000</pubDate></item><item><title>Markdown Syntax Guide</title><link>https://xuyunan.github.io/markdown-syntax/</link><description>&lt;p>This article offers a sample of basic Markdown syntax that can be used in Hugo content files, also it shows whether basic HTML elements are decorated with CSS in a Hugo theme.&lt;/p>
+&lt;h2 id="headings">Headings &lt;a href="#headings" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>The following HTML &lt;code>&amp;lt;h1&amp;gt;&lt;/code>—&lt;code>&amp;lt;h6&amp;gt;&lt;/code> elements represent six levels of section headings. &lt;code>&amp;lt;h1&amp;gt;&lt;/code> is the highest section level while &lt;code>&amp;lt;h6&amp;gt;&lt;/code> is the lowest.&lt;/p>
+&lt;h1 id="h1">H1 &lt;a href="#h1" class="hash g">#&lt;/a>&lt;/h1>
+&lt;h2 id="h2">H2 &lt;a href="#h2" class="hash g">#&lt;/a>&lt;/h2>
+&lt;h3 id="h3">H3 &lt;a href="#h3" class="hash g">#&lt;/a>&lt;/h3>
+&lt;h4 id="h4">H4 &lt;a href="#h4" class="hash g">#&lt;/a>&lt;/h4>
+&lt;h5 id="h5">H5 &lt;a href="#h5" class="hash g">#&lt;/a>&lt;/h5>
+&lt;h6 id="h6">H6 &lt;a href="#h6" class="hash g">#&lt;/a>&lt;/h6>
+&lt;h2 id="paragraph">Paragraph &lt;a href="#paragraph" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>Xerum, quo qui aut unt expliquam qui dolut labo. Aque venitatiusda cum, voluptionse latur sitiae dolessi aut parist aut dollo enim qui voluptate ma dolestendit peritin re plis aut quas inctum laceat est volestemque commosa as cus endigna tectur, offic to cor sequas etum rerum idem sintibus eiur? Quianimin porecus evelectur, cum que nis nust voloribus ratem aut omnimi, sitatur? Quiatem. Nam, omnis sum am facea corem alique molestrunt et eos evelece arcillit ut aut eos eos nus, sin conecerem erum fuga. Ri oditatquam, ad quibus unda veliamenimin cusam et facea ipsamus es exerum sitate dolores editium rerore eost, temped molorro ratiae volorro te reribus dolorer sperchicium faceata tiustia prat.&lt;/p>
+&lt;p>Itatur? Quiatae cullecum rem ent aut odis in re eossequodi nonsequ idebis ne sapicia is sinveli squiatum, core et que aut hariosam ex eat.&lt;/p>
+&lt;h2 id="blockquotes">Blockquotes &lt;a href="#blockquotes" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>The blockquote element represents content that is quoted from another source, optionally with a citation which must be within a &lt;code>footer&lt;/code> or &lt;code>cite&lt;/code> element, and optionally with in-line changes such as annotations and abbreviations.&lt;/p>
+&lt;h4 id="blockquote-without-attribution">Blockquote without attribution &lt;a href="#blockquote-without-attribution" class="hash g">#&lt;/a>&lt;/h4>
+&lt;blockquote>
+&lt;p>Tiam, ad mint andaepu dandae nostion secatur sequo quae.
+&lt;strong>Note&lt;/strong> that you can use &lt;em>Markdown syntax&lt;/em> within a blockquote.&lt;/p>
+&lt;/blockquote>
+&lt;h4 id="blockquote-with-attribution">Blockquote with attribution &lt;a href="#blockquote-with-attribution" class="hash g">#&lt;/a>&lt;/h4>
+&lt;blockquote>
+&lt;p>Don&amp;rsquo;t communicate by sharing memory, share memory by communicating.&lt;!-- raw HTML omitted -->
+— &lt;!-- raw HTML omitted -->Rob Pike&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>&lt;!-- raw HTML omitted -->&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="tables">Tables &lt;a href="#tables" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>Tables aren&amp;rsquo;t part of the core Markdown spec, but Hugo supports supports them out-of-the-box.&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Name&lt;/th>
+&lt;th>Age&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Bob&lt;/td>
+&lt;td>27&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Alice&lt;/td>
+&lt;td>23&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h4 id="inline-markdown-within-tables">Inline Markdown within tables &lt;a href="#inline-markdown-within-tables" class="hash g">#&lt;/a>&lt;/h4>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Italics&lt;/th>
+&lt;th>Bold&lt;/th>
+&lt;th>Code&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;em>italics&lt;/em>&lt;/td>
+&lt;td>&lt;strong>bold&lt;/strong>&lt;/td>
+&lt;td>&lt;code>code&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h2 id="code-blocks">Code Blocks &lt;a href="#code-blocks" class="hash g">#&lt;/a>&lt;/h2>
+&lt;h4 id="code-block-with-backticks">Code block with backticks &lt;a href="#code-block-with-backticks" class="hash g">#&lt;/a>&lt;/h4>
+&lt;pre>&lt;code class="language-html">&amp;lt;!doctype html&amp;gt;
+&amp;lt;html lang=&amp;quot;en&amp;quot;&amp;gt;
+&amp;lt;head&amp;gt;
+&amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+&amp;lt;title&amp;gt;Example HTML5 Document&amp;lt;/title&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;p&amp;gt;Test&amp;lt;/p&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code>&lt;/pre>
+&lt;h4 id="code-block-indented-with-four-spaces">Code block indented with four spaces &lt;a href="#code-block-indented-with-four-spaces" class="hash g">#&lt;/a>&lt;/h4>
+&lt;pre>&lt;code>&amp;lt;!doctype html&amp;gt;
+&amp;lt;html lang=&amp;quot;en&amp;quot;&amp;gt;
+&amp;lt;head&amp;gt;
+&amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+&amp;lt;title&amp;gt;Example HTML5 Document&amp;lt;/title&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;p&amp;gt;Test&amp;lt;/p&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code>&lt;/pre>
+&lt;h4 id="code-block-with-hugos-internal-highlight-shortcode">Code block with Hugo&amp;rsquo;s internal highlight shortcode &lt;a href="#code-block-with-hugos-internal-highlight-shortcode" class="hash g">#&lt;/a>&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-html" data-lang="html">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&amp;lt;!doctype html&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&amp;lt;&lt;span style="color:#f92672">html&lt;/span> &lt;span style="color:#a6e22e">lang&lt;/span>&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;en&amp;#34;&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&amp;lt;&lt;span style="color:#f92672">head&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &amp;lt;&lt;span style="color:#f92672">meta&lt;/span> &lt;span style="color:#a6e22e">charset&lt;/span>&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;utf-8&amp;#34;&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &amp;lt;&lt;span style="color:#f92672">title&lt;/span>&amp;gt;Example HTML5 Document&amp;lt;/&lt;span style="color:#f92672">title&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&amp;lt;/&lt;span style="color:#f92672">head&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&amp;lt;&lt;span style="color:#f92672">body&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &amp;lt;&lt;span style="color:#f92672">p&lt;/span>&amp;gt;Test&amp;lt;/&lt;span style="color:#f92672">p&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&amp;lt;/&lt;span style="color:#f92672">body&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&amp;lt;/&lt;span style="color:#f92672">html&lt;/span>&amp;gt;&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;h2 id="list-types">List Types &lt;a href="#list-types" class="hash g">#&lt;/a>&lt;/h2>
+&lt;h4 id="ordered-list">Ordered List &lt;a href="#ordered-list" class="hash g">#&lt;/a>&lt;/h4>
+&lt;ol>
+&lt;li>First item&lt;/li>
+&lt;li>Second item&lt;/li>
+&lt;li>Third item&lt;/li>
+&lt;/ol>
+&lt;h4 id="unordered-list">Unordered List &lt;a href="#unordered-list" class="hash g">#&lt;/a>&lt;/h4>
+&lt;ul>
+&lt;li>List item&lt;/li>
+&lt;li>Another item&lt;/li>
+&lt;li>And another item&lt;/li>
+&lt;/ul>
+&lt;h4 id="nested-list">Nested list &lt;a href="#nested-list" class="hash g">#&lt;/a>&lt;/h4>
+&lt;ul>
+&lt;li>Fruit
+&lt;ul>
+&lt;li>Apple&lt;/li>
+&lt;li>Orange&lt;/li>
+&lt;li>Banana&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Dairy
+&lt;ul>
+&lt;li>Milk&lt;/li>
+&lt;li>Cheese&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="other-elements--abbr-sub-sup-kbd-mark">Other Elements — abbr, sub, sup, kbd, mark &lt;a href="#other-elements--abbr-sub-sup-kbd-mark" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>&lt;!-- raw HTML omitted -->GIF&lt;!-- raw HTML omitted --> is a bitmap image format.&lt;/p>
+&lt;p>H&lt;!-- raw HTML omitted -->2&lt;!-- raw HTML omitted -->O&lt;/p>
+&lt;p>X&lt;!-- raw HTML omitted -->n&lt;!-- raw HTML omitted --> + Y&lt;!-- raw HTML omitted -->n&lt;!-- raw HTML omitted --> = Z&lt;!-- raw HTML omitted -->n&lt;!-- raw HTML omitted -->&lt;/p>
+&lt;p>Press &lt;!-- raw HTML omitted -->&lt;!-- raw HTML omitted -->CTRL&lt;!-- raw HTML omitted -->+&lt;!-- raw HTML omitted -->ALT&lt;!-- raw HTML omitted -->+&lt;!-- raw HTML omitted -->Delete&lt;!-- raw HTML omitted -->&lt;!-- raw HTML omitted --> to end the session.&lt;/p>
+&lt;p>Most &lt;!-- raw HTML omitted -->salamanders&lt;!-- raw HTML omitted --> are nocturnal, and hunt for insects, worms, and other small creatures.&lt;/p>
+&lt;section class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1" role="doc-endnote">
+&lt;p>The above quote is excerpted from Rob Pike&amp;rsquo;s &lt;a href="https://www.youtube.com/watch?v=PAAkCSZUG1c">talk&lt;/a> during Gopherfest, November 18, 2015.&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/section></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/markdown-syntax/</guid><pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate></item><item><title>Placeholder Text</title><link>https://xuyunan.github.io/placeholder-text/</link><description>&lt;p>Lorem est tota propiore conpellat pectoribus de pectora summo.&lt;/p>
+&lt;p>Redit teque digerit hominumque toris verebor lumina non cervice subde tollit usus habet Arctonque, furores quas nec ferunt. Quoque montibus nunc caluere tempus inhospita parcite confusaque translucet patri vestro qui optatis lumine cognoscere flos nubis! Fronde ipsamque patulos Dryopen deorum.&lt;/p>
+&lt;ol>
+&lt;li>Exierant elisi ambit vivere dedere&lt;/li>
+&lt;li>Duce pollice&lt;/li>
+&lt;li>Eris modo&lt;/li>
+&lt;li>Spargitque ferrea quos palude&lt;/li>
+&lt;/ol>
+&lt;p>Rursus nulli murmur; hastile inridet ut ab gravi sententia! Nomine potitus silentia flumen, sustinet placuit petis in dilapsa erat sunt. Atria tractus malis.&lt;/p>
+&lt;ol>
+&lt;li>Comas hunc haec pietate fetum procerum dixit&lt;/li>
+&lt;li>Post torum vates letum Tiresia&lt;/li>
+&lt;li>Flumen querellas&lt;/li>
+&lt;li>Arcanaque montibus omnes&lt;/li>
+&lt;li>Quidem et&lt;/li>
+&lt;/ol>
+&lt;h1 id="vagus-elidunt">Vagus elidunt &lt;a href="#vagus-elidunt" class="hash g">#&lt;/a>&lt;/h1>
+&lt;p>&lt;!-- raw HTML omitted -->&lt;!-- raw HTML omitted -->&lt;!-- raw HTML omitted -->&lt;!-- raw HTML omitted -->&lt;!-- raw HTML omitted -->&lt;!-- raw HTML omitted -->&lt;!-- raw HTML omitted -->&lt;!-- raw HTML omitted -->&lt;!-- raw HTML omitted -->&lt;!-- raw HTML omitted -->&lt;!-- raw HTML omitted -->&lt;!-- raw HTML omitted -->&lt;!-- raw HTML omitted -->&lt;!-- raw HTML omitted -->&lt;/p>
+&lt;p>&lt;a href="https://en.wikipedia.org/wiki/Canons_of_page_construction#Van_de_Graaf_canon">The Van de Graaf Canon&lt;/a>&lt;/p>
+&lt;h2 id="mane-refeci-capiebant-unda-mulcebat">Mane refeci capiebant unda mulcebat &lt;a href="#mane-refeci-capiebant-unda-mulcebat" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>Victa caducifer, malo vulnere contra dicere aurato, ludit regale, voca! Retorsit colit est profanae esse virescere furit nec; iaculi matertera et visa est, viribus. Divesque creatis, tecta novat collumque vulnus est, parvas. &lt;strong>Faces illo pepulere&lt;/strong> tempus adest. Tendit flamma, ab opes virum sustinet, sidus sequendo urbis.&lt;/p>
+&lt;p>Iubar proles corpore raptos vero auctor imperium; sed et huic: manus caeli Lelegas tu lux. Verbis obstitit intus oblectamina fixis linguisque ausus sperare Echionides cornuaque tenent clausit possit. Omnia putatur. Praeteritae refert ausus; ferebant e primus lora nutat, vici quae mea ipse. Et iter nil spectatae vulnus haerentia iuste et exercebat, sui et.&lt;/p>
+&lt;p>Eurytus Hector, materna ipsumque ut Politen, nec, nate, ignari, vernum cohaesit sequitur. Vel &lt;strong>mitis temploque&lt;/strong> vocatus, inque alis, &lt;em>oculos nomen&lt;/em> non silvis corpore coniunx ne displicet illa. Crescunt non unus, vidit visa quantum inmiti flumina mortis facto sic: undique a alios vincula sunt iactata abdita! Suspenderat ego fuit tendit: luna, ante urbem Propoetides &lt;strong>parte&lt;/strong>.&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/placeholder-text/</guid><pubDate>Sat, 09 Mar 2019 00:00:00 +0000</pubDate></item><item><title>Math Typesetting</title><link>https://xuyunan.github.io/math-typesetting/</link><description>&lt;p>Mathematical notation in a Hugo project can be enabled by using third party JavaScript libraries.&lt;/p>
+&lt;p>In this example we will be using &lt;a href="https://katex.org/">KaTeX&lt;/a>&lt;/p>
+&lt;ul>
+&lt;li>Create a partial under &lt;code>/layouts/partials/math.html&lt;/code>&lt;/li>
+&lt;li>Within this partial reference the &lt;a href="https://katex.org/docs/autorender.html">Auto-render Extension&lt;/a> or host these scripts locally.&lt;/li>
+&lt;li>Include the partial in your templates like so:&lt;/li>
+&lt;/ul>
+&lt;pre>&lt;code class="language-bash">{{ if or .Params.math .Site.Params.math }}
+{{ partial &amp;quot;math.html&amp;quot; . }}
+{{ end }}
+&lt;/code>&lt;/pre>
+&lt;ul>
+&lt;li>To enable KaTex globally set the parameter &lt;code>math&lt;/code> to &lt;code>true&lt;/code> in a project&amp;rsquo;s configuration&lt;/li>
+&lt;li>To enable KaTex on a per page basis include the parameter &lt;code>math: true&lt;/code> in content files&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Note:&lt;/strong> Use the online reference of &lt;a href="https://katex.org/docs/supported.html">Supported TeX Functions&lt;/a>&lt;/p>
+&lt;h3 id="examples">Examples &lt;a href="#examples" class="hash g">#&lt;/a>&lt;/h3>
+&lt;p>Block math:
+$$
+\varphi = 1+\frac{1} {1+\frac{1} {1+\frac{1} {1+\cdots} } }
+$$&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/math-typesetting/</guid><pubDate>Fri, 08 Mar 2019 00:00:00 +0000</pubDate></item><item><title>Emoji Support</title><link>https://xuyunan.github.io/emoji-support/</link><description>&lt;p>Emoji can be enabled in a Hugo project in a number of ways.&lt;/p>
+&lt;p>The &lt;a href="https://gohugo.io/functions/emojify/">&lt;code>emojify&lt;/code>&lt;/a> function can be called directly in templates or &lt;a href="https://gohugo.io/templates/shortcode-templates/#inline-shortcodes">Inline Shortcodes&lt;/a>.&lt;/p>
+&lt;p>To enable emoji globally, set &lt;code>enableEmoji&lt;/code> to &lt;code>true&lt;/code> in your site&amp;rsquo;s &lt;a href="https://gohugo.io/getting-started/configuration/">configuration&lt;/a> and then you can type emoji shorthand codes directly in content files; e.g.&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;p>The &lt;a href="http://www.emoji-cheat-sheet.com/">Emoji cheat sheet&lt;/a> is a useful reference for emoji shorthand codes.&lt;/p>
+&lt;hr>
+&lt;p>&lt;strong>N.B.&lt;/strong> The above steps enable Unicode Standard emoji characters and sequences in Hugo, however the rendering of these glyphs depends on the browser and the platform. To style the emoji you can either use a third party emoji font or a font stack; e.g.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-html" data-lang="html">&lt;span style="display:flex;">&lt;span>.emoji {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> font-family: Apple Color Emoji, Segoe UI Emoji, NotoColorEmoji, Segoe UI Symbol, Android Emoji, EmojiSymbols;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/emoji-support/</guid><pubDate>Tue, 05 Mar 2019 00:00:00 +0000</pubDate></item><item><title>Swift和OC混用</title><link>https://xuyunan.github.io/2017-06-07-swift-oc-mix-and-match/</link><description>&lt;h2 id="前言">前言 &lt;a href="#%e5%89%8d%e8%a8%80" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>你有一个使用Objective-c语言写的项目，想要混用部分Swift代码，于是你创建了一个Swift文件，就在此时，Xcode提示会生成一个跟你项目名称相关联的桥接文件ProductModuleName-Bridging-Header.h, 我们暂且叫它OC桥接文件, 其实Xcode还创建了另外一个桥接文件，叫ProductModuleName-Swift.h, 这个文件在列表里看不到而已, 我们暂且把它叫做Swift桥接文件。&lt;/p>
+&lt;h2 id="swift使用oc代码">Swift使用OC代码 &lt;a href="#swift%e4%bd%bf%e7%94%a8oc%e4%bb%a3%e7%a0%81" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>想要在Swift中使用OC代码，我们只需要做两件事情&lt;/p>
+&lt;p>1、将要使用的OC文件, 在OC桥接文件导入&lt;/p>
+&lt;pre>&lt;code class="language-objectivec">#import &amp;quot;XYZCustomCell.h&amp;quot;
+#import &amp;quot;XYZCustomView.h&amp;quot;
+#import &amp;quot;XYZCustomViewController.h&amp;quot;
+&lt;/code>&lt;/pre>
+&lt;p>2、确保Build Settings里, Objective-C Bridging Header这个选项里有正确的桥接文件相对地址, 一般系统都帮你填好了, 类似ProductModuleName/ProductModuleName-Bridging-Header.h&lt;/p>
+&lt;p>同一个target下不需要导入任何代码即可使用, 不用target, 要导入模块名.&lt;/p>
+&lt;h2 id="oc使用swift代码">OC使用Swift代码 &lt;a href="#oc%e4%bd%bf%e7%94%a8swift%e4%bb%a3%e7%a0%81" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>1、Swift桥接文件是Xcode自动处理的，我们只需要在写Swift代码的时候稍微主要下就可以了，那么具体要注意什么?&lt;/p>
+&lt;p>使用public或者open标记的代码，将会无条件的引入到桥接文件中; 关于被internal标记的代码，只有在项目中有OC桥接文件的情况下，才会被引入到Swift桥接文件中，之后暴露给OC代码; private和fileprivate标记的代码是不会被OC代码所看到的。&lt;/p>
+&lt;p>:::tip
+如果被private和fileprivate标记的代码块里含有@IBAction, @IBOutlet, or @objc, 那么这些代码也将会暴露给OC。
+:::&lt;/p>
+&lt;p>2、如果不再一个模块里，需要确保Build Settings里, Defines Module这个选项的值为YES, 才能混用&lt;/p>
+&lt;p>使用Swift代码时, 需要导入Swift桥接文件&lt;/p>
+&lt;pre>&lt;code class="language-objectivec">#import &amp;quot;ProductModuleName-Swift.h&amp;quot;
+&lt;/code>&lt;/pre>
+&lt;p>如果不在一个模块，怎么办?&lt;/p>
+&lt;p>如果混用时不再一个模块, 需要导入模块名&lt;/p>
+&lt;p>1、将模块引入Swift代码中&lt;/p>
+&lt;pre>&lt;code class="language-swift">import FrameworkName
+&lt;/code>&lt;/pre>
+&lt;p>2、将模块引入OC代码中&lt;/p>
+&lt;pre>&lt;code class="language-swift">@import FrameworkName;
+&lt;/code>&lt;/pre></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2017-06-07-swift-oc-mix-and-match/</guid><pubDate>Wed, 07 Jun 2017 00:00:00 +0000</pubDate></item><item><title>创建私有Pod</title><link>https://xuyunan.github.io/2017-04-04-create-private-pod/</link><description>&lt;h2 id="为什么搭建私有库">为什么搭建私有库 &lt;a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e6%90%ad%e5%bb%ba%e7%a7%81%e6%9c%89%e5%ba%93" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>私有库可以保证代码的安全性，亦可以将复用性强的代码、控件封装成模块，提供给部门或公司的人员用。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;h2 id="搭建过程">搭建过程 &lt;a href="#%e6%90%ad%e5%bb%ba%e8%bf%87%e7%a8%8b" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>首先需要创建一个私有git仓库，用来存放描述文件，可以使用bitbucket，假设创建了一个名为REPO_NAME的私有仓库。然后创建一个可复用的项目叫HexColors, 是一个swift中使用十六进制颜色的扩展，放到了bitbucket上。并且打了tag，HexColors.podspec文件也已经创建好了，整个过程和创建开源库没有什么区别。&lt;/p>
+&lt;p>关联私有库地址&lt;/p>
+&lt;pre>&lt;code class="language-bash">pod repo add REPO_NAME SOURCE_URL
+&lt;/code>&lt;/pre>
+&lt;p>验证是否配置正确&lt;/p>
+&lt;pre>&lt;code class="language-bash">cd ~/.cocoapods/repos/REPO_NAME
+pod repo lint .
+&lt;/code>&lt;/pre>
+&lt;p>将刚刚创建好的pod描述文件，推至私有仓库&lt;/p>
+&lt;pre>&lt;code class="language-bash">pod repo push REPO_NAME SPEC_NAME.podspec
+&lt;/code>&lt;/pre>
+&lt;p>此时，你的私有仓库应该是这个结构&lt;/p>
+&lt;pre>&lt;code class="language-bash">.
+├── Specs
+└── [SPEC_NAME]
+└── [VERSION]
+└── [SPEC_NAME].podspec
+&lt;/code>&lt;/pre>
+&lt;h2 id="使用">使用 &lt;a href="#%e4%bd%bf%e7%94%a8" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>切到要使用的项目，这里我还用我的YNPodDemo，在Podfile里加上这样一行，来指定私有和共开仓库&lt;/p>
+&lt;pre>&lt;code class="language-bash"># Private Specs
+source 'URL_TO_REPOSITORY'
+# Public Specs
+source 'https://github.com/CocoaPods/Specs.git'
+&lt;/code>&lt;/pre>
+&lt;p>然后添加HexColors&lt;/p>
+&lt;pre>&lt;code class="language-bash">pod 'HexColors', '~&amp;gt;0.0.1'
+&lt;/code>&lt;/pre>
+&lt;p>之后就跟使用开源库一样了&lt;/p>
+&lt;pre>&lt;code class="language-bash">pod install
+&lt;/code>&lt;/pre>
+&lt;h2 id="ynpoddemo">YNPodDemo &lt;a href="#ynpoddemo" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>这个Demo打了三个tag:&lt;/p>
+&lt;p>0.1 测试使用Cocoapods&lt;br>
+0.2 测试使用自己创建的开源库&lt;br>
+0.3 测试使用自己创建的私有库&lt;/p>
+&lt;p>使用下面这条命令可以检出特定Tag对应的代码&lt;/p>
+&lt;pre>&lt;code class="language-bash">git clone --branch &amp;lt;tag_name&amp;gt; &amp;lt;repo_url&amp;gt;
+&lt;/code>&lt;/pre></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2017-04-04-create-private-pod/</guid><pubDate>Tue, 04 Apr 2017 00:00:00 +0000</pubDate></item><item><title>创建开源POD</title><link>https://xuyunan.github.io/2017-04-03-create-opensource-pod/</link><description>&lt;h2 id="准备内容">准备内容 &lt;a href="#%e5%87%86%e5%a4%87%e5%86%85%e5%ae%b9" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>这里我使用YNWebViewController，一开始目录结构是这样的&lt;/p>
+&lt;pre>&lt;code>├── Demo
+├── LICENSE
+├── README.md
+└── YNWebViewController
+&lt;/code>&lt;/pre>
+&lt;!-- raw HTML omitted -->
+&lt;p>要分享的代码和资源文件都在YNWebViewController文件夹里了, 项目源代码在&lt;a href="https://github.com/xuyunan/YNWebViewController">Github&lt;/a>上。&lt;/p>
+&lt;p>先给项目打个tag，后面要用到&lt;/p>
+&lt;pre>&lt;code class="language-bash">git tag 0.1.5
+git push --tags
+&lt;/code>&lt;/pre>
+&lt;h2 id="pod描述文件">Pod描述文件 &lt;a href="#pod%e6%8f%8f%e8%bf%b0%e6%96%87%e4%bb%b6" class="hash g">#&lt;/a>&lt;/h2>
+&lt;ul>
+&lt;li>pod spec create YNWebViewController create后面跟的是项目名，在项目主目录下执行该命令后，系统会自动在该目录下创建一个名为YNWebViewController.podspec的描述文件，用于记录项目信息。&lt;/li>
+&lt;li>在podspec文件里，写入相关的项目信息，如：作者，项目地址，要包含的源文件和资源文件路径，开源协议等，具体还是要看里面的注释。&lt;a href="https://guides.cocoapods.org/syntax/podspec.html">Podspec Syntax Reference&lt;/a>&lt;/li>
+&lt;li>pod spec lint YNWebViewController.podspec 然后我们该命令来验证这个描述文件有没有错误， 没问题的话，就把这个文件也push到项目git。&lt;/li>
+&lt;/ul>
+&lt;h2 id="上传描述文件">上传描述文件 &lt;a href="#%e4%b8%8a%e4%bc%a0%e6%8f%8f%e8%bf%b0%e6%96%87%e4%bb%b6" class="hash g">#&lt;/a>&lt;/h2>
+&lt;ul>
+&lt;li>pod trunk register &lt;a href="mailto:xu_yunan@163.com">xu_yunan@163.com&lt;/a> &amp;lsquo;Tommy Xu&amp;rsquo; &amp;ndash;description=&amp;lsquo;macbook pro&amp;rsquo; 首先在你电脑上注册信息, 注册好之后可以用 pod trunk me 查看个人信息。&lt;/li>
+&lt;li>pod trunk push YNWebViewController.podspec 接下来使用这个命令，将pod描述文件推至cocoapods库。&lt;/li>
+&lt;li>成功之后就可以在cocoapods网站上看到你的库了YNWebViewController&lt;/li>
+&lt;/ul>
+&lt;p>:::tip
+经过以上几个步骤，一般情况下，别人就已经可以使用你的开源库了。如果在执行命令的时候总提示timeout，那就挂个梯子吧。
+:::&lt;/p>
+&lt;h2 id="遇到的问题">遇到的问题 &lt;a href="#%e9%81%87%e5%88%b0%e7%9a%84%e9%97%ae%e9%a2%98" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>以下是我在创建的过程遇到的几个问题及解决方法，希望对你有用:&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>明明已经提示上传好了，却还搜不到，这时就需要把本地缓存删掉
+rm ~/Library/Caches/CocoaPods/search_index.json&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>搜到之后，在使用的过程中报错 Cannot call value of non-function type ‘module‘
+将class和需要开放出来的方法和属性声明为public&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>方法，属性都能正常使用了，但是图片资源加载不出来，此时需要更换图片加载方式 Pod images not loading&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;pre>&lt;code class="language-swift">let bundle = Bundle(for: YNWebViewController.self)
+let backImage = UIImage(named: &amp;quot;YNWebViewControllerBack.png&amp;quot;, in: bundle, compatibleWith: nil)
+&lt;/code>&lt;/pre>
+&lt;p>&lt;a href="https://cocoapods.org/pods/YNWebViewController">项目地址&lt;/a>&lt;br>
+&lt;a href="https://github.com/xuyunan/YNPodDemo">测试项目地址&lt;/a>&lt;/p>
+&lt;h2 id="参考">参考 &lt;a href="#%e5%8f%82%e8%80%83" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>&lt;a href="https://cocoapods.org/">CREATE A POD&lt;/a>&lt;br>
+&lt;a href="https://guides.cocoapods.org/making/getting-setup-with-trunk.html">Getting setup with Trunk&lt;/a>&lt;br>
+&lt;a href="http://stackoverflow.com/questions/5480258/how-to-delete-a-git-remote-tag">Delete a tag&lt;/a>&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2017-04-03-create-opensource-pod/</guid><pubDate>Mon, 03 Apr 2017 00:00:00 +0000</pubDate></item><item><title>使用COCOAPODS</title><link>https://xuyunan.github.io/2017-04-02-cocoapods-usage/</link><description>&lt;h2 id="简介">简介 &lt;a href="#%e7%ae%80%e4%bb%8b" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>可以说这是一个平台，因为它保存了无数的开源库。 可以说是一个工具，一个帮你管理第三方库的工具。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;h2 id="安装">安装 &lt;a href="#%e5%ae%89%e8%a3%85" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>pod 检查是否已经安装，如果出现pod COMMAND，说明你已经安装过了。
+sudo gem install cocoapods 安装或者更新
+pod search Alamofire 搜索&lt;/p>
+&lt;h2 id="使用">使用 &lt;a href="#%e4%bd%bf%e7%94%a8" class="hash g">#&lt;/a>&lt;/h2>
+&lt;ul>
+&lt;li>首先我创建了个项目YNPodDemo&lt;/li>
+&lt;li>切到项目主目录，执行pod init，系统就会自动帮你创建一个名为Podfile的文件&lt;/li>
+&lt;li>将你要使用的库写进去 pod &amp;lsquo;Alamofire&amp;rsquo;, &amp;lsquo;~&amp;gt;4.3.0&amp;rsquo;&lt;/li>
+&lt;li>执行pod install，将使用的库安装到本地&lt;/li>
+&lt;li>之后就会在工程文件夹下多出一个类似YNPodDemo.xcworkspace这样的工程文件，以后用这个打开项目就可以了，不要在使用YNPodDemo.xcodeproj&lt;/li>
+&lt;li>导入&amp;amp;使用&lt;/li>
+&lt;/ul>
+&lt;p>在使用库时，如果有错误提示 Cannot load underlying module for ‘Alamofire’, clean然后build。&lt;a href="https://github.com/Alamofire/Alamofire/issues/441">issues441&lt;/a>&lt;/p>
+&lt;h2 id="卸载">卸载 &lt;a href="#%e5%8d%b8%e8%bd%bd" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>sudo gem uninstall cocoapods 一般也用不到&lt;/p>
+&lt;h2 id="参考">参考 &lt;a href="#%e5%8f%82%e8%80%83" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>&lt;a href="https://www.cocoapods.org/">cocoapods.org&lt;/a>&lt;br>
+&lt;a href="https://www.raywenderlich.com/97014/use-cocoapods-with-swift">How to Use CocoaPods with Swift&lt;/a>&lt;/p>
+&lt;h2 id="podfile示例">Podfile示例 &lt;a href="#podfile%e7%a4%ba%e4%be%8b" class="hash g">#&lt;/a>&lt;/h2>
+&lt;pre>&lt;code class="language-ruby"># Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+target 'YNPodDemo' do
+# Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+use_frameworks!
+# Pods for YNPodDemo
+pod 'Alamofire', '~&amp;gt;4.3.0'
+target 'YNPodDemoTests' do
+inherit! :search_paths
+# Pods for testing
+end
+target 'YNPodDemoUITests' do
+inherit! :search_paths
+# Pods for testing
+end
+end
+&lt;/code>&lt;/pre></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2017-04-02-cocoapods-usage/</guid><pubDate>Sun, 02 Apr 2017 00:00:00 +0000</pubDate></item><item><title>Lorem ipsum dolores eos</title><link>https://xuyunan.github.io/lorem-ipsum-copy-2/</link><description>&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/lorem-ipsum-copy-2/</guid><pubDate>Sat, 11 Mar 2017 00:00:00 +0000</pubDate></item><item><title>Lorem ipsum dolores eos</title><link>https://xuyunan.github.io/lorem-ipsum-copy/</link><description>&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/lorem-ipsum-copy/</guid><pubDate>Sat, 11 Mar 2017 00:00:00 +0000</pubDate></item><item><title>Lorem ipsum dolores eos qui ratione voluptatem</title><link>https://xuyunan.github.io/lorem-ipsum/</link><description>&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/lorem-ipsum/</guid><pubDate>Sat, 11 Mar 2017 00:00:00 +0000</pubDate></item><item><title>Lorem ipsum sit ale natus unde</title><link>https://xuyunan.github.io/lorem-ipsum-sit-ale/</link><description>&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/lorem-ipsum-sit-ale/</guid><pubDate>Thu, 08 Sep 2016 00:00:00 +0000</pubDate></item><item><title>Lorem ipsum perspiciatis unde omnis</title><link>https://xuyunan.github.io/ipsum-lore-guti-sit-volu-sit-amet/</link><description>&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/ipsum-lore-guti-sit-volu-sit-amet/</guid><pubDate>Fri, 08 Jul 2016 00:00:00 +0000</pubDate></item><item><title>Lorem ipsum magni dolores eos dolores eos qui ratione voluptatem</title><link>https://xuyunan.github.io/lorem-catu-ale-copy-2/</link><description>&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/lorem-catu-ale-copy-2/</guid><pubDate>Tue, 08 Sep 2015 00:00:00 +0000</pubDate></item><item><title>Lorem ipsum magni dolores eos qui ratione voluptatem</title><link>https://xuyunan.github.io/lorem-catu-ale-copy-4/</link><description>&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/lorem-catu-ale-copy-4/</guid><pubDate>Tue, 08 Sep 2015 00:00:00 +0000</pubDate></item><item><title>Lorem ipsum magni dolores eos voluptatem</title><link>https://xuyunan.github.io/lorem-catu-ale-copy-3/</link><description>&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/lorem-catu-ale-copy-3/</guid><pubDate>Tue, 08 Sep 2015 00:00:00 +0000</pubDate></item><item><title>Lorem ipsum magni ratione voluptatem</title><link>https://xuyunan.github.io/lorem-catu-ale-copy/</link><description>&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/lorem-catu-ale-copy/</guid><pubDate>Tue, 08 Sep 2015 00:00:00 +0000</pubDate></item><item><title>Lorem ipsumqui ratione voluptatem dolores eos</title><link>https://xuyunan.github.io/lorem-catu-ale-copy-5/</link><description>&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/lorem-catu-ale-copy-5/</guid><pubDate>Tue, 08 Sep 2015 00:00:00 +0000</pubDate></item><item><title>Lorem qui ratione voluptatem</title><link>https://xuyunan.github.io/lorem-catu-ale/</link><description>&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p>
+&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/lorem-catu-ale/</guid><pubDate>Tue, 08 Sep 2015 00:00:00 +0000</pubDate></item><item><title>Lorem ipsum dolores eos qui ratione</title><link>https://xuyunan.github.io/ipsum-lore-de-copy-2/</link><description/><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/ipsum-lore-de-copy-2/</guid><pubDate>Mon, 08 Sep 2014 00:00:00 +0000</pubDate></item><item><title>Lorem ipsum dolores eos qui ratione voluptatem</title><link>https://xuyunan.github.io/ipsum-lore-de-copy/</link><description/><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/ipsum-lore-de-copy/</guid><pubDate>Mon, 08 Sep 2014 00:00:00 +0000</pubDate></item><item><title>Lorem ipsum te</title><link>https://xuyunan.github.io/ipsum-lore-de-re-mo-mi/</link><description>&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/ipsum-lore-de-re-mo-mi/</guid><pubDate>Mon, 08 Sep 2014 00:00:00 +0000</pubDate></item><item><title>Lorem ipsum ut pers unde dolores</title><link>https://xuyunan.github.io/ipsum-lore-de-re-mo/</link><description>&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/ipsum-lore-de-re-mo/</guid><pubDate>Mon, 08 Sep 2014 00:00:00 +0000</pubDate></item><item><title>Loremratione voluptatem</title><link>https://xuyunan.github.io/ipsum-lore-de/</link><description/><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/ipsum-lore-de/</guid><pubDate>Mon, 08 Sep 2014 00:00:00 +0000</pubDate></item><item><title>Lorem ipsum unde omnis iste</title><link>https://xuyunan.github.io/ipsum-lore-de-re/</link><description>&lt;p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/ipsum-lore-de-re/</guid><pubDate>Thu, 08 May 2014 00:00:00 +0000</pubDate></item><item><title>Lorem ipsum tut</title><link>https://xuyunan.github.io/ipsum-lore-copy-2/</link><description/><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/ipsum-lore-copy-2/</guid><pubDate>Sun, 08 Sep 2013 00:00:00 +0000</pubDate></item><item><title>Lorem ipsum tut</title><link>https://xuyunan.github.io/ipsum-lore-copy/</link><description/><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/ipsum-lore-copy/</guid><pubDate>Sun, 08 Sep 2013 00:00:00 +0000</pubDate></item><item><title>Lorem ipsum tut dolores eos qui ration</title><link>https://xuyunan.github.io/ipsum-lore/</link><description/><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/ipsum-lore/</guid><pubDate>Sun, 08 Sep 2013 00:00:00 +0000</pubDate></item></channel></rss>
