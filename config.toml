@@ -9,7 +9,7 @@ paginate = 9999
 minify = true
 disableHugoGeneratorInject = true
 
-theme = "listed"
+theme = "hugo-fengcheng"
 
 [taxonomies]
   tag = "tags"

@@ -7,3 +7,6 @@
 [submodule "themes/listed"]
 	path = themes/listed
 	url = https://github.com/ronv/listed.git
+[submodule "themes/hugo-fengcheng"]
+	path = themes/hugo-fengcheng
+	url = https://github.com/xuyunan/hugo-fengcheng.git
