@@ -2,7 +2,6 @@
 title: 使用COCOAPODS
 tags: [iOS]
 date: 2017-04-02T13:00:24+08:00
-layout: "archives"
 ---
 
 ## 简介

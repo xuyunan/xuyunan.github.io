@@ -1,3 +1,9 @@
 [submodule "themes/hugo-tania"]
 	path = themes/hugo-tania
 	url = https://github.com/WingLim/hugo-tania
+[submodule "themes/ink-free"]
+	path = themes/ink-free
+	url = https://github.com/chollinger93/ink-free
+[submodule "themes/listed"]
+	path = themes/listed
+	url = https://github.com/ronv/listed.git

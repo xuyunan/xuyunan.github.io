@@ -109,7 +109,7 @@ typedef id _Nullable (*IMP)(id _Nonnull, SEL _Nonnull, ...);
 
 查找过程
 
-![messaging framework](./images/ios-messaging-framework.png)
+![messaging framework](/images/ios-messaging-framework.png)
 
 #### 隐藏的参数
 
