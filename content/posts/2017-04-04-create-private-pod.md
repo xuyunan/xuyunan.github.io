@@ -1,5 +1,5 @@
 ---
-title: 创建私有Pod
+title: 创建私有POD
 tags: [iOS]
 date: 2017-04-04T13:00:24+08:00
 ---

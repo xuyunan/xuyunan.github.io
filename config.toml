@@ -1,8 +1,7 @@
 baseURL = "https://xuyunan.github.io"
 languageCode = "zh-CN"
-title = "我的博客"
+title = "Tommy's blog"
 disableKinds = ["section", "categories", "tags"]
-disqusShortname = "xuyunan"
 pygmentsCodeFences = false
 pygmentsUseClasses = false
 paginate = 9999
@@ -33,10 +32,22 @@ theme = "hugo-fengcheng"
   name = "xuyunan"
 
 [params]
-  description = "记录一些有用的知识"
+  description = "烂笔头日记"
   author = "xuyunan"
   copyright = "xuyunan"
-  logo = ""
+  logo = "/assets/favicon.png"
+
+  # Comments settings
+  [params.comments]
+    enabled = true
+    provider = "giscus"
+
+    [params.comments.giscus]
+        repo = "xuyunan/xuyunan.github.io"
+        id = "R_kgDOHDKDYg"
+        [params.comments.giscus.category]
+          name = "Announcements"
+          id = "DIC_kwDOHDKDYs4COQxq"
 
 [frontmatter]
   date  = [":filename", ":default"]
@@ -88,3 +99,18 @@ theme = "hugo-fengcheng"
     name       = "About"
     url        = "/about/"
     weight     = -20
+    
+
+# [markup]
+#   [markup.highlight]
+#     anchorLineNos = false
+#     codeFences = true
+#     guessSyntax = true
+#     hl_Lines = ""
+#     lineAnchors = ""
+#     lineNoStart =1
+#     lineNos = true
+#     lineNumbersInTable = true
+#     noClasses = true
+#     style = "monokai"
+#     tabWidth = 4
