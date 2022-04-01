@@ -33,10 +33,10 @@ import Interval from 'bizcharts/lib/geometry/Interval';
 
 gzip配置示例如下
 
-```
+```nginx
 location / {
     try_files $uri $uri/ /index.html;
-    ...
+    # ...
 }
 gzip on; 
 gzip_vary on; 

@@ -1,9 +1,7 @@
 baseURL = "https://xuyunan.github.io"
 languageCode = "zh-CN"
 title = "Tommy's blog"
-disableKinds = ["section", "categories", "tags"]
-pygmentsCodeFences = false
-pygmentsUseClasses = false
+# disableKinds = ["section", "categories", "tags"]
 paginate = 9999
 minify = true
 disableHugoGeneratorInject = true
@@ -55,7 +53,7 @@ theme = "hugo-fengcheng"
   github = ""
   facebook = ""
   og_image = ""
-  sitename = "Liste"
+  sitename = ""
   twitter = ""
 
 [permalinks]
@@ -100,17 +98,20 @@ theme = "hugo-fengcheng"
     url        = "/about/"
     weight     = -20
     
+# Code highlight settings  
+# https://xyproto.github.io/splash/docs/all.html 
+# https://nnix.com/x/hedy.tilde.cafe/posts/hugo-syntax-highlighting.gmi
 
-# [markup]
-#   [markup.highlight]
-#     anchorLineNos = false
-#     codeFences = true
-#     guessSyntax = true
-#     hl_Lines = ""
-#     lineAnchors = ""
-#     lineNoStart =1
-#     lineNos = true
-#     lineNumbersInTable = true
-#     noClasses = true
-#     style = "monokai"
-#     tabWidth = 4
+[markup]
+  [markup.highlight]
+    anchorLineNos = false
+    codeFences = true
+    guessSyntax = true
+    hl_Lines = ""
+    lineAnchors = ""
+    lineNoStart =1
+    lineNos = true
+    lineNumbersInTable = true
+    noClasses = true
+    style = "witchhazel"
+    tabWidth = 4   

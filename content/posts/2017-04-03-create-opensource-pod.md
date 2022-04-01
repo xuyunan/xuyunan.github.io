@@ -38,9 +38,7 @@ git push --tags
 - pod trunk push YNWebViewController.podspec 接下来使用这个命令，将pod描述文件推至cocoapods库。
 - 成功之后就可以在cocoapods网站上看到你的库了YNWebViewController
 
-:::tip
-经过以上几个步骤，一般情况下，别人就已经可以使用你的开源库了。如果在执行命令的时候总提示timeout，那就挂个梯子吧。
-:::
+> 经过以上几个步骤，一般情况下，别人就已经可以使用你的开源库了。如果在执行命令的时候总提示timeout，那就挂个梯子吧。
 
 ## 遇到的问题
 

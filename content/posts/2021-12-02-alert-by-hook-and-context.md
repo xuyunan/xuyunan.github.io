@@ -38,19 +38,19 @@ src
 
 文件创建好了之后，接下来就要往里填充内容，修改alert-context.js, 先导入依赖
 
-```javascript
+```jsx
 import React, { useState, createContext, useContext, useEffect } from "react";
 ```
 
 创建context对象
 
-```javascript
+```jsx
 const AlertContext = createContext();
 ```
 
 定义alert组件
 
-```javascript
+```jsx
 const Alert = ({ onClick }) => {
   return (
     <div className="alert-wrapper">
@@ -65,7 +65,7 @@ const Alert = ({ onClick }) => {
 
 创建context provider
 
-```javascript
+```jsx
   const AlertProvider = (props) => {
   const [isDisplaying, setIsDisplaying] = useState(false);
 
@@ -84,7 +84,7 @@ const Alert = ({ onClick }) => {
 
 AlertProvider创建完成，一般我们会用其包裹应用入口组件，一般是`<App />` 。但是，使用前需要导出，现在我们创建一个自定义 hook，将外部使用到的内容导出
 
-```javascript
+```jsx
 const useAlert = () => {
   return useContext(AlertContext);
 };
@@ -95,7 +95,7 @@ export default { AlertContext, useAlert };
 
 下面就是如何使用以上制作的组件，首先配置AlertProvider，修改index.js
 
-```javascript
+```jsx
 import { AlertProvider } from "./context/alert-context";
 // ...
 ReactDOM.render(
@@ -108,7 +108,7 @@ ReactDOM.render(
 
 然后，在需要显示提示框，也就是需要调用show，dismiss的地方引入userAlert，修改App.js，在其中添加一个测试按钮
 
-```javascript
+```jsx
 import { useAlert } from './context/alert-context';
 // ...
 const alert = useAlert();
@@ -123,7 +123,7 @@ const onClick = () => alert.show();
 
 如果想让alert更加灵活，我们需要在show函数添加params 参数，最终将params传入alert，参数内容可以是title、icon等信息，修改alert-context.js
 
-```javascript
+```jsx
 //...
 const [params, setParams] = useState();
 //...
@@ -139,7 +139,7 @@ const show = (params) => {
 
 使用useEffect, 在组件挂载时绑定ESC键，组件卸载时移除键绑定，在alert组件添加
 
-```javascript
+```jsx
 useEffect(() => {
   const bind = (e) => {
     if (e.keyCode !== 27) return;

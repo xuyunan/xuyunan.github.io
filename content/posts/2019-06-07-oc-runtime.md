@@ -124,7 +124,7 @@ NSLog(@"_cmd: %@", NSStringFromSelector(_cmd));
 
 #### 获取方法地址
 
-```cpp
+```objectivec
 void (*setter)(id, SEL, BOOL);
 int i;
 setter = (void (*)(id, SEL, BOOL))[target methodForSelector:@selector(setFilled:)];
@@ -213,9 +213,7 @@ forwardingTargetForSelector:
 }
 ```
 
-:::tip
-forwardInvocation:在swift中是不支持的, 有关的api都已经被标示为UNAVAILABLE
-:::
+> forwardInvocation:在swift中是不支持的, 有关的api都已经被标示为UNAVAILABLE
 
 思考多重继承
 
@@ -225,7 +223,7 @@ forwardInvocation:在swift中是不支持的, 有关的api都已经被标示为U
 
 为协助运行时系统，编译器会将每个方法中的返回值和参数类型编码成字符串并且和方法选择器联系起来, 给一个类型, @encode()会返回对应的编码字符串, 使用方法就像c语言的sizeof一样.
 
-```cpp
+```objectivec
 char *buf1 = @encode(int **);       // ^^i
 char *buf2 = @encode(long);         // q
 char *buf3 = @encode(void);         // v
