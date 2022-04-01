@@ -1,90 +1,155 @@
 <!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=author content="Liste - https://xuyunan.github.io"><title>iOS中的锁(二)--synchronized | Tommy's blog</title><meta name=description content="烂笔头日记"><meta property="og:title" content="iOS中的锁(二)--synchronized"><meta property="og:description" content="11年刚入道的时候，只会用这么一种锁，简单方便
-@synchronized (obj) { }  我们在main函数里写段简单的代码，然后用clang命令看看它的具体实现
-id _rethrow = 0; id _sync_obj = (id)obj; objc_sync_enter(_sync_obj); try { struct _SYNC_EXIT { _SYNC_EXIT(id arg) : sync_exit(arg) {} ~_SYNC_EXIT() {objc_sync_exit(sync_exit);} id sync_exit; } _sync_exit(_sync_obj); // TODO: } catch (id e) { _rethrow = e; }  从上面我们可以看出
+1  @synchronized (obj) { }   我们在main函数里写段简单的代码，然后用clang命令看看它的具体实现
+1 2 3 4 5 6 7 8 9 10 11  id _rethrow = 0; id _sync_obj = (id)obj; objc_sync_enter(_sync_obj); try { 	struct _SYNC_EXIT { 	_SYNC_EXIT(id arg) : sync_exit(arg) {} 	~_SYNC_EXIT() {objc_sync_exit(sync_exit);} 	id sync_exit; 	} _sync_exit(_sync_obj); 	// TODO: } catch (id e) {  _rethrow = e; }   从上面我们可以看出
 1、使用的是objc_sync_enter和objc_sync_exit来加锁和解锁
-2、创建了一个结构体，充当了一个defer的角色, 当前代码块执行完之后会执行析构函数, 以释放锁资源
-关于锁的两个函数声明我们可以在usr/include/objc/objc-sync.h中找到(cmd+shift+p搜索objc-sync.h)
-/** * Begin synchronizing on 'obj'. * Allocates recursive pthread_mutex associated with 'obj' if needed. * * @param obj The object to begin synchronizing on."><meta property="og:type" content="article"><meta property="og:url" content="https://xuyunan.github.io/2019-06-11-ios-lock-synchronized/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2019-06-11T13:00:24+08:00"><meta property="article:modified_time" content="2019-06-11T13:00:24+08:00"><meta itemprop=name content="iOS中的锁(二)--synchronized"><meta itemprop=description content="11年刚入道的时候，只会用这么一种锁，简单方便
-@synchronized (obj) { }  我们在main函数里写段简单的代码，然后用clang命令看看它的具体实现
-id _rethrow = 0; id _sync_obj = (id)obj; objc_sync_enter(_sync_obj); try { struct _SYNC_EXIT { _SYNC_EXIT(id arg) : sync_exit(arg) {} ~_SYNC_EXIT() {objc_sync_exit(sync_exit);} id sync_exit; } _sync_exit(_sync_obj); // TODO: } catch (id e) { _rethrow = e; }  从上面我们可以看出
+2、创建了一个结构体，充当了一个defer的角色, 当前代码块执行完之后会执行析构函数, 以释放锁资源"><meta property="og:type" content="article"><meta property="og:url" content="https://xuyunan.github.io/2019-06-11-ios-lock-synchronized/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2019-06-11T13:00:24+08:00"><meta property="article:modified_time" content="2019-06-11T13:00:24+08:00"><meta itemprop=name content="iOS中的锁(二)--synchronized"><meta itemprop=description content="11年刚入道的时候，只会用这么一种锁，简单方便
+1  @synchronized (obj) { }   我们在main函数里写段简单的代码，然后用clang命令看看它的具体实现
+1 2 3 4 5 6 7 8 9 10 11  id _rethrow = 0; id _sync_obj = (id)obj; objc_sync_enter(_sync_obj); try { 	struct _SYNC_EXIT { 	_SYNC_EXIT(id arg) : sync_exit(arg) {} 	~_SYNC_EXIT() {objc_sync_exit(sync_exit);} 	id sync_exit; 	} _sync_exit(_sync_obj); 	// TODO: } catch (id e) {  _rethrow = e; }   从上面我们可以看出
 1、使用的是objc_sync_enter和objc_sync_exit来加锁和解锁
-2、创建了一个结构体，充当了一个defer的角色, 当前代码块执行完之后会执行析构函数, 以释放锁资源
-关于锁的两个函数声明我们可以在usr/include/objc/objc-sync.h中找到(cmd+shift+p搜索objc-sync.h)
-/** * Begin synchronizing on 'obj'. * Allocates recursive pthread_mutex associated with 'obj' if needed. * * @param obj The object to begin synchronizing on."><meta itemprop=datePublished content="2019-06-11T13:00:24+08:00"><meta itemprop=dateModified content="2019-06-11T13:00:24+08:00"><meta itemprop=wordCount content="236"><meta itemprop=keywords content="iOS,"><meta name=twitter:card content="summary"><meta name=twitter:title content="iOS中的锁(二)--synchronized"><meta name=twitter:description content="11年刚入道的时候，只会用这么一种锁，简单方便
-@synchronized (obj) { }  我们在main函数里写段简单的代码，然后用clang命令看看它的具体实现
-id _rethrow = 0; id _sync_obj = (id)obj; objc_sync_enter(_sync_obj); try { struct _SYNC_EXIT { _SYNC_EXIT(id arg) : sync_exit(arg) {} ~_SYNC_EXIT() {objc_sync_exit(sync_exit);} id sync_exit; } _sync_exit(_sync_obj); // TODO: } catch (id e) { _rethrow = e; }  从上面我们可以看出
+2、创建了一个结构体，充当了一个defer的角色, 当前代码块执行完之后会执行析构函数, 以释放锁资源"><meta itemprop=datePublished content="2019-06-11T13:00:24+08:00"><meta itemprop=dateModified content="2019-06-11T13:00:24+08:00"><meta itemprop=wordCount content="307"><meta itemprop=keywords content="iOS,"><meta name=twitter:card content="summary"><meta name=twitter:title content="iOS中的锁(二)--synchronized"><meta name=twitter:description content="11年刚入道的时候，只会用这么一种锁，简单方便
+1  @synchronized (obj) { }   我们在main函数里写段简单的代码，然后用clang命令看看它的具体实现
+1 2 3 4 5 6 7 8 9 10 11  id _rethrow = 0; id _sync_obj = (id)obj; objc_sync_enter(_sync_obj); try { 	struct _SYNC_EXIT { 	_SYNC_EXIT(id arg) : sync_exit(arg) {} 	~_SYNC_EXIT() {objc_sync_exit(sync_exit);} 	id sync_exit; 	} _sync_exit(_sync_obj); 	// TODO: } catch (id e) {  _rethrow = e; }   从上面我们可以看出
 1、使用的是objc_sync_enter和objc_sync_exit来加锁和解锁
-2、创建了一个结构体，充当了一个defer的角色, 当前代码块执行完之后会执行析构函数, 以释放锁资源
-关于锁的两个函数声明我们可以在usr/include/objc/objc-sync.h中找到(cmd+shift+p搜索objc-sync.h)
-/** * Begin synchronizing on 'obj'. * Allocates recursive pthread_mutex associated with 'obj' if needed. * * @param obj The object to begin synchronizing on."><link rel=canonical href=https://xuyunan.github.io/2019-06-11-ios-lock-synchronized/><meta name=monetization content="$twitter.xrptipbot.com/ronaldsvilcins"><link rel=dns-prefetch href=https://www.google-analytics.com><link href=https://www.google-analytics.com rel=preconnect crossorigin><link rel=alternate type=application/atom+xml title="Tommy's blog" href=https://xuyunan.github.ioatom.xml><link rel=alternate type=application/json title="Tommy's blog" href=https://xuyunan.github.iofeed.json><link rel="shortcut icon" type=image/png href=/assets/favicon.png><style>*,:after,:before{box-sizing:border-box;padding:0}body{font:1rem/1.5 '-apple-system',BlinkMacSystemFont,avenir next,avenir,helvetica,helvetica neue,ubuntu,roboto,noto,segoe ui,arial,sans-serif;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;padding:2rem;color:#000}.skip-link{position:absolute;top:-40px;left:0;background:#eee;z-index:100}.skip-link:focus{top:0}h1,h2,h3,h4,h5,strong,b{font-size:inherit;font-weight:600}header{line-height:2;padding-bottom:1.5rem}.link{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-decoration:none}.time{font-variant-numeric:tabular-nums;white-space:nowrap}blockquote{border-left:5px solid #eee;padding-left:1rem;margin:0}a,a:visited{color:inherit}a:hover,a.heading-link{text-decoration:none}pre{padding:.5rem;overflow:auto;overflow-x:scroll;overflow-wrap:normal}code,pre{font-family:San Francisco Mono,Monaco,consolas,lucida console,dejavu sans mono,bitstream vera sans mono,monospace;font-size:normal;font-size:small;background:#eee}code{padding:.1rem;border:none}ul{list-style-type:square}ul,ol{padding-left:1.2rem}.list{line-height:2;list-style-type:none;padding-left:0}.list li{padding-bottom:.1rem}.meta{color:#777}.content{max-width:70ch;margin:0 auto}header{line-height:2;display:flex;justify-content:space-between;padding-bottom:1rem}header a{text-decoration:none}header ul{list-style-type:none;padding:0}header li,header a{display:inline}h2.post{padding-top:.5rem}header ul a:first-child{padding-left:1rem}.nav{height:1px;background:#000;content:'';max-width:10%}.list li{display:flex;align-items:baseline}.list li time{flex:initial}.hr-list{margin-top:0;margin-bottom:0;margin-right:.5rem;margin-left:.5rem;height:1px;border:0;border-bottom:1px dotted #ccc;flex:1 0 1rem}.m,hr{border:0;margin:3rem 0}img{max-width:100%;height:auto}</style><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","articleSection":"posts","name":"iOS中的锁(二)--synchronized","headline":"iOS中的锁(二)--synchronized","alternativeHeadline":"","description":"11年刚入道的时候，只会用这么一种锁，简单方便\n@synchronized (obj) { }  我们在main函数里写段简单的代码，然后用clang命令看看它的具体实现\nid _rethrow = 0; id _sync_obj = (id)obj; objc_sync_enter(_sync_obj); try { struct _SYNC_EXIT { _SYNC_EXIT(id arg) : sync_exit(arg) {} ~_SYNC_EXIT() {objc_sync_exit(sync_exit);} id sync_exit; } _sync_exit(_sync_obj); \/\/ TODO: } catch (id e) { _rethrow = e; }  从上面我们可以看出\n1、使用的是objc_sync_enter和objc_sync_exit来加锁和解锁\n2、创建了一个结构体，充当了一个defer的角色, 当前代码块执行完之后会执行析构函数, 以释放锁资源\n关于锁的两个函数声明我们可以在usr\/include\/objc\/objc-sync.h中找到(cmd\u002bshift\u002bp搜索objc-sync.h)\n\/** * Begin synchronizing on \u0027obj\u0027. * Allocates recursive pthread_mutex associated with \u0027obj\u0027 if needed. * * @param obj The object to begin synchronizing on.","inLanguage":"zh-CN","isFamilyFriendly":"true","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/xuyunan.github.io\/2019-06-11-ios-lock-synchronized\/"},"author":{"@type":"Person","name":"xuyunan"},"creator":{"@type":"Person","name":"xuyunan"},"accountablePerson":{"@type":"Person","name":"xuyunan"},"copyrightHolder":"Tommy\u0027s blog","copyrightYear":"2019","dateCreated":"2019-06-11T00:00:00.00Z","datePublished":"2019-06-11T13:00:24.00Z","dateModified":"2019-06-11T13:00:24.00Z","publisher":{"@type":"Organization","name":"Tommy's blog","url":"https://xuyunan.github.io","logo":{"@type":"ImageObject","url":"https:\/\/xuyunan.github.io\/assets\/favicon.png","width":"32","height":"32"}},"image":"https://xuyunan.github.io/assets/favicon.png","url":"https:\/\/xuyunan.github.io\/2019-06-11-ios-lock-synchronized\/","wordCount":"236","genre":["iOS"],"keywords":["iOS"]}</script></head><body><a class=skip-link href=#main>Skip to main</a><main id=main><div class=content><header><p style=padding:0;margin:0><a href=/><b>Listed</b></a></p><ul style=padding:0;margin:0><li><a href=/projects>Projects</a></li><li><a href=/about>About</a></li></ul></header><hr class=hr-list style=padding:0;margin:0><h2 class=post>iOS中的锁(二)--synchronized</h2><p>11年刚入道的时候，只会用这么一种锁，简单方便</p><pre><code class=language-objectivec>@synchronized (obj) {  }
-</code></pre><p>我们在main函数里写段简单的代码，然后用clang命令看看它的具体实现</p><pre><code class=language-cpp>id _rethrow = 0; id _sync_obj = (id)obj; objc_sync_enter(_sync_obj);
-try {
-	struct _SYNC_EXIT {
-		_SYNC_EXIT(id arg) : sync_exit(arg) {}
-		~_SYNC_EXIT() {objc_sync_exit(sync_exit);}
-		id sync_exit;
-	} _sync_exit(_sync_obj);
-	// TODO:
-} catch (id e) {
-    _rethrow = e;
-}
-</code></pre><p>从上面我们可以看出</p><p>1、使用的是objc_sync_enter和objc_sync_exit来加锁和解锁<br>2、创建了一个结构体，充当了一个defer的角色, 当前代码块执行完之后会执行析构函数, 以释放锁资源</p><p>关于锁的两个函数声明我们可以在usr/include/objc/objc-sync.h中找到(cmd+shift+p搜索objc-sync.h)</p><pre><code class=language-cpp>/** 
- * Begin synchronizing on 'obj'.  
- * Allocates recursive pthread_mutex associated with 'obj' if needed.
- * 
- * @param obj The object to begin synchronizing on.
- * 
- * @return OBJC_SYNC_SUCCESS once lock is acquired.  
- */
-OBJC_EXPORT int
-objc_sync_enter(id _Nonnull obj)
-    OBJC_AVAILABLE(10.3, 2.0, 9.0, 1.0, 2.0);
-
-/** 
- * End synchronizing on 'obj'. 
- * 
- * @param obj The object to end synchronizing on.
- * 
- * @return OBJC_SYNC_SUCCESS or OBJC_SYNC_NOT_OWNING_THREAD_ERROR
- */
-OBJC_EXPORT int
-objc_sync_exit(id _Nonnull obj)
-    OBJC_AVAILABLE(10.3, 2.0, 9.0, 1.0, 2.0);
-</code></pre><p>注释中有提到使用的是pthread_mutex的递归锁, 我尝试着找了一下.m的实现, 但是网上版本太多了, 最后通过注释搜索, 找到了与该版本匹配的实现文件， 下面也贴出了重要的函数实现</p><p><a href=https://opensource.apple.com/source/objc4/objc4-371/runtime/objc-sync.h>objc4-371 objc-sync.h</a><br><a href=https://opensource.apple.com/source/objc4/objc4-371/runtime/objc-sync.m>objc4-371 objc-sync.m</a></p><pre><code class=language-cpp>static pthread_mutexattr_t* recursiveAttributes()
-{
-    // 略略略...
-    err = pthread_mutexattr_settype(&amp;sRecursiveLockAttr, PTHREAD_MUTEX_RECURSIVE);
-    // 略略略...
-    return &amp;sRecursiveLockAttr;
-}
-// Begin synchronizing on 'obj'.  
-// Allocates recursive pthread_mutex associated with 'obj' if needed.
-// Returns OBJC_SYNC_SUCCESS once lock is acquired.  
-int objc_sync_enter(id obj)
-{
-    // 略略略...
-    result = pthread_mutex_lock(&amp;data-&gt;mutex);
-    // 略略略...
-    return result;
-}
-
-// End synchronizing on 'obj'. 
-// Returns OBJC_SYNC_SUCCESS or OBJC_SYNC_NOT_OWNING_THREAD_ERROR
-int objc_sync_exit(id obj)
-{
-    // 略略略...
-    result = pthread_mutex_unlock(&amp;data-&gt;mutex);
-    // 略略略...
-    return result;
-}
-</code></pre><p>这下就很明了了, synchronized其实就是通过pthread_mutex_lock创建的递归锁(PTHREAD_MUTEX_RECURSIVE), 值得注意的是swift已经没有这个语法糖了, 不过可以通过尾随闭包的简写形式实现</p><pre><code class=language-cpp>// 实现
-func synchronized(lock: AnyObject, closure: () -&gt; ()) {
-    objc_sync_enter(lock)
-    closure()
-    objc_sync_exit(lock)
-}
-// 使用
-synchronized(anObj) {
-    // TODO:
-}
-</code></pre><p>参考链接 <a href=https://swifter.tips/lock/>https://swifter.tips/lock/</a></p><div class=container><script src=https://giscus.app/client.js data-repo=xuyunan/xuyunan.github.io data-repo-id=R_kgDOHDKDYg data-category=Announcements data-category-id=DIC_kwDOHDKDYs4COQxq data-mapping=pathname data-reactions-enabled=1 data-emit-metadata=0 data-theme=light crossorigin=anonymous async></script><script>function setGiscusTeheme(t){let e=document.querySelector(".giscus iframe");e&&e.contentWindow.postMessage({giscus:{setConfig:{theme:t}}},"https://giscus.app")}addEventListener("message",e=>{if(e.origin!=="https://giscus.app")return;setGiscusTeheme(document.documentElement.dataset.userColorScheme)}),window.addEventListener("onColorSchemeChange",e=>{setGiscusTeheme(e.detail)})</script></div></div></main></body></html>
+2、创建了一个结构体，充当了一个defer的角色, 当前代码块执行完之后会执行析构函数, 以释放锁资源"><link rel=canonical href=https://xuyunan.github.io/2019-06-11-ios-lock-synchronized/><meta name=monetization content="$twitter.xrptipbot.com/ronaldsvilcins"><link rel=dns-prefetch href=https://www.google-analytics.com><link href=https://www.google-analytics.com rel=preconnect crossorigin><link rel=alternate type=application/atom+xml title="Tommy's blog" href=https://xuyunan.github.ioatom.xml><link rel=alternate type=application/json title="Tommy's blog" href=https://xuyunan.github.iofeed.json><link rel="shortcut icon" type=image/png href=/assets/favicon.png><style>*,:after,:before{box-sizing:border-box;padding:0}body{font:1rem/1.5 '-apple-system',BlinkMacSystemFont,avenir next,avenir,helvetica,helvetica neue,ubuntu,roboto,noto,segoe ui,arial,sans-serif;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;padding:2rem;color:#000}.skip-link{position:absolute;top:-40px;left:0;background:#eee;z-index:100}.skip-link:focus{top:0}h1,h2,h3,h4,h5,strong,b{font-size:inherit;font-weight:600}header{line-height:2;padding-bottom:1.5rem}.link{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-decoration:none}.time{font-variant-numeric:tabular-nums;white-space:nowrap}blockquote{border-left:5px solid #eee;padding-left:1rem;margin:0}a,a:visited{color:inherit}a:hover,a.heading-link{text-decoration:none}code,pre{font-family:San Francisco Mono,Monaco,consolas,lucida console,dejavu sans mono,bitstream vera sans mono,monospace;font-size:normal;font-size:small;overflow-x:scroll}.highlight div{overflow-x:scroll}ul{list-style-type:square}ul,ol{padding-left:1.2rem}.list{line-height:2;list-style-type:none;padding-left:0}.list li{padding-bottom:.1rem}.meta{color:#777}.content{max-width:70ch;margin:0 auto}header{line-height:2;display:flex;justify-content:space-between;padding-bottom:1rem}header a{text-decoration:none}header ul{list-style-type:none;padding:0}header li,header a{display:inline}h2.post{padding-top:.5rem}header ul a:first-child{padding-left:1rem}.nav{height:1px;background:#000;content:'';max-width:10%}.list li{display:flex;align-items:baseline}.list li time{flex:initial}.hr-list{margin-top:0;margin-bottom:0;margin-right:.5rem;margin-left:.5rem;height:1px;border:0;border-bottom:1px dotted #ccc;flex:1 0 1rem}.m,hr{border:0;margin:3rem 0}img{max-width:100%;height:auto}</style><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","articleSection":"posts","name":"iOS中的锁(二)--synchronized","headline":"iOS中的锁(二)--synchronized","alternativeHeadline":"","description":"11年刚入道的时候，只会用这么一种锁，简单方便\n1  @synchronized (obj) { }   我们在main函数里写段简单的代码，然后用clang命令看看它的具体实现\n1 2 3 4 5 6 7 8 9 10 11  id _rethrow = 0; id _sync_obj = (id)obj; objc_sync_enter(_sync_obj); try { \tstruct _SYNC_EXIT { \t_SYNC_EXIT(id arg) : sync_exit(arg) {} \t~_SYNC_EXIT() {objc_sync_exit(sync_exit);} \tid sync_exit; \t} _sync_exit(_sync_obj); \t\/\/ TODO: } catch (id e) {  _rethrow = e; }   从上面我们可以看出\n1、使用的是objc_sync_enter和objc_sync_exit来加锁和解锁\n2、创建了一个结构体，充当了一个defer的角色, 当前代码块执行完之后会执行析构函数, 以释放锁资源","inLanguage":"zh-CN","isFamilyFriendly":"true","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/xuyunan.github.io\/2019-06-11-ios-lock-synchronized\/"},"author":{"@type":"Person","name":"xuyunan"},"creator":{"@type":"Person","name":"xuyunan"},"accountablePerson":{"@type":"Person","name":"xuyunan"},"copyrightHolder":"Tommy\u0027s blog","copyrightYear":"2019","dateCreated":"2019-06-11T00:00:00.00Z","datePublished":"2019-06-11T13:00:24.00Z","dateModified":"2019-06-11T13:00:24.00Z","publisher":{"@type":"Organization","name":"Tommy's blog","url":"https://xuyunan.github.io","logo":{"@type":"ImageObject","url":"https:\/\/xuyunan.github.io\/assets\/favicon.png","width":"32","height":"32"}},"image":"https://xuyunan.github.io/assets/favicon.png","url":"https:\/\/xuyunan.github.io\/2019-06-11-ios-lock-synchronized\/","wordCount":"307","genre":["iOS"],"keywords":["iOS"]}</script></head><body><a class=skip-link href=#main>Skip to main</a><main id=main><div class=content><header><p style=padding:0;margin:0><a href=/><b>Listed</b></a></p><ul style=padding:0;margin:0><li><a href=/projects>Projects</a></li><li><a href=/about>About</a></li></ul></header><hr class=hr-list style=padding:0;margin:0><h2 class=post>iOS中的锁(二)--synchronized</h2><p>11年刚入道的时候，只会用这么一种锁，简单方便</p><div class=highlight><div style=color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-objectivec data-lang=objectivec><span style=display:flex><span><span style=color:#c2ffdf>@synchronized</span> (obj) {  }
+</span></span></code></pre></td></tr></table></div></div><p>我们在main函数里写段简单的代码，然后用clang命令看看它的具体实现</p><div class=highlight><div style=color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span>id _rethrow <span style=color:#ffb8d1>=</span> <span style=color:#c5a3ff>0</span>; id _sync_obj <span style=color:#ffb8d1>=</span> (id)obj; objc_sync_enter(_sync_obj);
+</span></span><span style=display:flex><span><span style=color:#c2ffdf>try</span> {
+</span></span><span style=display:flex><span>	<span style=color:#c2ffdf>struct</span> <span style=color:#ceb1ff>_SYNC_EXIT</span> {
+</span></span><span style=display:flex><span>		_SYNC_EXIT(id arg) <span style=color:#ffb8d1>:</span> sync_exit(arg) {}
+</span></span><span style=display:flex><span>		<span style=color:#ffb8d1>~</span>_SYNC_EXIT() {objc_sync_exit(sync_exit);}
+</span></span><span style=display:flex><span>		id sync_exit;
+</span></span><span style=display:flex><span>	} _sync_exit(_sync_obj);
+</span></span><span style=display:flex><span>	<span style=color:#b0bec5>// TODO:
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5></span>} <span style=color:#c2ffdf>catch</span> (id e) {
+</span></span><span style=display:flex><span>    _rethrow <span style=color:#ffb8d1>=</span> e;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>从上面我们可以看出</p><p>1、使用的是objc_sync_enter和objc_sync_exit来加锁和解锁<br>2、创建了一个结构体，充当了一个defer的角色, 当前代码块执行完之后会执行析构函数, 以释放锁资源</p><p>关于锁的两个函数声明我们可以在usr/include/objc/objc-sync.h中找到(cmd+shift+p搜索objc-sync.h)</p><div class=highlight><div style=color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#b0bec5>/** 
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5> * Begin synchronizing on &#39;obj&#39;.  
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5> * Allocates recursive pthread_mutex associated with &#39;obj&#39; if needed.
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5> * 
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5> * @param obj The object to begin synchronizing on.
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5> * 
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5> * @return OBJC_SYNC_SUCCESS once lock is acquired.  
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5> */</span>
+</span></span><span style=display:flex><span>OBJC_EXPORT <span style=color:#c2ffdf>int</span>
+</span></span><span style=display:flex><span><span style=color:#ceb1ff>objc_sync_enter</span>(id _Nonnull obj)
+</span></span><span style=display:flex><span>    OBJC_AVAILABLE(<span style=color:#c5a3ff>10.3</span>, <span style=color:#c5a3ff>2.0</span>, <span style=color:#c5a3ff>9.0</span>, <span style=color:#c5a3ff>1.0</span>, <span style=color:#c5a3ff>2.0</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#b0bec5>/** 
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5> * End synchronizing on &#39;obj&#39;. 
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5> * 
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5> * @param obj The object to end synchronizing on.
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5> * 
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5> * @return OBJC_SYNC_SUCCESS or OBJC_SYNC_NOT_OWNING_THREAD_ERROR
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5> */</span>
+</span></span><span style=display:flex><span>OBJC_EXPORT <span style=color:#c2ffdf>int</span>
+</span></span><span style=display:flex><span><span style=color:#ceb1ff>objc_sync_exit</span>(id _Nonnull obj)
+</span></span><span style=display:flex><span>    OBJC_AVAILABLE(<span style=color:#c5a3ff>10.3</span>, <span style=color:#c5a3ff>2.0</span>, <span style=color:#c5a3ff>9.0</span>, <span style=color:#c5a3ff>1.0</span>, <span style=color:#c5a3ff>2.0</span>);
+</span></span></code></pre></td></tr></table></div></div><p>注释中有提到使用的是pthread_mutex的递归锁, 我尝试着找了一下.m的实现, 但是网上版本太多了, 最后通过注释搜索, 找到了与该版本匹配的实现文件， 下面也贴出了重要的函数实现</p><p><a href=https://opensource.apple.com/source/objc4/objc4-371/runtime/objc-sync.h>objc4-371 objc-sync.h</a><br><a href=https://opensource.apple.com/source/objc4/objc4-371/runtime/objc-sync.m>objc4-371 objc-sync.m</a></p><div class=highlight><div style=color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#c2ffdf>static</span> pthread_mutexattr_t<span style=color:#ffb8d1>*</span> <span style=color:#ceb1ff>recursiveAttributes</span>()
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#b0bec5>// 略略略...
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5></span>    err <span style=color:#ffb8d1>=</span> pthread_mutexattr_settype(<span style=color:#ffb8d1>&amp;</span>sRecursiveLockAttr, PTHREAD_MUTEX_RECURSIVE);
+</span></span><span style=display:flex><span>    <span style=color:#b0bec5>// 略略略...
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5></span>    <span style=color:#c2ffdf>return</span> <span style=color:#ffb8d1>&amp;</span>sRecursiveLockAttr;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#b0bec5>// Begin synchronizing on &#39;obj&#39;.  
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5>// Allocates recursive pthread_mutex associated with &#39;obj&#39; if needed.
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5>// Returns OBJC_SYNC_SUCCESS once lock is acquired.  
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5></span><span style=color:#c2ffdf>int</span> <span style=color:#ceb1ff>objc_sync_enter</span>(id obj)
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#b0bec5>// 略略略...
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5></span>    result <span style=color:#ffb8d1>=</span> pthread_mutex_lock(<span style=color:#ffb8d1>&amp;</span>data<span style=color:#ffb8d1>-&gt;</span>mutex);
+</span></span><span style=display:flex><span>    <span style=color:#b0bec5>// 略略略...
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5></span>    <span style=color:#c2ffdf>return</span> result;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#b0bec5>// End synchronizing on &#39;obj&#39;. 
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5>// Returns OBJC_SYNC_SUCCESS or OBJC_SYNC_NOT_OWNING_THREAD_ERROR
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5></span><span style=color:#c2ffdf>int</span> <span style=color:#ceb1ff>objc_sync_exit</span>(id obj)
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#b0bec5>// 略略略...
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5></span>    result <span style=color:#ffb8d1>=</span> pthread_mutex_unlock(<span style=color:#ffb8d1>&amp;</span>data<span style=color:#ffb8d1>-&gt;</span>mutex);
+</span></span><span style=display:flex><span>    <span style=color:#b0bec5>// 略略略...
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5></span>    <span style=color:#c2ffdf>return</span> result;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>这下就很明了了, synchronized其实就是通过pthread_mutex_lock创建的递归锁(PTHREAD_MUTEX_RECURSIVE), 值得注意的是swift已经没有这个语法糖了, 不过可以通过尾随闭包的简写形式实现</p><div class=highlight><div style=color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#b0bec5>// 实现
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5></span>func <span style=color:#ceb1ff>synchronized</span>(lock: AnyObject, closure: () <span style=color:#ffb8d1>-&gt;</span> ()) {
+</span></span><span style=display:flex><span>    objc_sync_enter(lock)
+</span></span><span style=display:flex><span>    closure()
+</span></span><span style=display:flex><span>    objc_sync_exit(lock)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#b0bec5>// 使用
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5></span>synchronized(anObj) {
+</span></span><span style=display:flex><span>    <span style=color:#b0bec5>// TODO:
+</span></span></span><span style=display:flex><span><span style=color:#b0bec5></span>}
+</span></span></code></pre></td></tr></table></div></div><p>参考链接 <a href=https://swifter.tips/lock/>https://swifter.tips/lock/</a></p><div class=container><script src=https://giscus.app/client.js data-repo=xuyunan/xuyunan.github.io data-repo-id=R_kgDOHDKDYg data-category=Announcements data-category-id=DIC_kwDOHDKDYs4COQxq data-mapping=pathname data-reactions-enabled=1 data-emit-metadata=0 data-theme=light crossorigin=anonymous async></script><script>function setGiscusTeheme(t){let e=document.querySelector(".giscus iframe");e&&e.contentWindow.postMessage({giscus:{setConfig:{theme:t}}},"https://giscus.app")}addEventListener("message",e=>{if(e.origin!=="https://giscus.app")return;setGiscusTeheme(document.documentElement.dataset.userColorScheme)}),window.addEventListener("onColorSchemeChange",e=>{setGiscusTeheme(e.detail)})</script></div></div></main></body></html>
