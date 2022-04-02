@@ -47,7 +47,7 @@ crontab  -e  #添加以下代码
 ## 参考
 
 [How to limit nginx access log file size and compress?](https://serverfault.com/questions/427144/how-to-limit-nginx-access-log-file-size-and-compress)  
-[Nginx Log Rotation Doesn't Seem to Be Working Correctly](https://unix.stackexchange.com/questions/259091/nginx-log-rotation-doesnt-seem-to-be-working-correctly) 
+[Nginx Log Rotation Doesn't Seem to Be Working Correctly](https://unix.stackexchange.com/questions/259091/nginx-log-rotation-doesnt-seem-to-be-working-correctly)  
 [nginx配置logrotate 配置](https://www.cnblogs.com/zhaoyingjie/p/14649006.html)  
 
 
