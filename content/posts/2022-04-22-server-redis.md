@@ -6,9 +6,9 @@ date: 2022-04-22T22:55:04+08:00
 
 一个基于内存的key-value存储系统
 
-Redis 官网：https://redis.io/
-Redis 在线测试：http://try.redis.io/
-Redis 命令参考：http://doc.redisfans.com/
+Redis 官网：https://redis.io/   
+Redis 在线测试：http://try.redis.io/   
+Redis 命令参考：http://doc.redisfans.com/   
 
 ## 常用命令
 
