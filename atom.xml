@@ -1,4 +1,119 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tommy's blog</title><description>烂笔头日记</description><link>https://xuyunan.github.io</link><language>en</language><copyright>Copyright 2022, Ronalds Vilcins</copyright><lastBuildDate>Fri, 18 Feb 2022 00:00:00 +0000</lastBuildDate><generator>Hugo - gohugo.io</generator><docs>http://cyber.harvard.edu/rss/rss.html</docs><atom:link href="https://ronaldsvilcins.com/atom.xml" rel="self" type="application/atom+xml"/><item><title>Web优化加载速度，优化打包大小</title><link>https://xuyunan.github.io/2022-02-18-web-performance-optimization/</link><description>&lt;h2 id="按需引入组件库-bizcharts">按需引入组件库, BizCharts &lt;a href="#%e6%8c%89%e9%9c%80%e5%bc%95%e5%85%a5%e7%bb%84%e4%bb%b6%e5%ba%93-bizcharts" class="hash g">#&lt;/a>&lt;/h2>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tommy's blog</title><description>烂笔头日记</description><link>https://xuyunan.github.io</link><language>en</language><copyright>Copyright 2022, Ronalds Vilcins</copyright><lastBuildDate>Fri, 22 Apr 2022 00:00:00 +0000</lastBuildDate><generator>Hugo - gohugo.io</generator><docs>http://cyber.harvard.edu/rss/rss.html</docs><atom:link href="https://ronaldsvilcins.com/atom.xml" rel="self" type="application/atom+xml"/><item><title>服务器软件备忘录--MySQL</title><link>https://xuyunan.github.io/2022-04-22-server-mysql/</link><description>&lt;p>有些项目是需要特定版本的 mysql 数据库，这里记下 mysql5.7 安装的过程和一些基础命令&lt;/p>
+&lt;h2 id="推荐客户端">推荐客户端 &lt;a href="#%e6%8e%a8%e8%8d%90%e5%ae%a2%e6%88%b7%e7%ab%af" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>mac client: &lt;a href="https://sequelpro.com/">https://sequelpro.com/&lt;/a> &lt;br>
+windows client: &lt;a href="https://www.heidisql.com/">https://www.heidisql.com/&lt;/a>&lt;/p>
+&lt;h2 id="常用命令">常用命令 &lt;a href="#%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4" class="hash g">#&lt;/a>&lt;/h2>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>mysql -V &lt;span style="color:#b0bec5"># 查看mysql版本 &lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>systemctl start mysqld &lt;span style="color:#b0bec5"># 开启服务 &lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>systemctl restart mysqld &lt;span style="color:#b0bec5"># 重启服务 &lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>systemctl stop mysqld &lt;span style="color:#b0bec5"># 停止服务 &lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>systemctl enable mysqld &lt;span style="color:#b0bec5"># 开启启动 &lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>systemctl disable mysqld &lt;span style="color:#b0bec5"># 禁止开机启动 &lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>systemctl status mysqld &lt;span style="color:#b0bec5"># 查看mysql状态 &lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="卸载已安装的-mysql">卸载已安装的 mysql &lt;a href="#%e5%8d%b8%e8%bd%bd%e5%b7%b2%e5%ae%89%e8%a3%85%e7%9a%84-mysql" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>卸载已安装的mysql&lt;br>
+sudo yum remove mysql mysql-server # CentOS and RedHat systems&lt;/p>
+&lt;p>删除mysql数据目录并备份&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>mv /var/lib/mysql /var/lib/mysql_old_backup
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>mv /etc/mysql /etc/mysql_old_backup
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>看看还有那些mysql文件, 找出来删掉&lt;br>
+find / -name mysql&lt;/p>
+&lt;p>删除已经安装的mysql源&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>rpm -qa|grep mysql
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>yum remove mysql*
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rpm -e mysql57-community-release-el7-10.noarch
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="centos-7-安装-mysql57">CentOS 7 安装 mysql5.7 &lt;a href="#centos-7-%e5%ae%89%e8%a3%85-mysql57" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>更新 yum&lt;br>
+yum update -y&lt;/p>
+&lt;p>打开网站 &lt;a href="https://dev.mysql.com/downloads/repo/yum/">https://dev.mysql.com/downloads/repo/yum/&lt;/a>&lt;/p>
+&lt;p>登录之后，选择 CentOS 7 版本的源，右键复制链接 &lt;a href="https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm">https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm&lt;/a>&lt;/p>
+&lt;p>安装 wget&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>sudo yum install -y wget
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>cd /download
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>wget https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>下载好之后安装
+sudo yum localinstall mysql80-community-release-el7-5.noarch.rpm&lt;/p>
+&lt;p>安装 yum 工具 yum-utils&lt;br>
+sudo yum install -y yum-utils&lt;/p>
+&lt;p>查看可用的 mysql 源&lt;br>
+yum repolist enabled | grep &amp;ldquo;mysql.&lt;em>-community.&lt;/em>&amp;rdquo;&lt;/p>
+&lt;p>列出所有版本&lt;br>
+yum repolist all | grep mysql&lt;/p>
+&lt;p>禁用默认的最新8.0版本&lt;br>
+yum-config-manager &amp;ndash;disable mysql80-community&lt;/p>
+&lt;p>启用5.7版本&lt;br>
+yum-config-manager &amp;ndash;enable mysql57-community&lt;/p>
+&lt;p>查看启用版本是否为5.7&lt;br>
+yum repolist enabled | grep mysql&lt;/p>
+&lt;p>开始安装&lt;br>
+yum install -y mysql-community-server&lt;/p>
+&lt;p>启动 mysql 服务&lt;br>
+systemctl start mysqld&lt;/p>
+&lt;p>查看 mysql 状态&lt;br>
+systemctl status mysqld&lt;/p>
+&lt;h2 id="初始化-mysql">初始化 mysql &lt;a href="#%e5%88%9d%e5%a7%8b%e5%8c%96-mysql" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>初始化配置, 设置初始密码&lt;br>
+sudo grep &amp;rsquo;temporary password&amp;rsquo; /var/log/mysqld.log&lt;/p>
+&lt;p>使用上一步得到的密码，做初始化操作，初始化数据库配置, 修改root密码，配置是否禁止root远程登录&lt;br>
+mysql_secure_installation # /usr/bin/mysql_secure_installation&lt;/p>
+&lt;p>如果还不能远程登录, 做以下设置&lt;br>
+先登录, mysql -u root -p&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-mysql" data-lang="mysql">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c2ffdf">SHOW&lt;/span>&lt;span style="color:#a8757b"> &lt;/span>&lt;span style="color:#c2ffdf">databases&lt;/span>;&lt;span style="color:#a8757b">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8757b">&lt;/span>&lt;span style="color:#c2ffdf">USE&lt;/span>&lt;span style="color:#a8757b"> &lt;/span>mysql;&lt;span style="color:#a8757b">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8757b">&lt;/span>&lt;span style="color:#c2ffdf">UPDATE&lt;/span>&lt;span style="color:#a8757b"> &lt;/span>&lt;span style="color:#c2ffdf">user&lt;/span>&lt;span style="color:#a8757b"> &lt;/span>&lt;span style="color:#c2ffdf">SET&lt;/span>&lt;span style="color:#a8757b"> &lt;/span>host&lt;span style="color:#ffb8d1">=&lt;/span>&lt;span style="color:#1bc5e0">&amp;#39;%&amp;#39;&lt;/span>&lt;span style="color:#a8757b"> &lt;/span>&lt;span style="color:#c2ffdf">WHERE&lt;/span>&lt;span style="color:#a8757b"> &lt;/span>&lt;span style="color:#c2ffdf">user&lt;/span>&lt;span style="color:#ffb8d1">=&lt;/span>&lt;span style="color:#1bc5e0">&amp;#39;root&amp;#39;&lt;/span>;&lt;span style="color:#a8757b">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a8757b">&lt;/span>&lt;span style="color:#c2ffdf">FLUSH&lt;/span>&lt;span style="color:#a8757b"> &lt;/span>&lt;span style="color:#c2ffdf">PRIVILEGES&lt;/span>;&lt;span style="color:#a8757b">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>参考&lt;br>
+&lt;a href="https://dev.mysql.com/doc/mysql-yum-repo-quick-guide/en/#repo-qg-yum-installing">A Quick Guide to Using the MySQL Yum Repository&lt;/a>&lt;br>
+&lt;a href="https://stackoverflow.com/questions/1559955/host-xxx-xx-xxx-xxx-is-not-allowed-to-connect-to-this-mysql-server">Host &amp;lsquo;xxx.xx.xxx.xxx&amp;rsquo; is not allowed to connect to this MySQL server&lt;/a>&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2022-04-22-server-mysql/</guid><pubDate>Fri, 22 Apr 2022 00:00:00 +0000</pubDate></item><item><title>Web优化加载速度，优化打包大小</title><link>https://xuyunan.github.io/2022-02-18-web-performance-optimization/</link><description>&lt;h2 id="按需引入组件库-bizcharts">按需引入组件库, BizCharts &lt;a href="#%e6%8c%89%e9%9c%80%e5%bc%95%e5%85%a5%e7%bb%84%e4%bb%b6%e5%ba%93-bizcharts" class="hash g">#&lt;/a>&lt;/h2>
 &lt;p>直接引入方式 import { Chart, Interval, Tooltip } from &amp;ldquo;bizcharts&amp;rdquo;;&lt;br>
 按需引入方式&lt;/p>
 &lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
