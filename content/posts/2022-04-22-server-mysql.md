@@ -2,7 +2,6 @@
 title: 服务器软件备忘录--MySQL
 tags: [MySQL]
 date: 2022-04-22T20:53:01+08:00
-draft: true
 ---
 
 有些项目是需要特定版本的 mysql 数据库，这里记下 mysql5.7 安装的过程和一些基础命令  
