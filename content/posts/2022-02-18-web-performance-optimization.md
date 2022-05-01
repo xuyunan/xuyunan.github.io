@@ -6,7 +6,12 @@ date: 2021-02-18T13:00:24+08:00
 
 ## 按需引入组件库, BizCharts
 
-直接引入方式 import { Chart, Interval, Tooltip } from "bizcharts";  
+直接引入方式 
+
+```javascript
+import { Chart, Interval, Tooltip } from "bizcharts";  
+```
+
 按需引入方式 
 
 ```javascript
@@ -46,7 +51,7 @@ gzip_types text/plain text/css text/xml text/javascript application/javascript a
 gzip_disable "MSIE [1-6]\.";
 ```
 
-注意不要忘记在gzip_typs添加application/javascript
+注意不要忘记在gzip_types添加application/javascript
 
 如需更详细的配置，可至官网查看 [Module ngx_http_gzip_module](http://nginx.org/en/docs/http/ngx_http_gzip_module.html)
 

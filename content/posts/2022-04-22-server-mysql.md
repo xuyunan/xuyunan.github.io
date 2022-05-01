@@ -35,7 +35,7 @@ mv /var/lib/mysql /var/lib/mysql_old_backup
 mv /etc/mysql /etc/mysql_old_backup
 ```
 
-看看还有那些mysql文件, 找出来删掉   
+看看还有哪些mysql文件, 找出来删掉   
 find / -name mysql
 
 删除已经安装的mysql源 
