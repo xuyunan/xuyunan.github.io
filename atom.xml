@@ -1,4 +1,154 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tommy's blog</title><description>烂笔头日记</description><link>https://xuyunan.github.io</link><language>en</language><copyright>Copyright 2022, Ronalds Vilcins</copyright><lastBuildDate>Fri, 22 Apr 2022 00:00:00 +0000</lastBuildDate><generator>Hugo - gohugo.io</generator><docs>http://cyber.harvard.edu/rss/rss.html</docs><atom:link href="https://ronaldsvilcins.com/atom.xml" rel="self" type="application/atom+xml"/><item><title>服务器软件备忘录--MySQL</title><link>https://xuyunan.github.io/2022-04-22-server-mysql/</link><description>&lt;p>有些项目是需要特定版本的 mysql 数据库，这里记下 mysql5.7 安装的过程和一些基础命令&lt;/p>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tommy's blog</title><description>烂笔头日记</description><link>https://xuyunan.github.io</link><language>en</language><copyright>Copyright 2022, Ronalds Vilcins</copyright><lastBuildDate>Sat, 30 Apr 2022 00:00:00 +0000</lastBuildDate><generator>Hugo - gohugo.io</generator><docs>http://cyber.harvard.edu/rss/rss.html</docs><atom:link href="https://ronaldsvilcins.com/atom.xml" rel="self" type="application/atom+xml"/><item><title>服务器软件备忘录-Caddy</title><link>https://xuyunan.github.io/2022-04-30-server-caddy/</link><description>&lt;p>Caddy是一个高性能的web服务器, 采用go语言编写, 类似nginx的, 一个显著的特性是默认启用 HTTPS. Caddy2相对于Caddy1在配置上有诸多变动. 以下内容，如无特殊说明，均指Caddy2版本.&lt;/p>
+&lt;h2 id="安装">安装 &lt;a href="#%e5%ae%89%e8%a3%85" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>推荐使用社区提供的一键安装方法, 更多官方安装方式 &lt;a href="https://caddyserver.com/docs/install">https://caddyserver.com/docs/install&lt;/a>&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>curl -sS https://webinstall.dev/caddy | bash
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>安装之后可以通过 whereis caddy 找到安装目录, 配置文件在/etc/caddy/Caddyfile&lt;/p>
+&lt;h2 id="常用命令">常用命令 &lt;a href="#%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4" class="hash g">#&lt;/a>&lt;/h2>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>caddy &lt;span style="color:#b0bec5"># 显示帮助信息&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>caddy run  &lt;span style="color:#b0bec5"># 前台运行&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>caddy start  &lt;span style="color:#b0bec5"># 后台运行&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>caddy stop    &lt;span style="color:#b0bec5"># 停止服务&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>caddy reload &lt;span style="color:#b0bec5"># 重新加载服务&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="静态web服务">静态Web服务 &lt;a href="#%e9%9d%99%e6%80%81web%e6%9c%8d%e5%8a%a1" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>最简单的配置&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-fallback" data-lang="fallback">&lt;span style="display:flex;">&lt;span>example.com
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>respond &amp;#34;Hello, privacy!&amp;#34;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>通过端口访问配置&lt;/p>
+&lt;p>:2015 {
+root * /var/www/www.website.com/
+file_server
+}&lt;/p>
+&lt;h2 id="反向代理服务">反向代理服务 &lt;a href="#%e5%8f%8d%e5%90%91%e4%bb%a3%e7%90%86%e6%9c%8d%e5%8a%a1" class="hash g">#&lt;/a>&lt;/h2>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-fallback" data-lang="fallback">&lt;span style="display:flex;">&lt;span>:2016 {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> reverse_proxy 127.0.0.1:9000
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="https配置">HTTPS配置 &lt;a href="#https%e9%85%8d%e7%bd%ae" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>默认为所有的站点开启https，默认使用Let’s Encrypt, 在配置文件中指定申请证书的邮箱 tls &lt;a href="mailto:helloworld@gmail.com">helloworld@gmail.com&lt;/a>
+也可以设置不自动获取ssl证书，通过tls指定ssl证书&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-fallback" data-lang="fallback">&lt;span style="display:flex;">&lt;span>example.com {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> root * /var/www/www.website.com/
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> file_server
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> tls cert.pem key.pem
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="日志">日志 &lt;a href="#%e6%97%a5%e5%bf%97" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>下面是一个简洁的日志配置, 甚至可以只写log&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-fallback" data-lang="fallback">&lt;span style="display:flex;">&lt;span>log {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> output file /var/log/access.log
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>下面是一个完整的日志配置&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-fallback" data-lang="fallback">&lt;span style="display:flex;">&lt;span>example.com {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> log {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> output file &amp;lt;filename&amp;gt; {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> roll_disabled
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> roll_size &amp;lt;size&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> roll_uncompressed
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> roll_local_time
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> roll_keep &amp;lt;num&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> roll_keep_for &amp;lt;days&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> format &amp;lt;encoder_module&amp;gt; ...
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> level &amp;lt;level&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>output 配置输出目标, stdout(默认输出到console), stderr, file, discard(不输出日志),
+format 格式化日志内容,
+level 自定义日志级别, INFO(默认)、ERROR&lt;/p>
+&lt;p>其中，output可配置项说明&lt;/p>
+&lt;p>filename 日志文件路径及名称.&lt;br>
+roll_disabled 不分割轮转日志文件，保持一个日志文件. &lt;br>
+roll_size 日志文件大小, 以M为单位, 1.1MiB 会四舍五入到 2MiB. 默认: 100MiB.&lt;br>
+roll_uncompressed 文件压缩. 默认: 开启gzip压缩.&lt;br>
+roll_local_time 设置应用到文件名时间格式. 默认: UTC时间格式.&lt;br>
+roll_keep 最多保持多少个日志文件. 默认: 10.&lt;br>
+roll_keep_for 日志保持时长，单位是h，但是会四舍五入到整天. 例如, 36h (1.5 days) 会四舍五入到 48h (2 days). 默认: 2160h (90 days).&lt;/p>
+&lt;h2 id="单页应用配置react-vue">单页应用配置(React Vue&amp;hellip;) &lt;a href="#%e5%8d%95%e9%a1%b5%e5%ba%94%e7%94%a8%e9%85%8d%e7%bd%aereact-vue" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>Caddy并不了解单页应用的路由组件，在页面刷新时，默认会去找路由做对应的资源文件，但是资源文件并没有，这时候就会报404，所以我们要把请求重定向到首页&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-fallback" data-lang="fallback">&lt;span style="display:flex;">&lt;span>try_files {path} /
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>参考&lt;br>
+&lt;a href="https://router.vuejs.org/guide/essentials/history-mode.html#caddy-v2">https://router.vuejs.org/guide/essentials/history-mode.html#caddy-v2&lt;/a>
+&lt;a href="https://caddyserver.com/docs/caddyfile/patterns#single-page-apps-spas">https://caddyserver.com/docs/caddyfile/patterns#single-page-apps-spas&lt;/a>&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2022-04-30-server-caddy/</guid><pubDate>Sat, 30 Apr 2022 00:00:00 +0000</pubDate></item><item><title>服务器软件备忘录--MySQL</title><link>https://xuyunan.github.io/2022-04-22-server-mysql/</link><description>&lt;p>有些项目是需要特定版本的 mysql 数据库，这里记下 mysql5.7 安装的过程和一些基础命令&lt;/p>
 &lt;h2 id="推荐客户端">推荐客户端 &lt;a href="#%e6%8e%a8%e8%8d%90%e5%ae%a2%e6%88%b7%e7%ab%af" class="hash g">#&lt;/a>&lt;/h2>
 &lt;p>mac client: &lt;a href="https://sequelpro.com/">https://sequelpro.com/&lt;/a> &lt;br>
 windows client: &lt;a href="https://www.heidisql.com/">https://www.heidisql.com/&lt;/a>&lt;/p>
@@ -37,7 +187,7 @@ sudo yum remove mysql mysql-server # CentOS and RedHat systems&lt;/p>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>mv /etc/mysql /etc/mysql_old_backup
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>看看还有那些mysql文件, 找出来删掉&lt;br>
+&lt;/div>&lt;p>看看还有哪些mysql文件, 找出来删掉&lt;br>
 find / -name mysql&lt;/p>
 &lt;p>删除已经安装的mysql源&lt;/p>
 &lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
@@ -170,8 +320,16 @@ Redis 命令参考：http://doc.redisfans.com/&lt;/p>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>安全组需要开放6379端口&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2022-04-22-server-redis/</guid><pubDate>Fri, 22 Apr 2022 00:00:00 +0000</pubDate></item><item><title>Web优化加载速度，优化打包大小</title><link>https://xuyunan.github.io/2022-02-18-web-performance-optimization/</link><description>&lt;h2 id="按需引入组件库-bizcharts">按需引入组件库, BizCharts &lt;a href="#%e6%8c%89%e9%9c%80%e5%bc%95%e5%85%a5%e7%bb%84%e4%bb%b6%e5%ba%93-bizcharts" class="hash g">#&lt;/a>&lt;/h2>
-&lt;p>直接引入方式 import { Chart, Interval, Tooltip } from &amp;ldquo;bizcharts&amp;rdquo;;&lt;br>
-按需引入方式&lt;/p>
+&lt;p>直接引入方式&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-javascript" data-lang="javascript">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c2ffdf">import&lt;/span> { Chart, Interval, Tooltip } from &lt;span style="color:#1bc5e0">&amp;#34;bizcharts&amp;#34;&lt;/span>;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>按需引入方式&lt;/p>
 &lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
 &lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
 &lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
@@ -223,7 +381,7 @@ Redis 命令参考：http://doc.redisfans.com/&lt;/p>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c2ffdf">gzip_disable&lt;/span> &lt;span style="color:#1bc5e0">&amp;#34;MSIE&lt;/span> &lt;span style="color:#1bc5e0">[1-6]\.&amp;#34;&lt;/span>;
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>注意不要忘记在gzip_typs添加application/javascript&lt;/p>
+&lt;/div>&lt;p>注意不要忘记在gzip_types添加application/javascript&lt;/p>
 &lt;p>如需更详细的配置，可至官网查看 &lt;a href="http://nginx.org/en/docs/http/ngx_http_gzip_module.html">Module ngx_http_gzip_module&lt;/a>&lt;/p>
 &lt;p>这里也有一篇比较详细的文章，可以参考 &lt;a href="http://www.yaohaixiao.com/blog/how-to-configure-gzip-compression-with-nginx/">如何在 Nginx 服务器中配置 GZip 压缩？
 &lt;/a>&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2022-02-18-web-performance-optimization/</guid><pubDate>Fri, 18 Feb 2022 00:00:00 +0000</pubDate></item><item><title>对于NGINX的日志文件大小控制</title><link>https://xuyunan.github.io/2022-01-01-nginx-access-log-control/</link><description>&lt;h2 id="问题">问题 &lt;a href="#%e9%97%ae%e9%a2%98" class="hash g">#&lt;/a>&lt;/h2>

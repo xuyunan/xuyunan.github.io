@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Caddy on Tommy's blog</title><link>https://xuyunan.github.io/tags/caddy/</link><description>Recent content in Caddy on Tommy's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sat, 30 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://xuyunan.github.io/tags/caddy/atom.xml" rel="self" type="application/rss+xml"/><item><title>服务器软件备忘录-Caddy</title><link>https://xuyunan.github.io/2022-04-30-server-caddy/</link><pubDate>Sat, 30 Apr 2022 00:00:00 +0000</pubDate><guid>https://xuyunan.github.io/2022-04-30-server-caddy/</guid><description>Caddy是一个高性能的web服务器, 采用go语言编写, 类似nginx的, 一个显著的特性是默认启用 HTTPS. Caddy2相对于Caddy1在配置上有诸多变动. 以下内容，如无特殊说明，均指Caddy2版本.
+安装 # 推荐使用社区提供的一键安装方法, 更多官方安装方式 https://caddyserver.com/docs/install
+1 curl -sS https://webinstall.dev/caddy | bash 安装之后可以通过 whereis caddy 找到安装目录, 配置文件在/etc/caddy/Caddyfile
+常用命令 # 1 2 3 4 5 caddy # 显示帮助信息 caddy run # 前台运行 caddy start # 后台运行 caddy stop # 停止服务 caddy reload # 重新加载服务 静态Web服务 # 最简单的配置
+1 2 example.com respond &amp;#34;Hello, privacy!&amp;#34; 通过端口访问配置
+:2015 { root * /var/www/www.</description></item></channel></rss>
