@@ -82,8 +82,7 @@ npm install @types/react-redux
 
 > 注意，如果使用的库，本身就是用ts写的，直接install即可，不必再安装type定义文件
 
-参考 
-
+参考   
 [What is the difference between null and undefined in JavaScript?](https://stackoverflow.com/questions/5076944/what-is-the-difference-between-null-and-undefined-in-javascript)
 ['unknown' vs. 'any'](https://stackoverflow.com/questions/51439843/unknown-vs-any)
 
