@@ -1,4 +1,115 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tommy's blog</title><description>烂笔头日记</description><link>https://xuyunan.github.io</link><language>en</language><copyright>Copyright 2022, Ronalds Vilcins</copyright><lastBuildDate>Sat, 30 Apr 2022 00:00:00 +0000</lastBuildDate><generator>Hugo - gohugo.io</generator><docs>http://cyber.harvard.edu/rss/rss.html</docs><atom:link href="https://ronaldsvilcins.com/atom.xml" rel="self" type="application/atom+xml"/><item><title>服务器软件备忘录-Caddy</title><link>https://xuyunan.github.io/2022-04-30-server-caddy/</link><description>&lt;p>Caddy是一个高性能的web服务器, 采用go语言编写, 类似nginx的, 一个显著的特性是默认启用 HTTPS. Caddy2相对于Caddy1在配置上有诸多变动. 以下内容，如无特殊说明，均指Caddy2版本.&lt;/p>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tommy's blog</title><description>烂笔头日记</description><link>https://xuyunan.github.io</link><language>en</language><copyright>Copyright 2022, Ronalds Vilcins</copyright><lastBuildDate>Sun, 01 May 2022 00:00:00 +0000</lastBuildDate><generator>Hugo - gohugo.io</generator><docs>http://cyber.harvard.edu/rss/rss.html</docs><atom:link href="https://ronaldsvilcins.com/atom.xml" rel="self" type="application/atom+xml"/><item><title>关于 TypeScript，需要了解的几点知识</title><link>https://xuyunan.github.io/2022-05-01-about-typescript/</link><description>&lt;h2 id="为什么要用-typescript">为什么要用 TypeScript &lt;a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e7%94%a8-typescript" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>类型检查: ts最最明显的一个特性就是给js添加了类型，方便在多人协作或者项目时间长了以后，能够清晰的识读代码;&lt;br>
+IDE自动提示: 当我们对一个对象后敲入逗号时，IDE可以自动提示对应类型的属性、函数.&lt;/p>
+&lt;h2 id="一些类型的区别">一些类型的区别 &lt;a href="#%e4%b8%80%e4%ba%9b%e7%b1%bb%e5%9e%8b%e7%9a%84%e5%8c%ba%e5%88%ab" class="hash g">#&lt;/a>&lt;/h2>
+&lt;h3 id="undefined和null的区别">undefined和null的区别 &lt;a href="#undefined%e5%92%8cnull%e7%9a%84%e5%8c%ba%e5%88%ab" class="hash g">#&lt;/a>&lt;/h3>
+&lt;p>都表示空，判断语句中都标示false，undefined 表示一个变量声明了，但是没有赋值，null 用来表明一个变量是空值&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-js" data-lang="js">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c2ffdf">var&lt;/span> testVar;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>alert(testVar); &lt;span style="color:#b0bec5">//shows undefined
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#b0bec5">&lt;/span>alert(&lt;span style="color:#c2ffdf">typeof&lt;/span> testVar); &lt;span style="color:#b0bec5">//shows undefined
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-js" data-lang="js">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c2ffdf">var&lt;/span> testVar &lt;span style="color:#ffb8d1">=&lt;/span> &lt;span style="color:#c2ffdf">null&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>alert(testVar); &lt;span style="color:#b0bec5">//shows null
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#b0bec5">&lt;/span>alert(&lt;span style="color:#c2ffdf">typeof&lt;/span> testVar); &lt;span style="color:#b0bec5">//shows object
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>undefined是一个空类型，转为数值时为NaN，null是一个空对象，转为数值时为0.&lt;/p>
+&lt;h3 id="any和unknown的区别">any和unknown的区别 &lt;a href="#any%e5%92%8cunknown%e7%9a%84%e5%8c%ba%e5%88%ab" class="hash g">#&lt;/a>&lt;/h3>
+&lt;p>都表示未知类型，但是any是自由类型，unknown是类型安全的，unknown表示我暂时不知道这是什么类型，any表示我不关心这是什么类型 (unknown is I don&amp;rsquo;t know; any is I don&amp;rsquo;t care )。&lt;br>
+当一个变量被赋值了any，在接下来的使用过程中不会有什么警告、报错、提示，但是如果变量被赋值了unknown类型，那么在真正使用之前必须确定类型，否则就会编译报错，例如:&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-ts" data-lang="ts">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c2ffdf">let&lt;/span> vAny: &lt;span style="color:#c2ffdf">any&lt;/span> &lt;span style="color:#ffb8d1">=&lt;/span> &lt;span style="color:#c5a3ff">10&lt;/span>; &lt;span style="color:#b0bec5">// We can assign anything to any
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#b0bec5">&lt;/span>&lt;span style="color:#c2ffdf">let&lt;/span> vUnknown: &lt;span style="color:#c2ffdf">unknown&lt;/span> &lt;span style="color:#ffb8d1">=&lt;/span> &lt;span style="color:#c5a3ff">10&lt;/span>; &lt;span style="color:#b0bec5">// We can assign anything to unknown just like any
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#b0bec5">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c2ffdf">let&lt;/span> s1: &lt;span style="color:#c2ffdf">string&lt;/span> &lt;span style="color:#ffb8d1">=&lt;/span> vAny; &lt;span style="color:#b0bec5">// Any is assignable to anything
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#b0bec5">&lt;/span>&lt;span style="color:#c2ffdf">let&lt;/span> s2: &lt;span style="color:#c2ffdf">string&lt;/span> &lt;span style="color:#ffb8d1">=&lt;/span> vUnknown; &lt;span style="color:#b0bec5">// 报错，在没有断言之前，我们不能将unknown类型赋值给其它类型
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#b0bec5">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>vAny.method(); &lt;span style="color:#b0bec5">// Ok; anything goes with any
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#b0bec5">&lt;/span>vUnknown.method(); &lt;span style="color:#b0bec5">// 报错，vUnknown实际类型没有确定
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="interface和type的区别">interface和type的区别 &lt;a href="#interface%e5%92%8ctype%e7%9a%84%e5%8c%ba%e5%88%ab" class="hash g">#&lt;/a>&lt;/h3>
+&lt;p>interface 接口，用于定义类型，用来限制对象属性，在实际应用中，通常用于定义实体对象类型，更为常用&lt;br>
+type 定义别名，常用于复杂的复合类型&lt;/p>
+&lt;p>interface 示例&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-ts" data-lang="ts">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c2ffdf">interface&lt;/span> ButtonProps {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> title: &lt;span style="color:#c2ffdf">string&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> size?: &lt;span style="color:#c2ffdf">ButtonSize&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> btnType?: &lt;span style="color:#c2ffdf">ButtonType&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>type 示例&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-ts" data-lang="ts">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c2ffdf">type&lt;/span> ButtonSize &lt;span style="color:#ffb8d1">=&lt;/span> &lt;span style="color:#1bc5e0">&amp;#39;lg&amp;#39;&lt;/span> &lt;span style="color:#ffb8d1">|&lt;/span> &lt;span style="color:#1bc5e0">&amp;#39;sm&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c2ffdf">type&lt;/span> ButtonType &lt;span style="color:#ffb8d1">=&lt;/span> &lt;span style="color:#1bc5e0">&amp;#39;primary&amp;#39;&lt;/span> &lt;span style="color:#ffb8d1">|&lt;/span> &lt;span style="color:#1bc5e0">&amp;#39;default&amp;#39;&lt;/span> &lt;span style="color:#ffb8d1">|&lt;/span> &lt;span style="color:#1bc5e0">&amp;#39;danger&amp;#39;&lt;/span> &lt;span style="color:#ffb8d1">|&lt;/span> &lt;span style="color:#1bc5e0">&amp;#39;link&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="关于定义文件-xxxdts">关于定义文件 xxx.d.ts &lt;a href="#%e5%85%b3%e4%ba%8e%e5%ae%9a%e4%b9%89%e6%96%87%e4%bb%b6-xxxdts" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>使用declare关键字，为实现提供定义说明，将这些定义放置在xxx.d.ts文件中，用来让一些原本不支持ts的代码支持ts，
+这样，原本不支持ts的库，通过安装类型声明，就可以在ts中使用这些三方库了，示例：&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>npm install jquery
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>npm install @types/jquery
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>npm install redux react-redux
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>npm install @types/react-redux
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;blockquote>
+&lt;p>注意，如果使用的库，本身就是用ts写的，直接install即可，不必再安装type定义文件&lt;/p>
+&lt;/blockquote>
+&lt;p>参考&lt;br>
+&lt;a href="https://stackoverflow.com/questions/5076944/what-is-the-difference-between-null-and-undefined-in-javascript">What is the difference between null and undefined in JavaScript?&lt;/a>
+&lt;a href="https://stackoverflow.com/questions/51439843/unknown-vs-any">&amp;lsquo;unknown&amp;rsquo; vs. &amp;lsquo;any&amp;rsquo;&lt;/a>&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2022-05-01-about-typescript/</guid><pubDate>Sun, 01 May 2022 00:00:00 +0000</pubDate></item><item><title>服务器软件备忘录-Caddy</title><link>https://xuyunan.github.io/2022-04-30-server-caddy/</link><description>&lt;p>Caddy是一个高性能的web服务器, 采用go语言编写, 类似nginx的, 一个显著的特性是默认启用 HTTPS. Caddy2相对于Caddy1在配置上有诸多变动. 以下内容，如无特殊说明，均指Caddy2版本.&lt;/p>
 &lt;h2 id="安装">安装 &lt;a href="#%e5%ae%89%e8%a3%85" class="hash g">#&lt;/a>&lt;/h2>
 &lt;p>推荐使用社区提供的一键安装方法, 更多官方安装方式 &lt;a href="https://caddyserver.com/docs/install">https://caddyserver.com/docs/install&lt;/a>&lt;/p>
 &lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
