@@ -1,5 +1,5 @@
 ---
-title: "服务器软件备忘录-Caddy"
+title: 服务器软件备忘录--Caddy
 tags: [Caddy]
 date: 2022-04-30T16:44:21+08:00
 ---
