@@ -1,6 +1,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tommy's blog</title><description>烂笔头日记</description><link>https://xuyunan.github.io</link><language>en</language><copyright>Copyright 2022, Ronalds Vilcins</copyright><lastBuildDate>Sun, 01 May 2022 00:00:00 +0000</lastBuildDate><generator>Hugo - gohugo.io</generator><docs>http://cyber.harvard.edu/rss/rss.html</docs><atom:link href="https://ronaldsvilcins.com/atom.xml" rel="self" type="application/atom+xml"/><item><title>关于 TypeScript，需要了解的几点知识</title><link>https://xuyunan.github.io/2022-05-01-about-typescript/</link><description>&lt;h2 id="为什么要用-typescript">为什么要用 TypeScript &lt;a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e7%94%a8-typescript" class="hash g">#&lt;/a>&lt;/h2>
 &lt;p>类型检查: ts最最明显的一个特性就是给js添加了类型，方便在多人协作或者项目时间长了以后，能够清晰的识读代码;&lt;br>
-IDE自动提示: 当我们对一个对象后敲入逗号时，IDE可以自动提示对应类型的属性、函数.&lt;/p>
+IDE自动提示: 当我们对一个对象后敲入逗号时，IDE可以自动提示对应类型的属性、函数;&lt;/p>
+&lt;p>Vue3就是使用ts来重构的，这足以证明ts在前端生态中起着及其重要的作用，对于前端开发人员而言，很有必要去学习和使用;&lt;/p>
 &lt;h2 id="一些类型的区别">一些类型的区别 &lt;a href="#%e4%b8%80%e4%ba%9b%e7%b1%bb%e5%9e%8b%e7%9a%84%e5%8c%ba%e5%88%ab" class="hash g">#&lt;/a>&lt;/h2>
 &lt;h3 id="undefined和null的区别">undefined和null的区别 &lt;a href="#undefined%e5%92%8cnull%e7%9a%84%e5%8c%ba%e5%88%ab" class="hash g">#&lt;/a>&lt;/h3>
 &lt;p>都表示空，判断语句中都标示false，undefined 表示一个变量声明了，但是没有赋值，null 用来表明一个变量是空值&lt;/p>
@@ -109,7 +110,7 @@ type 定义别名，常用于复杂的复合类型&lt;/p>
 &lt;/blockquote>
 &lt;p>参考&lt;br>
 &lt;a href="https://stackoverflow.com/questions/5076944/what-is-the-difference-between-null-and-undefined-in-javascript">What is the difference between null and undefined in JavaScript?&lt;/a>
-&lt;a href="https://stackoverflow.com/questions/51439843/unknown-vs-any">&amp;lsquo;unknown&amp;rsquo; vs. &amp;lsquo;any&amp;rsquo;&lt;/a>&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2022-05-01-about-typescript/</guid><pubDate>Sun, 01 May 2022 00:00:00 +0000</pubDate></item><item><title>服务器软件备忘录-Caddy</title><link>https://xuyunan.github.io/2022-04-30-server-caddy/</link><description>&lt;p>Caddy是一个高性能的web服务器, 采用go语言编写, 类似nginx的, 一个显著的特性是默认启用 HTTPS. Caddy2相对于Caddy1在配置上有诸多变动. 以下内容，如无特殊说明，均指Caddy2版本.&lt;/p>
+&lt;a href="https://stackoverflow.com/questions/51439843/unknown-vs-any">&amp;lsquo;unknown&amp;rsquo; vs. &amp;lsquo;any&amp;rsquo;&lt;/a>&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2022-05-01-about-typescript/</guid><pubDate>Sun, 01 May 2022 00:00:00 +0000</pubDate></item><item><title>服务器软件备忘录--Caddy</title><link>https://xuyunan.github.io/2022-04-30-server-caddy/</link><description>&lt;p>Caddy是一个高性能的web服务器, 采用go语言编写, 类似nginx的, 一个显著的特性是默认启用 HTTPS. Caddy2相对于Caddy1在配置上有诸多变动. 以下内容，如无特殊说明，均指Caddy2版本.&lt;/p>
 &lt;h2 id="安装">安装 &lt;a href="#%e5%ae%89%e8%a3%85" class="hash g">#&lt;/a>&lt;/h2>
 &lt;p>推荐使用社区提供的一键安装方法, 更多官方安装方式 &lt;a href="https://caddyserver.com/docs/install">https://caddyserver.com/docs/install&lt;/a>&lt;/p>
 &lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
@@ -259,7 +260,74 @@ roll_keep_for 日志保持时长，单位是h，但是会四舍五入到整天. 
 &lt;/div>
 &lt;/div>&lt;p>参考&lt;br>
 &lt;a href="https://router.vuejs.org/guide/essentials/history-mode.html#caddy-v2">https://router.vuejs.org/guide/essentials/history-mode.html#caddy-v2&lt;/a>
-&lt;a href="https://caddyserver.com/docs/caddyfile/patterns#single-page-apps-spas">https://caddyserver.com/docs/caddyfile/patterns#single-page-apps-spas&lt;/a>&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2022-04-30-server-caddy/</guid><pubDate>Sat, 30 Apr 2022 00:00:00 +0000</pubDate></item><item><title>服务器软件备忘录--MySQL</title><link>https://xuyunan.github.io/2022-04-22-server-mysql/</link><description>&lt;p>有些项目是需要特定版本的 mysql 数据库，这里记下 mysql5.7 安装的过程和一些基础命令&lt;/p>
+&lt;a href="https://caddyserver.com/docs/caddyfile/patterns#single-page-apps-spas">https://caddyserver.com/docs/caddyfile/patterns#single-page-apps-spas&lt;/a>&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2022-04-30-server-caddy/</guid><pubDate>Sat, 30 Apr 2022 00:00:00 +0000</pubDate></item><item><title>服务器软件备忘录--JDK8</title><link>https://xuyunan.github.io/2022-04-30-server-jdk8/</link><description>&lt;p>下载地址 &lt;a href="https://www.oracle.com/java/technologies/downloads/#java8">https://www.oracle.com/java/technologies/downloads/#java8&lt;/a>&lt;/p>
+&lt;p>找到 jdk-8u333-linux-x64.tar.gz, 点击拷贝其下载链接&lt;br>
+&lt;a href="https://download.oracle.com/otn/java/jdk/8u333-b02/2dee051a5d0647d5be72a7c0abff270e/jdk-8u333-linux-x64.tar.gz">https://download.oracle.com/otn/java/jdk/8u333-b02/2dee051a5d0647d5be72a7c0abff270e/jdk-8u333-linux-x64.tar.gz&lt;/a>&lt;/p>
+&lt;p>开始下载&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>cd /download
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>wget https://download.oracle.com/otn/java/jdk/8u333-b02/2dee051a5d0647d5be72a7c0abff270e/jdk-8u333-linux-x64.tar.gz
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>解压缩至 java 目录&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>mkdir /usr/java/
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tar -xvf jdk-8u333-linux-x64.tar.gz -C /usr/java/
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>配置环境变量&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>vi /etc/profile
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>在文件最底部追加&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#b0bec5">#java environment&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>export JAVA_HOME&lt;span style="color:#ffb8d1">=&lt;/span>/usr/java/jdk1.8.0_333
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>export CLASSPATH&lt;span style="color:#ffb8d1">=&lt;/span>.:&lt;span style="color:#1bc5e0">${&lt;/span>JAVA_HOME&lt;span style="color:#1bc5e0">}&lt;/span>/jre/lib/rt.jar:&lt;span style="color:#1bc5e0">${&lt;/span>JAVA_HOME&lt;span style="color:#1bc5e0">}&lt;/span>/lib/dt.jar:&lt;span style="color:#1bc5e0">${&lt;/span>JAVA_HOME&lt;span style="color:#1bc5e0">}&lt;/span>/lib/tools.jar
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>export PATH&lt;span style="color:#ffb8d1">=&lt;/span>$PATH:&lt;span style="color:#1bc5e0">${&lt;/span>JAVA_HOME&lt;span style="color:#1bc5e0">}&lt;/span>/bin
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>使配置生效&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>source /etc/profile
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>检查是否安装成功&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>java -version
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>如果能显示出版本信息，就说明安装成功了.&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2022-04-30-server-jdk8/</guid><pubDate>Sat, 30 Apr 2022 00:00:00 +0000</pubDate></item><item><title>服务器软件备忘录--MySQL</title><link>https://xuyunan.github.io/2022-04-22-server-mysql/</link><description>&lt;p>有些项目是需要特定版本的 mysql 数据库，这里记下 mysql5.7 安装的过程和一些基础命令&lt;/p>
 &lt;h2 id="推荐客户端">推荐客户端 &lt;a href="#%e6%8e%a8%e8%8d%90%e5%ae%a2%e6%88%b7%e7%ab%af" class="hash g">#&lt;/a>&lt;/h2>
 &lt;p>mac client: &lt;a href="https://sequelpro.com/">https://sequelpro.com/&lt;/a> &lt;br>
 windows client: &lt;a href="https://www.heidisql.com/">https://www.heidisql.com/&lt;/a>&lt;/p>
