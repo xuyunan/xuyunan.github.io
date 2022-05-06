@@ -260,7 +260,9 @@ roll_keep_for 日志保持时长，单位是h，但是会四舍五入到整天. 
 &lt;/div>
 &lt;/div>&lt;p>参考&lt;br>
 &lt;a href="https://router.vuejs.org/guide/essentials/history-mode.html#caddy-v2">https://router.vuejs.org/guide/essentials/history-mode.html#caddy-v2&lt;/a>
-&lt;a href="https://caddyserver.com/docs/caddyfile/patterns#single-page-apps-spas">https://caddyserver.com/docs/caddyfile/patterns#single-page-apps-spas&lt;/a>&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2022-04-30-server-caddy/</guid><pubDate>Sat, 30 Apr 2022 00:00:00 +0000</pubDate></item><item><title>服务器软件备忘录--JDK8</title><link>https://xuyunan.github.io/2022-04-30-server-jdk8/</link><description>&lt;p>下载地址 &lt;a href="https://www.oracle.com/java/technologies/downloads/#java8">https://www.oracle.com/java/technologies/downloads/#java8&lt;/a>&lt;/p>
+&lt;a href="https://caddyserver.com/docs/caddyfile/patterns#single-page-apps-spas">https://caddyserver.com/docs/caddyfile/patterns#single-page-apps-spas&lt;/a>&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2022-04-30-server-caddy/</guid><pubDate>Sat, 30 Apr 2022 00:00:00 +0000</pubDate></item><item><title>服务器软件备忘录--JDK8</title><link>https://xuyunan.github.io/2022-04-30-server-jdk8/</link><description>&lt;p>从JDK1.5版本开始，由于命名规则的变化，版本开始从JDK5.0开始递增。JDK5.0 即 JDK1.5, JDK6.0 即 JDK1.6, JDK7.0 即 JDK1.7, JDK8.0 即 JDK1.8&amp;hellip;&lt;/p>
+&lt;p>JDK8 也是JDK1.8, 是一个非常稳定的版本，以至于现在很多研发人员还在使用该版本。&lt;/p>
+&lt;p>下载地址 &lt;a href="https://www.oracle.com/java/technologies/downloads/#java8">https://www.oracle.com/java/technologies/downloads/#java8&lt;/a>&lt;/p>
 &lt;p>找到 jdk-8u333-linux-x64.tar.gz, 点击拷贝其下载链接&lt;br>
 &lt;a href="https://download.oracle.com/otn/java/jdk/8u333-b02/2dee051a5d0647d5be72a7c0abff270e/jdk-8u333-linux-x64.tar.gz">https://download.oracle.com/otn/java/jdk/8u333-b02/2dee051a5d0647d5be72a7c0abff270e/jdk-8u333-linux-x64.tar.gz&lt;/a>&lt;/p>
 &lt;p>开始下载&lt;/p>
@@ -294,7 +296,7 @@ roll_keep_for 日志保持时长，单位是h，但是会四舍五入到整天. 
 &lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>vi /etc/profile
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>在文件最底部追加&lt;/p>
+&lt;/div>&lt;p>在文件最底部追加，注意在JAVA_HOME中替换为自己的版本号&lt;/p>
 &lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
 &lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
 &lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
@@ -327,7 +329,20 @@ roll_keep_for 日志保持时长，单位是h，但是会四舍五入到整天. 
 &lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>java -version
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>如果能显示出版本信息，就说明安装成功了.&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2022-04-30-server-jdk8/</guid><pubDate>Sat, 30 Apr 2022 00:00:00 +0000</pubDate></item><item><title>服务器软件备忘录--MySQL</title><link>https://xuyunan.github.io/2022-04-22-server-mysql/</link><description>&lt;p>有些项目是需要特定版本的 mysql 数据库，这里记下 mysql5.7 安装的过程和一些基础命令&lt;/p>
+&lt;/div>&lt;p>如果能显示如下出版本信息，就说明安装成功了.&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>java version &lt;span style="color:#1bc5e0">&amp;#34;1.8.0_333&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Java&lt;span style="color:#ffb8d1">(&lt;/span>TM&lt;span style="color:#ffb8d1">)&lt;/span> SE Runtime Environment &lt;span style="color:#ffb8d1">(&lt;/span>build 1.8.0_333-b02&lt;span style="color:#ffb8d1">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Java HotSpot&lt;span style="color:#ffb8d1">(&lt;/span>TM&lt;span style="color:#ffb8d1">)&lt;/span> 64-Bit Server VM &lt;span style="color:#ffb8d1">(&lt;/span>build 25.333-b02, mixed mode&lt;span style="color:#ffb8d1">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2022-04-30-server-jdk8/</guid><pubDate>Sat, 30 Apr 2022 00:00:00 +0000</pubDate></item><item><title>服务器软件备忘录--MySQL</title><link>https://xuyunan.github.io/2022-04-22-server-mysql/</link><description>&lt;p>有些项目是需要特定版本的 mysql 数据库，这里记下 mysql5.7 安装的过程和一些基础命令&lt;/p>
 &lt;h2 id="推荐客户端">推荐客户端 &lt;a href="#%e6%8e%a8%e8%8d%90%e5%ae%a2%e6%88%b7%e7%ab%af" class="hash g">#&lt;/a>&lt;/h2>
 &lt;p>mac client: &lt;a href="https://sequelpro.com/">https://sequelpro.com/&lt;/a> &lt;br>
 windows client: &lt;a href="https://www.heidisql.com/">https://www.heidisql.com/&lt;/a>&lt;/p>
