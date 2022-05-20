@@ -1,7 +1,129 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tommy's blog</title><description>烂笔头日记</description><link>https://xuyunan.github.io</link><language>en</language><copyright>Copyright 2022, Ronalds Vilcins</copyright><lastBuildDate>Sun, 01 May 2022 00:00:00 +0000</lastBuildDate><generator>Hugo - gohugo.io</generator><docs>http://cyber.harvard.edu/rss/rss.html</docs><atom:link href="https://ronaldsvilcins.com/atom.xml" rel="self" type="application/atom+xml"/><item><title>关于 TypeScript，需要了解的几点知识</title><link>https://xuyunan.github.io/2022-05-01-about-typescript/</link><description>&lt;h2 id="为什么要用-typescript">为什么要用 TypeScript &lt;a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e7%94%a8-typescript" class="hash g">#&lt;/a>&lt;/h2>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tommy's blog</title><description>烂笔头日记</description><link>https://xuyunan.github.io</link><language>en</language><copyright>Copyright 2022, Ronalds Vilcins</copyright><lastBuildDate>Wed, 18 May 2022 00:00:00 +0000</lastBuildDate><generator>Hugo - gohugo.io</generator><docs>http://cyber.harvard.edu/rss/rss.html</docs><atom:link href="https://ronaldsvilcins.com/atom.xml" rel="self" type="application/atom+xml"/><item><title>大前端领域下, 都是有哪些常用单位</title><link>https://xuyunan.github.io/2022-05-18-about-frontend-units/</link><description>&lt;h2 id="web端常用单位">WEB端常用单位 &lt;a href="#web%e7%ab%af%e5%b8%b8%e7%94%a8%e5%8d%95%e4%bd%8d" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>web端常用的单位比较多，有px、em、rem、%、vw、wh、vmin、vmax等，可以将其分为两类，一类是绝对单位，一类是相对单位&lt;/p>
+&lt;p>&lt;strong>绝对单位&lt;/strong>, px: (pixels), 即像素单位，如果元素是固定大小的，那么px无疑是最好的选择，常用语margin、padding、shadow&lt;/p>
+&lt;p>&lt;strong>相对单位&lt;/strong>, 相对单位用来处理响应式网页很有帮助，em、rem常用于font size、width、height，%、vw、vh、vmin、vmax常用于布局.&lt;/p>
+&lt;ul>
+&lt;li>em: (emeters), 相对于父级元素，默认font size = 16px&lt;/li>
+&lt;li>rem: (root emeters) 相对于根元素(HTML tag)，默认font size = 16px&lt;/li>
+&lt;li>%: 相对于父级元素&lt;/li>
+&lt;li>vw: 相对于浏览器窗口宽度(viewport&amp;rsquo;s width)&lt;/li>
+&lt;li>vh: 相对于浏览器窗口高度(viewport&amp;rsquo;s height)&lt;/li>
+&lt;li>vmin: 取vw和vh的最小值&lt;/li>
+&lt;li>vmax: 取vw和vh的最大值&lt;/li>
+&lt;/ul>
+&lt;p>举个例子&lt;/p>
+&lt;p>在大多数的浏览器中，默认字体大小是16px，那么em、rem就是相对这个值来做改变&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-fallback" data-lang="fallback">&lt;span style="display:flex;">&lt;span>1em = 16px (1 * 16)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>2em = 32px (2 * 16)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>.5em = 8px (.5 * 16)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>1rem = 16px
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>2rem = 32px
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>.5rem = 8px
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>100% = 16px
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>200% = 32px
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>50% = 8px
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>如果我们把默认的大小改为14px，那么实际的值也会相应变化&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-fallback" data-lang="fallback">&lt;span style="display:flex;">&lt;span>1em = 14px (1 * 14)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>2em = 28px (2 * 14)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>.5em = 7px (.5 * 14)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>1rem = 14px
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>2rem = 28px
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>.5rem = 7px
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>100% = 14px
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>200% = 28px
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>50% = 7px
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>然后来看看vw和vh，假如窗口大小是480px x 800px，那么&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-fallback" data-lang="fallback">&lt;span style="display:flex;">&lt;span>1vw = 1% 的窗口宽度 (4.8px)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>50vw = 50% 的窗口宽度 (240px)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>1vh = 1% 的窗口高度 (8px)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>50vh = 50% 的窗口高度 (400px)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>为什么在看别人代码的时候，会有人将body的默认设置改为 font-size：62.5% ? 这是因为设置过后，方便计算，此时的1em=16px * 62.5% = 10px, 1.2em=12px, 1.8em=18px&lt;/p>
+&lt;h2 id="小程序端常用单位-rpx">小程序端常用单位 rpx &lt;a href="#%e5%b0%8f%e7%a8%8b%e5%ba%8f%e7%ab%af%e5%b8%b8%e7%94%a8%e5%8d%95%e4%bd%8d-rpx" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>小程序中的 WXSS 对 CSS 进行了扩充以及修改, 除了有一些上面地提到的单位外，还增加了 rpx (responsive pixel)，用作响应式单位，需要特殊说明的是，小程序把屏幕宽度设定为750rpx，永久的把屏幕宽度平分成了750份，假设把组件宽度设定为750rpx，则无论在什么设备上，这个组件的宽度都是跟屏幕一样宽.&lt;/p>
+&lt;p>iPhone6的物理像素宽度恰好是750px，也就是说在iPhone6上，1rpx就是一个物理像素.&lt;/p>
+&lt;h2 id="ios端常用单位-pt">iOS端常用单位 pt &lt;a href="#ios%e7%ab%af%e5%b8%b8%e7%94%a8%e5%8d%95%e4%bd%8d-pt" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>在iOS开发中，使用的单位是pt，在 iPhone4 以前，1pt = 1px，但是苹果为了让屏幕内容看起来更清晰，引入了多倍屏的概念，也就出现了更清晰的retina屏手机，这是在有限的空间内显示更多像素的一种技术；iPhone4以后开始使用2倍屏，如果想要图片显示看起来正常，就需要使用2倍图，也就是image@2x.png，这张图具体的像素需要多大呢，如果原来使用的是100x100px的图，那么image@2x.png就需要是200x200px；iPhone6 6s 7 8还是2倍屏，到了6+,6s+,7+,8+及以后开始使用更为清晰的3倍屏，也就是说在同样一块屏幕的大小上，我们可以展示300x300px的图片.&lt;/p>
+&lt;p>网络上很多文章写在2倍屏下1pt = 2px，其实是不准确的，1pt应当是4px，也就是一个点里面有2x2个物理像素.&lt;/p>
+&lt;h2 id="android端常用单位-dp">Android端常用单位 dp &lt;a href="#android%e7%ab%af%e5%b8%b8%e7%94%a8%e5%8d%95%e4%bd%8d-dp" class="hash g">#&lt;/a>&lt;/h2>
+&lt;p>由于Android的源代码是开源的，所有就有很多厂商用Android系统研发了各种尺寸的手机，也就没有标准的1倍图，2倍图，3倍图，而是通过ldpi, mdpi, hdpi, xhdpi, xxhdpi划分了几个密度等级，越往后用在越高清屏幕的手机上。&lt;/p>
+&lt;div class="highlight">&lt;div style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#433e56;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-fallback" data-lang="fallback">&lt;span style="display:flex;">&lt;span>ldpi：对应的dpi范围为0 ~ 120，也就是说每英寸有0到120个像素点的屏幕的屏幕密度都属于低密度
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>mdpi：dpi范围为120 ~ 160
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>hdpi：dpi范围为160 ~ 240
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>xhdpi：dpi范围为240 ~ 320
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>xxhdpi：dpi范围为320 ~ 480
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>在Android开发中，常用的单位是dp和sp，dp常用语组件，sp常用于字体. 其他还有一些不常用的单位，比如px, in, mm.&lt;br>
+dp跟pt类似, Android的基本屏幕密度160dpi(英寸160点)，就是说在密度为160的设备上1dp = 1px，在320dpi的设备上，1dp = 2px.&lt;br>
+sp跟dp类似，但是sp还受系统字体大小缩放比例的影响，更为适合用在字体单位.&lt;/p>
+&lt;p>参考&lt;/p>
+&lt;p>&lt;a href="https://www.kickassux.com/ux-library/pixels-vs-points">Pixels vs points&lt;/a>&lt;br>
+&lt;a href="https://stackoverflow.com/questions/12019170/what-are-pixels-and-points-in-ios">What are pixels and points in iOS?&lt;/a>&lt;br>
+&lt;a href="https://www.paintcodeapp.com/news/ultimate-guide-to-iphone-resolutions">The Ultimate Guide To iPhone Resolutions&lt;/a>&lt;br>
+&lt;a href="https://en.wikipedia.org/wiki/List_of_iOS_and_iPadOS_devices">List of iOS and iPadOS devices&lt;/a>&lt;br>
+&lt;a href="https://stackoverflow.com/questions/2025282/what-is-the-difference-between-px-dip-dp-and-sp">What is the difference between &amp;ldquo;px&amp;rdquo;, &amp;ldquo;dip&amp;rdquo;, &amp;ldquo;dp&amp;rdquo; and &amp;ldquo;sp&amp;rdquo;?&lt;/a>&lt;/p></description><author>ronalds.vilcins@gmail.com (Ronalds Vilcins)</author><guid>https://xuyunan.github.io/2022-05-18-about-frontend-units/</guid><pubDate>Wed, 18 May 2022 00:00:00 +0000</pubDate></item><item><title>关于 TypeScript，需要了解的几点知识</title><link>https://xuyunan.github.io/2022-05-01-about-typescript/</link><description>&lt;h2 id="为什么要用-typescript">为什么要用 TypeScript &lt;a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e7%94%a8-typescript" class="hash g">#&lt;/a>&lt;/h2>
 &lt;p>类型检查: ts最最明显的一个特性就是给js添加了类型，方便在多人协作或者项目时间长了以后，能够清晰的识读代码;&lt;br>
-IDE自动提示: 当我们对一个对象后敲入逗号时，IDE可以自动提示对应类型的属性、函数;&lt;/p>
-&lt;p>Vue3就是使用ts来重构的，这足以证明ts在前端生态中起着及其重要的作用，对于前端开发人员而言，很有必要去学习和使用;&lt;/p>
+IDE自动提示: 当我们在一个对象后敲入逗号时，IDE可以自动提示对应类型的属性、函数;&lt;/p>
+&lt;p>Vue3就是使用ts来重构的，这足以证明ts在前端生态中起着极其重要的作用，对于前端开发人员而言，很有必要去学习和使用。在使用的过程中，有些知识点易混淆，我们需要了解他们的区别，和各自使用的场景。&lt;/p>
 &lt;h2 id="一些类型的区别">一些类型的区别 &lt;a href="#%e4%b8%80%e4%ba%9b%e7%b1%bb%e5%9e%8b%e7%9a%84%e5%8c%ba%e5%88%ab" class="hash g">#&lt;/a>&lt;/h2>
 &lt;h3 id="undefined和null的区别">undefined和null的区别 &lt;a href="#undefined%e5%92%8cnull%e7%9a%84%e5%8c%ba%e5%88%ab" class="hash g">#&lt;/a>&lt;/h3>
 &lt;p>都表示空，判断语句中都标示false，undefined 表示一个变量声明了，但是没有赋值，null 用来表明一个变量是空值&lt;/p>
