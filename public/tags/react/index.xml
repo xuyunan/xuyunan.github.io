@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>React on Tommy&#39;s blog</title>
-    <link>http://localhost:1313/tags/react/</link>
+    <link>https://xuyunan.github.io/tags/react/</link>
     <description>Recent content in React on Tommy&#39;s blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 02 Dec 2021 13:00:24 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/react/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://xuyunan.github.io/tags/react/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>React--使用Hook和Context创建全局提示框</title>
-      <link>http://localhost:1313/posts/2021-12-02-alert-by-hook-and-context/</link>
+      <link>https://xuyunan.github.io/posts/2021-12-02-alert-by-hook-and-context/</link>
       <pubDate>Thu, 02 Dec 2021 13:00:24 +0800</pubDate>
-      <guid>http://localhost:1313/posts/2021-12-02-alert-by-hook-and-context/</guid>
+      <guid>https://xuyunan.github.io/posts/2021-12-02-alert-by-hook-and-context/</guid>
       <description>做一个全局的提示框，是非常有必要的，在使用的地方直接调用，而非在每个页面都插入一个提示框组件，可以使用这种技术的还有modal、notfication、dialog、spinner。&#xA;创建应用 环境准备，安装node、npm 或 yarn&#xA;npx create-react-app react-alert cd react-alert npm start 创建alert 创建context文件&#xA;mkdir src/context touch src/context/alert-context.js 创建完成之后的目录&#xA;src ├ ... ├── context │ └── alert-context.js 文件创建好了之后，接下来就要往里填充内容，修改alert-context.js, 先导入依赖&#xA;import React, { useState, createContext, useContext, useEffect } from &amp;#34;react&amp;#34;; 创建context对象&#xA;const AlertContext = createContext(); 定义alert组件&#xA;const Alert = ({ onClick }) =&amp;gt; { return ( &amp;lt;div className=&amp;#34;alert-wrapper&amp;#34;&amp;gt; &amp;lt;div className=&amp;#34;alert&amp;#34;&amp;gt; &amp;lt;div&amp;gt;提示信息&amp;lt;/div&amp;gt; &amp;lt;button onClick={onClick}&amp;gt;关闭&amp;lt;/button&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; ); }; 创建context provider&#xA;const AlertProvider = (props) =&amp;gt; { const [isDisplaying, setIsDisplaying] = useState(false); const show = () =&amp;gt; setIsDisplaying(true); const dismiss = () =&amp;gt; setIsDisplaying(false); const onClick = () =&amp;gt; setIsDisplaying(false); return ( &amp;lt;AlertContext.</description>
     </item>
   </channel>

@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>TypeScript on Tommy&#39;s blog</title>
-    <link>http://localhost:1313/tags/typescript/</link>
+    <link>https://xuyunan.github.io/tags/typescript/</link>
     <description>Recent content in TypeScript on Tommy&#39;s blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 01 May 2022 16:43:33 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/typescript/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://xuyunan.github.io/tags/typescript/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>关于 TypeScript，需要了解的几点知识</title>
-      <link>http://localhost:1313/posts/2022-05-01-about-typescript/</link>
+      <link>https://xuyunan.github.io/posts/2022-05-01-about-typescript/</link>
       <pubDate>Sun, 01 May 2022 16:43:33 +0800</pubDate>
-      <guid>http://localhost:1313/posts/2022-05-01-about-typescript/</guid>
+      <guid>https://xuyunan.github.io/posts/2022-05-01-about-typescript/</guid>
       <description>为什么要用 TypeScript 类型检查: ts最最明显的一个特性就是给js添加了类型，方便在多人协作或者项目时间长了以后，能够清晰的识读代码;&#xA;IDE自动提示: 当我们在一个对象后敲入逗号时，IDE可以自动提示对应类型的属性、函数;&#xA;Vue3就是使用ts来重构的，这足以证明ts在前端生态中起着极其重要的作用，对于前端开发人员而言，很有必要去学习和使用。在使用的过程中，有些知识点易混淆，我们需要了解他们的区别，和各自使用的场景。&#xA;一些类型的区别 undefined和null的区别 都表示空，判断语句中都标示false，undefined 表示一个变量声明了，但是没有赋值，null 用来表明一个变量是空值&#xA;var testVar; alert(testVar); //shows undefined alert(typeof testVar); //shows undefined var testVar = null; alert(testVar); //shows null alert(typeof testVar); //shows object undefined是一个空类型，转为数值时为NaN，null是一个空对象，转为数值时为0.&#xA;any和unknown的区别 都表示未知类型，但是any是自由类型，unknown是类型安全的，unknown表示我暂时不知道这是什么类型，any表示我不关心这是什么类型 (unknown is I don&amp;rsquo;t know; any is I don&amp;rsquo;t care )。&#xA;当一个变量被赋值了any，在接下来的使用过程中不会有什么警告、报错、提示，但是如果变量被赋值了unknown类型，那么在真正使用之前必须确定类型，否则就会编译报错，例如:&#xA;let vAny: any = 10; // We can assign anything to any let vUnknown: unknown = 10; // We can assign anything to unknown just like any let s1: string = vAny; // Any is assignable to anything let s2: string = vUnknown; // 报错，在没有断言之前，我们不能将unknown类型赋值给其它类型 vAny.</description>
     </item>
   </channel>

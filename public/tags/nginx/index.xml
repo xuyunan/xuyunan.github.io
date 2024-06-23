@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Nginx on Tommy&#39;s blog</title>
-    <link>http://localhost:1313/tags/nginx/</link>
+    <link>https://xuyunan.github.io/tags/nginx/</link>
     <description>Recent content in Nginx on Tommy&#39;s blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 01 Jan 2022 13:00:24 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/nginx/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://xuyunan.github.io/tags/nginx/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>对于NGINX的日志文件大小控制</title>
-      <link>http://localhost:1313/posts/2022-01-01-nginx-access-log-control/</link>
+      <link>https://xuyunan.github.io/posts/2022-01-01-nginx-access-log-control/</link>
       <pubDate>Sat, 01 Jan 2022 13:00:24 +0800</pubDate>
-      <guid>http://localhost:1313/posts/2022-01-01-nginx-access-log-control/</guid>
+      <guid>https://xuyunan.github.io/posts/2022-01-01-nginx-access-log-control/</guid>
       <description>问题 新年伊始，系统就报起了磁盘即将被占满的警告，经排查是原因为nginx日志文件access.log文件太大了，临时先清空下文件 echo &amp;quot;&amp;quot; &amp;gt; access.log&#xA;nginx有两个日志文件，一个是access.log，会记录每次成功的请求信息，包括ip地址，时间，浏览器等信息，格式可以通过在nginx.conf中的log_format配置；一个是error.log，会记录异常的信息。 关于磁盘大小报警，如何排查，可以通过du命令，可以参考 How to Find Out Top Directories and Files (Disk Space) in Linux&#xA;解决方式:logrotate logrotate是一个可以分割、压缩日志文件的工具&#xA;使用方式是在特定目录建立(/etc/logrotate)一个配置配置文件，通过配置项来管理日志文件，比如: mysql日志配置文件 /etc/logrotate.d/mysql nginx日志配置文件 /etc/logrotate.d/nginx&#xA;例如ngxin而配置之后，产生的access日志文件&#xA;access.log access.log-20220217.gz access.log-20220218.gz access.log-20220219.gz access.log-20220220&#xA;常用的三个命令选项 -f、-d、-v&#xA;logrotate通常是要通过cron任务来执行的，但是如果你现在就想看看转存后的文件，可以通过-f来强制执行一次转存。 logrotate -f /etc/logrotate.d/nginx&#xA;如果你想测试下写的配置是否正常，可以使用-d来测试，它不会真的去切割文件，而是会以日志输出的形式，把过程打印出来。 logrotate -d /etc/logrotate.d/nginx&#xA;如果你好奇转存时logrotate都做了哪些工作，可以使用-v来输出详细过程 logrotate -v /etc/logrotate.d/nginx&#xA;触发logrotate的方式有多种：&#xA;配置了size，文件到达具体大小时会触发分割； daily、weekly等时间节点会触发分割； 通过-f强制执行分割；&#xA;配置文件关键点分两个部分，一个是日志文件的路径，一个是配置项。两个示例:&#xA;一个是nginx日志配置，每天检查日志文件，会保留7个分割的日志文件，然后会执行一个脚本(postrotate后面一行)，来通知nginx，重新写入日志，这样就不会写到旧的日志文件里去。&#xA;/usr/local/nginx/logs/*.log { daily rotate 7 size 5k missingok dateext compress delaycompress notifempty sharedscripts postrotate [ -e /usr/local/nginx/logs/nginx.pid ] &amp;amp;&amp;amp; kill -USR1 `cat /usr/local/nginx/logs/nginx.</description>
     </item>
   </channel>
