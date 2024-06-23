@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width"><meta name="description" content="" />
+
+<title>
+    
+    关于 TypeScript，需要了解的几点知识 | Tommy&#39;s blog
+    
+</title>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.f69b4a5b91a9bc416804eda1f19d04210551b843d47318bf1913d7edce1504fb.css" media="all">
+
+
+
+  </head>
+
+  
+
+  
+  
+  
+
+  <body class="auto">
+
+    <div class="content">
+      <header>
+        
+
+<div class="header">
+    <h1 class="header-title">Tommy&#39;s blog</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/about">
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+      </header>
+
+      <main class="main">
+        
+
+
+
+
+
+<div >
+
+  <div class="single-intro-container">
+
+    
+
+    <h1 class="single-title">关于 TypeScript，需要了解的几点知识</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2022-05-01T16:43:33&#43;08:00">May 1, 2022</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h2 id="为什么要用-typescript">为什么要用 TypeScript</h2>
+<p>类型检查: ts最最明显的一个特性就是给js添加了类型，方便在多人协作或者项目时间长了以后，能够清晰的识读代码;<br>
+IDE自动提示: 当我们在一个对象后敲入逗号时，IDE可以自动提示对应类型的属性、函数;</p>
+<p>Vue3就是使用ts来重构的，这足以证明ts在前端生态中起着极其重要的作用，对于前端开发人员而言，很有必要去学习和使用。在使用的过程中，有些知识点易混淆，我们需要了解他们的区别，和各自使用的场景。</p>
+<h2 id="一些类型的区别">一些类型的区别</h2>
+<h3 id="undefined和null的区别">undefined和null的区别</h3>
+<p>都表示空，判断语句中都标示false，undefined 表示一个变量声明了，但是没有赋值，null 用来表明一个变量是空值</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">var</span> testVar;
+</span></span><span style="display:flex;"><span>alert(testVar); <span style="color:#888;font-style:italic">//shows undefined
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>alert(<span style="font-weight:bold;text-decoration:underline">typeof</span> testVar); <span style="color:#888;font-style:italic">//shows undefined
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">var</span> testVar = <span style="font-weight:bold;text-decoration:underline">null</span>;
+</span></span><span style="display:flex;"><span>alert(testVar); <span style="color:#888;font-style:italic">//shows null
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>alert(<span style="font-weight:bold;text-decoration:underline">typeof</span> testVar); <span style="color:#888;font-style:italic">//shows object
+</span></span></span></code></pre></div><p>undefined是一个空类型，转为数值时为NaN，null是一个空对象，转为数值时为0.</p>
+<h3 id="any和unknown的区别">any和unknown的区别</h3>
+<p>都表示未知类型，但是any是自由类型，unknown是类型安全的，unknown表示我暂时不知道这是什么类型，any表示我不关心这是什么类型 (unknown is I don&rsquo;t know; any is I don&rsquo;t care )。<br>
+当一个变量被赋值了any，在接下来的使用过程中不会有什么警告、报错、提示，但是如果变量被赋值了unknown类型，那么在真正使用之前必须确定类型，否则就会编译报错，例如:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">let</span> vAny: <span style="font-weight:bold;text-decoration:underline">any</span> = 10;          <span style="color:#888;font-style:italic">// We can assign anything to any
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span><span style="font-weight:bold;font-style:italic;text-decoration:underline">let</span> vUnknown: <span style="font-weight:bold;text-decoration:underline">unknown</span> =  10; <span style="color:#888;font-style:italic">// We can assign anything to unknown just like any 
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">let</span> s1: <span style="font-weight:bold;text-decoration:underline">string</span> = vAny;      <span style="color:#888;font-style:italic">// Any is assignable to anything 
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span><span style="font-weight:bold;font-style:italic;text-decoration:underline">let</span> s2: <span style="font-weight:bold;text-decoration:underline">string</span> = vUnknown;  <span style="color:#888;font-style:italic">// 报错，在没有断言之前，我们不能将unknown类型赋值给其它类型
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>
+</span></span><span style="display:flex;"><span>vAny.method();              <span style="color:#888;font-style:italic">// Ok; anything goes with any
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>vUnknown.method();          <span style="color:#888;font-style:italic">// 报错，vUnknown实际类型没有确定
+</span></span></span></code></pre></div><h3 id="interface和type的区别">interface和type的区别</h3>
+<p>interface 接口，用于定义类型，用来限制对象属性，在实际应用中，通常用于定义实体对象类型，更为常用<br>
+type 定义别名，常用于复杂的复合类型</p>
+<p>interface 示例</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">interface</span> ButtonProps {
+</span></span><span style="display:flex;"><span>  title: <span style="font-weight:bold;text-decoration:underline">string</span>;
+</span></span><span style="display:flex;"><span>  size?: <span style="font-weight:bold;text-decoration:underline">ButtonSize</span>;
+</span></span><span style="display:flex;"><span>  btnType?: <span style="font-weight:bold;text-decoration:underline">ButtonType</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>type 示例</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">type</span> ButtonSize = <span style="color:#666;font-style:italic">&#39;lg&#39;</span> | <span style="color:#666;font-style:italic">&#39;sm&#39;</span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">type</span> ButtonType = <span style="color:#666;font-style:italic">&#39;primary&#39;</span> | <span style="color:#666;font-style:italic">&#39;default&#39;</span> | <span style="color:#666;font-style:italic">&#39;danger&#39;</span> | <span style="color:#666;font-style:italic">&#39;link&#39;</span>
+</span></span></code></pre></div><h2 id="关于定义文件-xxxdts">关于定义文件 xxx.d.ts</h2>
+<p>使用declare关键字，为实现提供定义说明，将这些定义放置在xxx.d.ts文件中，用来让一些原本不支持ts的代码支持ts，
+这样，原本不支持ts的库，通过安装类型声明，就可以在ts中使用这些三方库了，示例：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>npm install jquery
+</span></span><span style="display:flex;"><span>npm install @types/jquery
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>npm install redux react-redux
+</span></span><span style="display:flex;"><span>npm install @types/react-redux
+</span></span></code></pre></div><blockquote>
+<p>注意，如果使用的库，本身就是用ts写的，直接install即可，不必再安装type定义文件</p>
+</blockquote>
+<p>参考<br>
+<a href="https://stackoverflow.com/questions/5076944/what-is-the-difference-between-null-and-undefined-in-javascript">What is the difference between null and undefined in JavaScript?</a>
+<a href="https://stackoverflow.com/questions/51439843/unknown-vs-any">&lsquo;unknown&rsquo; vs. &lsquo;any&rsquo;</a></p>
+
+    
+  </div>
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+      </main>
+    </div>
+
+    <footer>
+      <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+
+
+    </footer>
+
+  </body>
+
+  <script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    document.body.classList.remove("auto");
+    let cls = "light";
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+  }
+
+  function invertBody() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invertBody);
+  }
+
+  setTheme();
+
+</script>
+
+</html>

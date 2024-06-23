@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width"><meta name="description" content="" />
+
+<title>
+    
+    WKWebView(二)--和原生交互 | Tommy&#39;s blog
+    
+</title>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.f69b4a5b91a9bc416804eda1f19d04210551b843d47318bf1913d7edce1504fb.css" media="all">
+
+
+
+  </head>
+
+  
+
+  
+  
+  
+
+  <body class="auto">
+
+    <div class="content">
+      <header>
+        
+
+<div class="header">
+    <h1 class="header-title">Tommy&#39;s blog</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/about">
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+      </header>
+
+      <main class="main">
+        
+
+
+
+
+
+<div >
+
+  <div class="single-intro-container">
+
+    
+
+    <h1 class="single-title">WKWebView(二)--和原生交互</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2019-05-27T13:00:24&#43;08:00">May 27, 2019</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h2 id="简介">简介</h2>
+<p>随意移动互联网的飞速发展，移动应用技术的方案也变得丰富起来了</p>
+<p>1、纯原生开发 Objective-C、Swift、Java、Kotlin  <br>
+2、原生+跨平台混合开发 ReactNative、Flutter<br>
+3、原生+H5混合开发✔️</p>
+<p>更是随着科技的发展，5G的到来，网速越来越快，H5页面在移动应用上表现的越来越优秀，很多时候我们不得不选择原生+H5的混合开发方案，以便能够快速适应产品需求。接下来我们就看看iOS最新的web组件WKWebView如何与原生交互共存的。</p>
+<!-- raw HTML omitted -->
+<p>下面的场景需要我们加载一个简单的本地html文件来测试</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-swift" data-lang="swift"><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">let</span> <span style="color:#666;font-weight:bold;font-style:italic">filePath</span> = Bundle.main.path(forResource: <span style="color:#666;font-style:italic">&#34;h5/index&#34;</span>, ofType: <span style="color:#666;font-style:italic">&#34;html&#34;</span>)!
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">let</span> <span style="color:#666;font-weight:bold;font-style:italic">myURL</span> = URL(fileURLWithPath: filePath)
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">let</span> <span style="color:#666;font-weight:bold;font-style:italic">myRequest</span> = URLRequest(url: myURL)
+</span></span><span style="display:flex;"><span>webView.load(myRequest)
+</span></span></code></pre></div><p>:::tip
+当加载远程不安全的链接(http)时，需要在info.plist文件添加App Transport Security Settings-Allow Arbitrary Loads为YES
+:::</p>
+<h2 id="嵌入javascript代码">嵌入JavaScript代码</h2>
+<p>通过WKUserScript注入JavaScript代码</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-swift" data-lang="swift"><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">let</span> <span style="color:#666;font-weight:bold;font-style:italic">contentController</span> = WKUserContentController()
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">let</span> <span style="color:#666;font-weight:bold;font-style:italic">scriptSource</span> = <span style="color:#666;font-style:italic">&#34;document.body.style.backgroundColor = `red`;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">let</span> <span style="color:#666;font-weight:bold;font-style:italic">script</span> = WKUserScript(source: scriptSource, injectionTime: .atDocumentEnd, forMainFrameOnly: <span style="font-weight:bold;text-decoration:underline">true</span>)
+</span></span><span style="display:flex;"><span>contentController.addUserScript(script)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">let</span> <span style="color:#666;font-weight:bold;font-style:italic">config</span> = WKWebViewConfiguration()
+</span></span><span style="display:flex;"><span>config.userContentController = contentController
+</span></span></code></pre></div><p>初始化是有个三个参数</p>
+<ul>
+<li>source: JavaScript代码字符串</li>
+<li>injectionTime: 注入的时机，.atDocumentStart document元素刚创建，其他资源还未加载完成时；.atDocumentEnd 文档加载完成时(图片等附属资源有可能还没有加载完成)
+forMainFrameOnly: 是否只在main frame起作用</li>
+<li>JavaScript调用Native</li>
+</ul>
+<p>调用原生分三个步骤</p>
+<p>注册调用原生的事件userContentController.add(scriptMessageHandler, name: “share”)
+继承WKScriptMessageHandler协议，实现里面的方法，该方法用来接收js事件
+web触发事件window.webkit.messageHandlers.{name}.postMessage(params); name为事件名，params为事件参数, 在协议方法参数message.body中获取.</p>
+<p>接收示例</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-swift" data-lang="swift"><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">class</span> <span style="color:#666;font-weight:bold;font-style:italic">YNScriptMessageHandler</span>: NSObject, WKScriptMessageHandler {
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;font-style:italic;text-decoration:underline">func</span> <span style="color:#666;font-weight:bold;font-style:italic">userContentController</span>(<span style="font-weight:bold;text-decoration:underline">_</span> userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">switch</span> message.name {
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">case</span> <span style="color:#666;font-style:italic">&#34;share&#34;</span>:
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">default</span>:
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold;font-style:italic">print</span>(<span style="color:#666;font-style:italic">&#34;default&#34;</span>)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>触发示例</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic">window</span>.webkit.messageHandlers.share.postMessage(params);
+</span></span></code></pre></div><h2 id="native调用javascript">Native调用JavaScript</h2>
+<p>该方法是异步调用</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-swift" data-lang="swift"><span style="display:flex;"><span>message.webView?.evaluateJavaScript(<span style="color:#666;font-style:italic">&#34;shareCallback(1)&#34;</span>, completionHandler: { (result, error) <span style="font-weight:bold;text-decoration:underline">in</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>})
+</span></span></code></pre></div><p>测试文件 index.html</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#888;font-weight:bold">&lt;!DOCTYPE html&gt;</span>
+</span></span><span style="display:flex;"><span>&lt;html&gt;
+</span></span><span style="display:flex;"><span>&lt;head lang=<span style="color:#666;font-style:italic">&#34;en&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;meta charset=<span style="color:#666;font-style:italic">&#34;utf-8&#34;</span> /&gt;
+</span></span><span style="display:flex;"><span>    &lt;meta name=<span style="color:#666;font-style:italic">&#34;viewport&#34;</span> content=<span style="color:#666;font-style:italic">&#34;width=device-width,initial-scale=1, user-scalable=no&#34;</span> /&gt;
+</span></span><span style="display:flex;"><span>    &lt;title&gt;h5&lt;/title&gt;
+</span></span><span style="display:flex;"><span>&lt;/head&gt;
+</span></span><span style="display:flex;"><span>&lt;body&gt;
+</span></span><span style="display:flex;"><span>    &lt;div style=<span style="color:#666;font-style:italic">&#34;margin-top: 20px&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;h2 style=<span style="color:#666;font-style:italic">&#34;text-align: center&#34;</span>&gt;iOS和JavaScript交互&lt;/h1&gt;
+</span></span><span style="display:flex;"><span>    &lt;/div&gt;
+</span></span><span style="display:flex;"><span>    &lt;div&gt;
+</span></span><span style="display:flex;"><span>        &lt;input type=<span style="color:#666;font-style:italic">&#34;button&#34;</span> value=<span style="color:#666;font-style:italic">&#34;share&#34;</span> onclick=<span style="color:#666;font-style:italic">&#34;shareHandler()&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;/div&gt;
+</span></span><span style="display:flex;"><span>    &lt;script&gt;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;font-style:italic;text-decoration:underline">function</span> shareHandler() {
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;font-style:italic;text-decoration:underline">var</span> info = {
+</span></span><span style="display:flex;"><span>            <span style="color:#666;font-style:italic">&#34;title&#34;</span>: <span style="color:#666;font-style:italic">&#34;标题&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#666;font-style:italic">&#34;desc&#34;</span>: <span style="color:#666;font-style:italic">&#34;内容&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#666;font-style:italic">&#34;shareUrl&#34;</span>: <span style="color:#666;font-style:italic">&#34;http://xuyunan.github.io&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#666;font-style:italic">&#34;shareIcon&#34;</span>: <span style="color:#666;font-style:italic">&#34;https://cdn.pixabay.com/photo/2019/03/12/18/00/kerala-4051412_1280.jpg&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;font-style:italic">window</span>.webkit.messageHandlers.share.postMessage(info);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;font-style:italic;text-decoration:underline">function</span> shareCallback(result) {
+</span></span><span style="display:flex;"><span>        console.log(result);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    &lt;/script&gt;
+</span></span><span style="display:flex;"><span>&lt;/body&gt;
+</span></span><span style="display:flex;"><span>&lt;/html&gt;
+</span></span></code></pre></div><h2 id="参考">参考</h2>
+<p><a href="https://nshipster.cn/wkwebkit/">nshipster.cn</a><br>
+<a href="https://medium.com/capital-one-tech/javascript-manipulation-on-ios-using-webkit-2b1115e7e405">JavaScript Manipulation on iOS Using WebKit</a></p>
+
+    
+  </div>
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+      </main>
+    </div>
+
+    <footer>
+      <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+
+
+    </footer>
+
+  </body>
+
+  <script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    document.body.classList.remove("auto");
+    let cls = "light";
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+  }
+
+  function invertBody() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invertBody);
+  }
+
+  setTheme();
+
+</script>
+
+</html>

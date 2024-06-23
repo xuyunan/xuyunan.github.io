@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width"><meta name="description" content="" />
+
+<title>
+    
+    React--使用Hook和Context创建全局提示框 | Tommy&#39;s blog
+    
+</title>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.f69b4a5b91a9bc416804eda1f19d04210551b843d47318bf1913d7edce1504fb.css" media="all">
+
+
+
+  </head>
+
+  
+
+  
+  
+  
+
+  <body class="auto">
+
+    <div class="content">
+      <header>
+        
+
+<div class="header">
+    <h1 class="header-title">Tommy&#39;s blog</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/about">
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+      </header>
+
+      <main class="main">
+        
+
+
+
+
+
+<div >
+
+  <div class="single-intro-container">
+
+    
+
+    <h1 class="single-title">React--使用Hook和Context创建全局提示框</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2021-12-02T13:00:24&#43;08:00">December 2, 2021</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <p>做一个全局的提示框，是非常有必要的，在使用的地方直接调用，而非在每个页面都插入一个提示框组件，可以使用这种技术的还有modal、notfication、dialog、spinner。</p>
+<!-- raw HTML omitted -->
+<h2 id="创建应用">创建应用</h2>
+<p>环境准备，安装node、npm 或 yarn</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>npx create-react-app react-alert
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic">cd</span> react-alert
+</span></span><span style="display:flex;"><span>npm start
+</span></span></code></pre></div><h2 id="创建alert">创建alert</h2>
+<p>创建context文件</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir src/context
+</span></span><span style="display:flex;"><span>touch src/context/alert-context.js
+</span></span></code></pre></div><p>创建完成之后的目录</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>src
+</span></span><span style="display:flex;"><span>├ ...
+</span></span><span style="display:flex;"><span>├── context
+</span></span><span style="display:flex;"><span>│   └── alert-context.js
+</span></span></code></pre></div><p>文件创建好了之后，接下来就要往里填充内容，修改alert-context.js, 先导入依赖</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-jsx" data-lang="jsx"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">import</span> React, { useState, createContext, useContext, useEffect } from <span style="color:#666;font-style:italic">&#34;react&#34;</span>;
+</span></span></code></pre></div><p>创建context对象</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-jsx" data-lang="jsx"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">const</span> AlertContext = createContext();
+</span></span></code></pre></div><p>定义alert组件</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-jsx" data-lang="jsx"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">const</span> Alert = ({ onClick }) =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">return</span> (
+</span></span><span style="display:flex;"><span>    &lt;div className=<span style="color:#666;font-style:italic">&#34;alert-wrapper&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>      &lt;div className=<span style="color:#666;font-style:italic">&#34;alert&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;div&gt;提示信息&lt;/div&gt;
+</span></span><span style="display:flex;"><span>        &lt;button onClick={onClick}&gt;关闭&lt;/button&gt;
+</span></span><span style="display:flex;"><span>      &lt;/div&gt;
+</span></span><span style="display:flex;"><span>    &lt;/div&gt;
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p>创建context provider</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-jsx" data-lang="jsx"><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">const</span> AlertProvider = (props) =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">const</span> [isDisplaying, setIsDisplaying] = useState(<span style="font-weight:bold;text-decoration:underline">false</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">const</span> show = () =&gt; setIsDisplaying(<span style="font-weight:bold;text-decoration:underline">true</span>);
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">const</span> dismiss = () =&gt; setIsDisplaying(<span style="font-weight:bold;text-decoration:underline">false</span>);
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">const</span> onClick = () =&gt; setIsDisplaying(<span style="font-weight:bold;text-decoration:underline">false</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">return</span> (
+</span></span><span style="display:flex;"><span>    &lt;AlertContext.Provider value={{ show, dismiss }} {...props}&gt;
+</span></span><span style="display:flex;"><span>      {props.children}
+</span></span><span style="display:flex;"><span>      {isDisplaying &amp;&amp; &lt;Alert onClick={onClick} /&gt;}
+</span></span><span style="display:flex;"><span>    &lt;/AlertContext.Provider&gt;
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p>AlertProvider创建完成，一般我们会用其包裹应用入口组件，一般是<code>&lt;App /&gt;</code> 。但是，使用前需要导出，现在我们创建一个自定义 hook，将外部使用到的内容导出</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-jsx" data-lang="jsx"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">const</span> useAlert = () =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">return</span> useContext(AlertContext);
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">export</span> <span style="font-weight:bold;text-decoration:underline">default</span> { AlertContext, useAlert };
+</span></span></code></pre></div><h2 id="使用alert">使用alert</h2>
+<p>下面就是如何使用以上制作的组件，首先配置AlertProvider，修改index.js</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-jsx" data-lang="jsx"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">import</span> { AlertProvider } from <span style="color:#666;font-style:italic">&#34;./context/alert-context&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>ReactDOM.render(
+</span></span><span style="display:flex;"><span>  &lt;AlertProvider&gt;
+</span></span><span style="display:flex;"><span>    &lt;App /&gt;
+</span></span><span style="display:flex;"><span>  &lt;/AlertProvider&gt;,
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;font-style:italic">document</span>.getElementById(<span style="color:#666;font-style:italic">&#34;root&#34;</span>)
+</span></span><span style="display:flex;"><span>);
+</span></span></code></pre></div><p>然后，在需要显示提示框，也就是需要调用show，dismiss的地方引入userAlert，修改App.js，在其中添加一个测试按钮</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-jsx" data-lang="jsx"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">import</span> { useAlert } from <span style="color:#666;font-style:italic">&#39;./context/alert-context&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span><span style="font-weight:bold;text-decoration:underline">const</span> alert = useAlert();
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">const</span> onClick = () =&gt; alert.show();
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>&lt;button onClick={onClick}&gt;提示&lt;/button&gt;;
+</span></span></code></pre></div><p>以上就是基本的创建和使用，接下来可以对alert进行一点改造，使其更加完善</p>
+<h2 id="补充给show添加参数">补充，给show添加参数</h2>
+<p>如果想让alert更加灵活，我们需要在show函数添加params 参数，最终将params传入alert，参数内容可以是title、icon等信息，修改alert-context.js</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-jsx" data-lang="jsx"><span style="display:flex;"><span><span style="color:#888;font-style:italic">//...
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span><span style="font-weight:bold;text-decoration:underline">const</span> [params, setParams] = useState();
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">//...
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span><span style="font-weight:bold;text-decoration:underline">const</span> show = (params) =&gt; {
+</span></span><span style="display:flex;"><span>  params &amp;&amp; setParams(params);
+</span></span><span style="display:flex;"><span>  setIsDisplaying(<span style="font-weight:bold;text-decoration:underline">true</span>);
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>{isDisplaying &amp;&amp; &lt;Alert onClick={onClick} {...params} /&gt;;}
+</span></span></code></pre></div><h2 id="补充按esc键隐藏提示框">补充，按ESC键，隐藏提示框</h2>
+<p>使用useEffect, 在组件挂载时绑定ESC键，组件卸载时移除键绑定，在alert组件添加</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-jsx" data-lang="jsx"><span style="display:flex;"><span>useEffect(() =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">const</span> bind = (e) =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">if</span> (e.keyCode !== 27) <span style="font-weight:bold;text-decoration:underline">return</span>;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">if</span> (<span style="font-weight:bold;font-style:italic">document</span>.activeElement &amp;&amp; [<span style="color:#666;font-style:italic">&#34;INPUT&#34;</span>, <span style="color:#666;font-style:italic">&#34;SELECT&#34;</span>].includes(<span style="font-weight:bold;font-style:italic">document</span>.activeElement.tagName)) <span style="font-weight:bold;text-decoration:underline">return</span>;
+</span></span><span style="display:flex;"><span>    onClick &amp;&amp; onClick();
+</span></span><span style="display:flex;"><span>  };
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;font-style:italic">document</span>.addEventListener(<span style="color:#666;font-style:italic">&#34;keyup&#34;</span>, bind);
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">return</span> () =&gt; <span style="font-weight:bold;font-style:italic">document</span>.removeEventListener(<span style="color:#666;font-style:italic">&#34;keyup&#34;</span>, bind);
+</span></span><span style="display:flex;"><span>}, []);
+</span></span></code></pre></div><p>至此，一个全局的提示框就处理好了，至于样式，每个应用的风格各不相同，可以自由发挥。</p>
+
+    
+  </div>
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+      </main>
+    </div>
+
+    <footer>
+      <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+
+
+    </footer>
+
+  </body>
+
+  <script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    document.body.classList.remove("auto");
+    let cls = "light";
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+  }
+
+  function invertBody() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invertBody);
+  }
+
+  setTheme();
+
+</script>
+
+</html>

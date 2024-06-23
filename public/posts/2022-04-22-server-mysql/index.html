@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width"><meta name="description" content="" />
+
+<title>
+    
+    服务器软件备忘录--MySQL | Tommy&#39;s blog
+    
+</title>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.f69b4a5b91a9bc416804eda1f19d04210551b843d47318bf1913d7edce1504fb.css" media="all">
+
+
+
+  </head>
+
+  
+
+  
+  
+  
+
+  <body class="auto">
+
+    <div class="content">
+      <header>
+        
+
+<div class="header">
+    <h1 class="header-title">Tommy&#39;s blog</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/about">
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+      </header>
+
+      <main class="main">
+        
+
+
+
+
+
+<div >
+
+  <div class="single-intro-container">
+
+    
+
+    <h1 class="single-title">服务器软件备忘录--MySQL</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2022-04-22T20:53:01&#43;08:00">April 22, 2022</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <p>有些项目是需要特定版本的 mysql 数据库，这里记下 mysql5.7 安装的过程和一些基础命令</p>
+<h2 id="推荐客户端">推荐客户端</h2>
+<p>mac client: <a href="https://sequelpro.com/">https://sequelpro.com/</a>  <br>
+windows client: <a href="https://www.heidisql.com/">https://www.heidisql.com/</a></p>
+<h2 id="常用命令">常用命令</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mysql -V  <span style="color:#888;font-style:italic"># 查看mysql版本 	</span>
+</span></span><span style="display:flex;"><span>systemctl start mysqld      <span style="color:#888;font-style:italic"># 开启服务   		</span>
+</span></span><span style="display:flex;"><span>systemctl restart mysqld    <span style="color:#888;font-style:italic"># 重启服务		</span>
+</span></span><span style="display:flex;"><span>systemctl stop mysqld       <span style="color:#888;font-style:italic"># 停止服务		</span>
+</span></span><span style="display:flex;"><span>systemctl <span style="font-weight:bold;font-style:italic">enable</span> mysqld     <span style="color:#888;font-style:italic"># 开启启动		</span>
+</span></span><span style="display:flex;"><span>systemctl disable mysqld    <span style="color:#888;font-style:italic"># 禁止开机启动		</span>
+</span></span><span style="display:flex;"><span>systemctl status mysqld     <span style="color:#888;font-style:italic"># 查看mysql状态		</span>
+</span></span></code></pre></div><h2 id="卸载已安装的-mysql">卸载已安装的 mysql</h2>
+<p>卸载已安装的mysql<br>
+sudo yum remove mysql mysql-server    # CentOS and RedHat systems</p>
+<p>删除mysql数据目录并备份</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mv /var/lib/mysql /var/lib/mysql_old_backup
+</span></span><span style="display:flex;"><span>mv /etc/mysql /etc/mysql_old_backup
+</span></span></code></pre></div><p>看看还有哪些mysql文件, 找出来删掉<br>
+find / -name mysql</p>
+<p>删除已经安装的mysql源</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>rpm -qa|grep mysql
+</span></span><span style="display:flex;"><span>yum remove mysql*
+</span></span><span style="display:flex;"><span>rpm -e mysql57-community-release-el7-10.noarch
+</span></span></code></pre></div><h2 id="centos-7-安装-mysql57">CentOS 7 安装 mysql5.7</h2>
+<p>更新 yum<br>
+yum update -y</p>
+<p>打开网站 <a href="https://dev.mysql.com/downloads/repo/yum/">https://dev.mysql.com/downloads/repo/yum/</a></p>
+<p>登录之后，选择 CentOS 7 版本的源，右键复制链接 <a href="https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm">https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm</a></p>
+<p>安装 wget</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo yum install -y wget
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic">cd</span> /download
+</span></span><span style="display:flex;"><span>wget https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm
+</span></span></code></pre></div><p>下载好之后安装
+sudo yum localinstall mysql80-community-release-el7-5.noarch.rpm</p>
+<p>安装 yum 工具 yum-utils<br>
+sudo yum install -y yum-utils</p>
+<p>查看可用的 mysql 源<br>
+yum repolist enabled | grep &ldquo;mysql.<em>-community.</em>&rdquo;</p>
+<p>列出所有版本<br>
+yum repolist all | grep mysql</p>
+<p>禁用默认的最新8.0版本<br>
+yum-config-manager &ndash;disable mysql80-community</p>
+<p>启用5.7版本<br>
+yum-config-manager &ndash;enable mysql57-community</p>
+<p>查看启用版本是否为5.7<br>
+yum repolist enabled | grep mysql</p>
+<p>开始安装<br>
+yum install -y mysql-community-server</p>
+<p>启动 mysql 服务<br>
+systemctl start mysqld</p>
+<p>查看 mysql 状态<br>
+systemctl status mysqld</p>
+<h2 id="初始化-mysql">初始化 mysql</h2>
+<p>初始化配置, 设置初始密码<br>
+sudo grep &rsquo;temporary password&rsquo; /var/log/mysqld.log</p>
+<p>使用上一步得到的密码，做初始化操作，初始化数据库配置, 修改root密码，配置是否禁止root远程登录<br>
+mysql_secure_installation   # /usr/bin/mysql_secure_installation</p>
+<p>如果还不能远程登录, 做以下设置<br>
+先登录, mysql -u root -p</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">SHOW</span> <span style="font-weight:bold;text-decoration:underline">databases</span>;
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">USE</span> mysql;
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">UPDATE</span> <span style="font-weight:bold;text-decoration:underline">user</span> <span style="font-weight:bold;text-decoration:underline">SET</span> host=<span style="color:#666;font-style:italic">&#39;%&#39;</span> <span style="font-weight:bold;text-decoration:underline">WHERE</span> <span style="font-weight:bold;text-decoration:underline">user</span>=<span style="color:#666;font-style:italic">&#39;root&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">FLUSH</span> <span style="font-weight:bold;text-decoration:underline">PRIVILEGES</span>;
+</span></span></code></pre></div><p>参考<br>
+<a href="https://dev.mysql.com/doc/mysql-yum-repo-quick-guide/en/#repo-qg-yum-installing">A Quick Guide to Using the MySQL Yum Repository</a><br>
+<a href="https://stackoverflow.com/questions/1559955/host-xxx-xx-xxx-xxx-is-not-allowed-to-connect-to-this-mysql-server">Host &lsquo;xxx.xx.xxx.xxx&rsquo; is not allowed to connect to this MySQL server</a></p>
+
+    
+  </div>
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+      </main>
+    </div>
+
+    <footer>
+      <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+
+
+    </footer>
+
+  </body>
+
+  <script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    document.body.classList.remove("auto");
+    let cls = "light";
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+  }
+
+  function invertBody() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invertBody);
+  }
+
+  setTheme();
+
+</script>
+
+</html>

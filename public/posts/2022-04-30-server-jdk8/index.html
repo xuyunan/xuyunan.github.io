@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width"><meta name="description" content="" />
+
+<title>
+    
+    服务器软件备忘录--JDK8 | Tommy&#39;s blog
+    
+</title>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.f69b4a5b91a9bc416804eda1f19d04210551b843d47318bf1913d7edce1504fb.css" media="all">
+
+
+
+  </head>
+
+  
+
+  
+  
+  
+
+  <body class="auto">
+
+    <div class="content">
+      <header>
+        
+
+<div class="header">
+    <h1 class="header-title">Tommy&#39;s blog</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/about">
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+      </header>
+
+      <main class="main">
+        
+
+
+
+
+
+<div >
+
+  <div class="single-intro-container">
+
+    
+
+    <h1 class="single-title">服务器软件备忘录--JDK8</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2022-04-30T16:44:21&#43;08:00">April 30, 2022</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <p>从JDK1.5版本开始，由于命名规则的变化，版本开始从JDK5.0开始递增。JDK5.0 即 JDK1.5, JDK6.0 即 JDK1.6, JDK7.0 即 JDK1.7, JDK8.0 即 JDK1.8&hellip;</p>
+<p>JDK8 也是JDK1.8, 是一个非常稳定的版本，以至于现在很多研发人员还在使用该版本。</p>
+<p>下载地址 <a href="https://www.oracle.com/java/technologies/downloads/#java8">https://www.oracle.com/java/technologies/downloads/#java8</a></p>
+<p>找到 jdk-8u333-linux-x64.tar.gz, 点击拷贝其下载链接<br>
+<a href="https://download.oracle.com/otn/java/jdk/8u333-b02/2dee051a5d0647d5be72a7c0abff270e/jdk-8u333-linux-x64.tar.gz">https://download.oracle.com/otn/java/jdk/8u333-b02/2dee051a5d0647d5be72a7c0abff270e/jdk-8u333-linux-x64.tar.gz</a></p>
+<p>开始下载</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic">cd</span> /download
+</span></span><span style="display:flex;"><span>wget https://download.oracle.com/otn/java/jdk/8u333-b02/2dee051a5d0647d5be72a7c0abff270e/jdk-8u333-linux-x64.tar.gz
+</span></span></code></pre></div><p>解压缩至 java 目录</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir /usr/java/
+</span></span><span style="display:flex;"><span>tar -xvf jdk-8u333-linux-x64.tar.gz -C /usr/java/
+</span></span></code></pre></div><p>配置环境变量</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>vi /etc/profile
+</span></span></code></pre></div><p>在文件最底部追加，注意在JAVA_HOME中替换为自己的版本号</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#888;font-style:italic">#java environment</span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic">export</span> <span style="color:#666;font-weight:bold;font-style:italic">JAVA_HOME</span>=/usr/java/jdk1.8.0_333
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic">export</span> <span style="color:#666;font-weight:bold;font-style:italic">CLASSPATH</span>=.:<span style="color:#666;font-style:italic">${</span><span style="color:#666;font-weight:bold;font-style:italic">JAVA_HOME</span><span style="color:#666;font-style:italic">}</span>/jre/lib/rt.jar:<span style="color:#666;font-style:italic">${</span><span style="color:#666;font-weight:bold;font-style:italic">JAVA_HOME</span><span style="color:#666;font-style:italic">}</span>/lib/dt.jar:<span style="color:#666;font-style:italic">${</span><span style="color:#666;font-weight:bold;font-style:italic">JAVA_HOME</span><span style="color:#666;font-style:italic">}</span>/lib/tools.jar
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic">export</span> <span style="color:#666;font-weight:bold;font-style:italic">PATH</span>=<span style="color:#666;font-weight:bold;font-style:italic">$PATH</span>:<span style="color:#666;font-style:italic">${</span><span style="color:#666;font-weight:bold;font-style:italic">JAVA_HOME</span><span style="color:#666;font-style:italic">}</span>/bin
+</span></span></code></pre></div><p>使配置生效</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic">source</span> /etc/profile
+</span></span></code></pre></div><p>检查是否安装成功</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>java -version
+</span></span></code></pre></div><p>如果能显示如下出版本信息，就说明安装成功了.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>java version <span style="color:#666;font-style:italic">&#34;1.8.0_333&#34;</span>
+</span></span><span style="display:flex;"><span>Java(TM) SE Runtime Environment (build 1.8.0_333-b02)
+</span></span><span style="display:flex;"><span>Java HotSpot(TM) 64-Bit Server VM (build 25.333-b02, mixed mode)
+</span></span></code></pre></div>
+    
+  </div>
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+      </main>
+    </div>
+
+    <footer>
+      <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+
+
+    </footer>
+
+  </body>
+
+  <script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    document.body.classList.remove("auto");
+    let cls = "light";
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+  }
+
+  function invertBody() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invertBody);
+  }
+
+  setTheme();
+
+</script>
+
+</html>

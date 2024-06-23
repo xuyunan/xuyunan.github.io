@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Redis on Tommy&#39;s blog</title>
+    <link>http://localhost:1313/tags/redis/</link>
+    <description>Recent content in Redis on Tommy&#39;s blog</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 22 Apr 2022 22:55:04 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/redis/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>服务器软件备忘录--Redis</title>
+      <link>http://localhost:1313/posts/2022-04-22-server-redis/</link>
+      <pubDate>Fri, 22 Apr 2022 22:55:04 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2022-04-22-server-redis/</guid>
+      <description>一个基于内存的key-value存储系统&#xA;Redis 官网：https://redis.io/&#xA;Redis 在线测试：http://try.redis.io/&#xA;Redis 命令参考：http://doc.redisfans.com/&#xA;常用命令 systemctl start redis # 启动服务 systemctl stop redis # 停止服务 systemctl restart redis # 重启服务 systemctl enable redis # 设置开机自启动 systemctl status redis # 查看服务状态 ps -ef | grep redis # 查看redis进程 netstat -lnp|grep 6379 # 查看端口 安装 yum install epel-release yum install redis 初始化配置 vi /etc/redis.conf&#xA;# 设置允许远程连接, 注释掉即可, 默认只允许本机连接 # bind 127.0.0.1 # 将保护模式关闭，默认是yes protected-mode no # 为了安全着想,可以设置密码 requirepass xxxx 安全组需要开放6379端口</description>
+    </item>
+  </channel>
+</rss>

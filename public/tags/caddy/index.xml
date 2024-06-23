@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Caddy on Tommy&#39;s blog</title>
+    <link>http://localhost:1313/tags/caddy/</link>
+    <description>Recent content in Caddy on Tommy&#39;s blog</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 30 Apr 2022 16:44:21 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/caddy/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>服务器软件备忘录--Caddy</title>
+      <link>http://localhost:1313/posts/2022-04-30-server-caddy/</link>
+      <pubDate>Sat, 30 Apr 2022 16:44:21 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2022-04-30-server-caddy/</guid>
+      <description>Caddy是一个高性能的web服务器, 采用go语言编写, 类似nginx的, 一个显著的特性是默认启用 HTTPS. Caddy2相对于Caddy1在配置上有诸多变动. 以下内容，如无特殊说明，均指Caddy2版本.&#xA;安装 推荐使用社区提供的一键安装方法, 更多官方安装方式 https://caddyserver.com/docs/install&#xA;curl -sS https://webinstall.dev/caddy | bash 安装之后可以通过 whereis caddy 找到安装目录, 配置文件在/etc/caddy/Caddyfile&#xA;常用命令 caddy # 显示帮助信息 caddy run # 前台运行 caddy start # 后台运行 caddy stop # 停止服务 caddy reload # 重新加载服务 静态Web服务 最简单的配置&#xA;example.com respond &amp;#34;Hello, privacy!&amp;#34; 通过端口访问配置&#xA;:2015 { root * /var/www/www.website.com/ file_server }&#xA;反向代理服务 :2016 { reverse_proxy 127.0.0.1:9000 } HTTPS配置 默认为所有的站点开启https，默认使用Let’s Encrypt, 在配置文件中指定申请证书的邮箱 tls helloworld@gmail.com 也可以设置不自动获取ssl证书，通过tls指定ssl证书&#xA;example.com { root * /var/www/www.</description>
+    </item>
+  </channel>
+</rss>

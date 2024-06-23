@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Web on Tommy&#39;s blog</title>
+    <link>http://localhost:1313/tags/web/</link>
+    <description>Recent content in Web on Tommy&#39;s blog</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 18 May 2022 23:40:06 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/web/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>大前端领域下, 都是有哪些常用单位</title>
+      <link>http://localhost:1313/posts/2022-05-18-about-frontend-units/</link>
+      <pubDate>Wed, 18 May 2022 23:40:06 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2022-05-18-about-frontend-units/</guid>
+      <description>WEB端常用单位 web端常用的单位比较多，有px、em、rem、%、vw、wh、vmin、vmax等，可以将其分为两类，一类是绝对单位，一类是相对单位&#xA;绝对单位, px: (pixels), 即像素单位，如果元素是固定大小的，那么px无疑是最好的选择，常用于margin、padding、shadow&#xA;相对单位, 相对单位用来处理响应式网页很有帮助，em、rem常用于font size、width、height，%、vw、vh、vmin、vmax常用于布局.&#xA;em: (emeters), 相对于父级元素，默认font size = 16px rem: (root emeters) 相对于根元素(HTML tag)，默认font size = 16px %: 相对于父级元素 vw: 相对于浏览器窗口宽度(viewport&amp;rsquo;s width) vh: 相对于浏览器窗口高度(viewport&amp;rsquo;s height) vmin: 取vw和vh的最小值 vmax: 取vw和vh的最大值 举个例子&#xA;在大多数的浏览器中，默认字体大小是16px，那么em、rem就是相对这个值来做改变&#xA;1em = 16px (1 * 16) 2em = 32px (2 * 16) .5em = 8px (.5 * 16) 1rem = 16px 2rem = 32px .5rem = 8px 100% = 16px 200% = 32px 50% = 8px 如果我们把默认的大小改为14px，那么实际的值也会相应变化</description>
+    </item>
+    <item>
+      <title>Web优化加载速度，优化打包大小</title>
+      <link>http://localhost:1313/posts/2022-02-18-web-performance-optimization/</link>
+      <pubDate>Thu, 18 Feb 2021 13:00:24 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2022-02-18-web-performance-optimization/</guid>
+      <description>按需引入组件库, BizCharts 直接引入方式&#xA;import { Chart, Interval, Tooltip } from &amp;#34;bizcharts&amp;#34;; 按需引入方式&#xA;import { TooltipItem } from &amp;#34;bizcharts/lib/interface&amp;#34;; import Chart from &amp;#39;bizcharts/lib/components/Chart&amp;#39;; import Tooltip from &amp;#39;bizcharts/lib/components/Tooltip&amp;#39;; import Axis from &amp;#39;bizcharts/lib/components/Axis&amp;#39;; import Interval from &amp;#39;bizcharts/lib/geometry/Interval&amp;#39;; 由于项目中我只使用了柱状图和饼图两个组件, 所以大小由bizcharts 3.72M缩减至643KB. (其中没有计算data-set.js文件，data-set占619KB)&#xA;如果你也想分析下项目文件大小，也可以试试 Source map explorer&#xA;关闭sourcemap功能 将package.json中的 &amp;ldquo;build&amp;rdquo;: &amp;ldquo;react-scripts build&amp;rdquo;, 替换成 &amp;ldquo;build&amp;rdquo;: &amp;ldquo;GENERATE_SOURCEMAP=false react-scripts build&amp;rdquo;,&#xA;这样就避免生成类似2.feb6b4a0.chunk.js.map的map文件，2.9M的代码，map文件近10.9M, 关闭sourcemap功能，将大大缩减页面加载时间.&#xA;Nginx开启gzip压缩 开启之后，2.9M的代码，可压缩至796KB，压缩了近77%的大小&#xA;gzip配置示例如下&#xA;location / { try_files $uri $uri/ /index.html; # ... } gzip on; gzip_vary on; gzip_min_length 1024; gzip_proxied expired no-cache no-store private auth; gzip_types text/plain text/css text/xml text/javascript application/javascript application/x-javascript application/xml; gzip_disable &amp;#34;MSIE [1-6]\.</description>
+    </item>
+  </channel>
+</rss>

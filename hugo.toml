@@ -1,0 +1,72 @@
+baseURL = 'https://xuyunan.github.io/'
+languageCode = 'en-us'
+title = "Tommy's blog"
+theme = 'Typo'
+
+[taxonomies]
+tag = 'tags'
+
+# Google analytics code
+googleAnalytics = "G-xxxxxxxxx"
+
+[params]
+# Meta description
+description = "Tommy's blog"
+
+# Appearance settings
+theme = 'auto'
+
+# Intro on main page, content is markdown
+homeIntroTitle = 'Hi!'
+homeIntroContent = """
+一名全栈开发者, 主要技术方向大前端方向, 涉及技术有, 移动端: iOS, Android, ReactNative, Web: React, Vue, 后端: Go.
+"""
+
+# Collection to display on home
+homeCollectionTitle = 'Posts'
+homeCollection = 'posts'
+
+# Lists parameters
+paginationSize = 20
+listSummaries = false
+listDateFormat = '2006-01-02'
+
+# Breadcrumbs
+breadcrumbs = false
+
+# Social icons
+[[params.social]]
+name = "twitter"
+url = "https://x.com/xuyunan"
+
+[[params.social]]
+name = "github"
+url = "https://github.com/xuyunan"
+
+# Main menu pages
+[[params.menu]]
+name = "home"
+url = "/"
+
+[[params.menu]]
+name = "posts"
+url = "/posts"
+
+[[params.menu]]
+name = "about"
+url = "/about"
+
+# Syntax highligth on code blocks
+[markup]
+[markup.highlight]
+style = 'algol'
+
+# Giscus comments
+[params.giscus]
+enable = false
+repo = "user/repo"
+repoid = "repoId"
+category = "General"
+categoryid = "categoryId"
+mapping = "pathname"
+theme = "preferred_color_scheme"

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width"><meta name="description" content="" />
+
+<title>
+    
+    服务器软件备忘录--Caddy | Tommy&#39;s blog
+    
+</title>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.f69b4a5b91a9bc416804eda1f19d04210551b843d47318bf1913d7edce1504fb.css" media="all">
+
+
+
+  </head>
+
+  
+
+  
+  
+  
+
+  <body class="auto">
+
+    <div class="content">
+      <header>
+        
+
+<div class="header">
+    <h1 class="header-title">Tommy&#39;s blog</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/about">
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+      </header>
+
+      <main class="main">
+        
+
+
+
+
+
+<div >
+
+  <div class="single-intro-container">
+
+    
+
+    <h1 class="single-title">服务器软件备忘录--Caddy</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2022-04-30T16:44:21&#43;08:00">April 30, 2022</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <p>Caddy是一个高性能的web服务器, 采用go语言编写, 类似nginx的, 一个显著的特性是默认启用 HTTPS. Caddy2相对于Caddy1在配置上有诸多变动. 以下内容，如无特殊说明，均指Caddy2版本.</p>
+<h2 id="安装">安装</h2>
+<p>推荐使用社区提供的一键安装方法, 更多官方安装方式 <a href="https://caddyserver.com/docs/install">https://caddyserver.com/docs/install</a></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -sS https://webinstall.dev/caddy | bash
+</span></span></code></pre></div><p>安装之后可以通过 whereis caddy 找到安装目录, 配置文件在/etc/caddy/Caddyfile</p>
+<h2 id="常用命令">常用命令</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>caddy           <span style="color:#888;font-style:italic"># 显示帮助信息</span>
+</span></span><span style="display:flex;"><span>caddy run       <span style="color:#888;font-style:italic"># 前台运行</span>
+</span></span><span style="display:flex;"><span>caddy start     <span style="color:#888;font-style:italic"># 后台运行</span>
+</span></span><span style="display:flex;"><span>caddy stop      <span style="color:#888;font-style:italic"># 停止服务</span>
+</span></span><span style="display:flex;"><span>caddy reload    <span style="color:#888;font-style:italic"># 重新加载服务</span>
+</span></span></code></pre></div><h2 id="静态web服务">静态Web服务</h2>
+<p>最简单的配置</p>
+<pre tabindex="0"><code>example.com
+respond &#34;Hello, privacy!&#34;
+</code></pre><p>通过端口访问配置</p>
+<p>:2015 {
+root * /var/www/www.website.com/
+file_server
+}</p>
+<h2 id="反向代理服务">反向代理服务</h2>
+<pre tabindex="0"><code>:2016 {
+    reverse_proxy 127.0.0.1:9000
+}
+</code></pre><h2 id="https配置">HTTPS配置</h2>
+<p>默认为所有的站点开启https，默认使用Let’s Encrypt, 在配置文件中指定申请证书的邮箱 tls <a href="mailto:helloworld@gmail.com">helloworld@gmail.com</a>
+也可以设置不自动获取ssl证书，通过tls指定ssl证书</p>
+<pre tabindex="0"><code>example.com {
+  root * /var/www/www.website.com/
+  file_server
+  tls cert.pem key.pem
+}
+</code></pre><h2 id="日志">日志</h2>
+<p>下面是一个简洁的日志配置, 甚至可以只写log</p>
+<pre tabindex="0"><code>log {
+	output file /var/log/access.log
+}
+</code></pre><p>下面是一个完整的日志配置</p>
+<pre tabindex="0"><code>example.com {
+    log {
+	   output file &lt;filename&gt; {
+    	   roll_disabled
+    	   roll_size     &lt;size&gt;
+    	   roll_uncompressed
+    	   roll_local_time
+    	   roll_keep     &lt;num&gt;
+    	   roll_keep_for &lt;days&gt;
+      }
+	   format &lt;encoder_module&gt; ...
+	   level  &lt;level&gt;
+    }
+}
+</code></pre><p>output 配置输出目标, stdout(默认输出到console), stderr, file, discard(不输出日志),
+format 格式化日志内容,
+level 自定义日志级别, INFO(默认)、ERROR</p>
+<p>其中，output可配置项说明</p>
+<p>filename 日志文件路径及名称.<br>
+roll_disabled 不分割轮转日志文件，保持一个日志文件.   <br>
+roll_size 日志文件大小, 以M为单位, 1.1MiB 会四舍五入到 2MiB. 默认: 100MiB.<br>
+roll_uncompressed 文件压缩. 默认: 开启gzip压缩.<br>
+roll_local_time 设置应用到文件名时间格式. 默认: UTC时间格式.<br>
+roll_keep 最多保持多少个日志文件. 默认: 10.<br>
+roll_keep_for 日志保持时长，单位是h，但是会四舍五入到整天. 例如, 36h (1.5 days) 会四舍五入到 48h (2 days). 默认: 2160h (90 days).</p>
+<h2 id="单页应用配置react-vue">单页应用配置(React Vue&hellip;)</h2>
+<p>Caddy并不了解单页应用的路由组件，在页面刷新时，默认会去找路由做对应的资源文件，但是资源文件并没有，这时候就会报404，所以我们要把请求重定向到首页</p>
+<pre tabindex="0"><code>try_files {path} /
+</code></pre><p>参考<br>
+<a href="https://router.vuejs.org/guide/essentials/history-mode.html#caddy-v2">https://router.vuejs.org/guide/essentials/history-mode.html#caddy-v2</a>
+<a href="https://caddyserver.com/docs/caddyfile/patterns#single-page-apps-spas">https://caddyserver.com/docs/caddyfile/patterns#single-page-apps-spas</a></p>
+
+    
+  </div>
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+      </main>
+    </div>
+
+    <footer>
+      <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+
+
+    </footer>
+
+  </body>
+
+  <script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    document.body.classList.remove("auto");
+    let cls = "light";
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+  }
+
+  function invertBody() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invertBody);
+  }
+
+  setTheme();
+
+</script>
+
+</html>

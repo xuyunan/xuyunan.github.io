@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width"><meta name="description" content="" />
+
+<title>
+    
+    Web优化加载速度，优化打包大小 | Tommy&#39;s blog
+    
+</title>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.f69b4a5b91a9bc416804eda1f19d04210551b843d47318bf1913d7edce1504fb.css" media="all">
+
+
+
+  </head>
+
+  
+
+  
+  
+  
+
+  <body class="auto">
+
+    <div class="content">
+      <header>
+        
+
+<div class="header">
+    <h1 class="header-title">Tommy&#39;s blog</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/about">
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+      </header>
+
+      <main class="main">
+        
+
+
+
+
+
+<div >
+
+  <div class="single-intro-container">
+
+    
+
+    <h1 class="single-title">Web优化加载速度，优化打包大小</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2021-02-18T13:00:24&#43;08:00">February 18, 2021</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h2 id="按需引入组件库-bizcharts">按需引入组件库, BizCharts</h2>
+<p>直接引入方式</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">import</span> { Chart, Interval, Tooltip } from <span style="color:#666;font-style:italic">&#34;bizcharts&#34;</span>;  
+</span></span></code></pre></div><p>按需引入方式</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">import</span> { TooltipItem } from <span style="color:#666;font-style:italic">&#34;bizcharts/lib/interface&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">import</span> Chart from <span style="color:#666;font-style:italic">&#39;bizcharts/lib/components/Chart&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">import</span> Tooltip from <span style="color:#666;font-style:italic">&#39;bizcharts/lib/components/Tooltip&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">import</span> Axis from <span style="color:#666;font-style:italic">&#39;bizcharts/lib/components/Axis&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">import</span> Interval from <span style="color:#666;font-style:italic">&#39;bizcharts/lib/geometry/Interval&#39;</span>;
+</span></span></code></pre></div><p>由于项目中我只使用了柱状图和饼图两个组件, 所以大小由bizcharts 3.72M缩减至643KB. (其中没有计算data-set.js文件，data-set占619KB)</p>
+<p>如果你也想分析下项目文件大小，也可以试试 <a href="https://create-react-app.dev/docs/analyzing-the-bundle-size/">Source map explorer</a></p>
+<h2 id="关闭sourcemap功能">关闭sourcemap功能</h2>
+<p>将package.json中的 &ldquo;build&rdquo;: &ldquo;react-scripts build&rdquo;,
+替换成 &ldquo;build&rdquo;: &ldquo;GENERATE_SOURCEMAP=false react-scripts build&rdquo;,</p>
+<p>这样就避免生成类似<code>2.feb6b4a0.chunk.js.map</code>的map文件，2.9M的代码，map文件近10.9M, 关闭sourcemap功能，将大大缩减页面加载时间.</p>
+<h2 id="nginx开启gzip压缩">Nginx开启gzip压缩</h2>
+<p>开启之后，2.9M的代码，可压缩至796KB，压缩了近77%的大小</p>
+<p>gzip配置示例如下</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nginx" data-lang="nginx"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">location</span> <span style="color:#666;font-style:italic">/</span> {
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">try_files</span> <span style="color:#666;font-weight:bold;font-style:italic">$uri</span> <span style="color:#666;font-weight:bold;font-style:italic">$uri/</span> <span style="color:#666;font-style:italic">/index.html</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-style:italic"># ...
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>}
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">gzip</span> <span style="color:#666;font-weight:bold;font-style:italic">on</span>; 
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">gzip_vary</span> <span style="color:#666;font-weight:bold;font-style:italic">on</span>; 
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">gzip_min_length</span> 1024; 
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">gzip_proxied</span> <span style="color:#666;font-style:italic">expired</span> <span style="color:#666;font-style:italic">no-cache</span> <span style="color:#666;font-style:italic">no-store</span> <span style="color:#666;font-style:italic">private</span> <span style="color:#666;font-style:italic">auth</span>; 
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">gzip_types</span> <span style="color:#666;font-style:italic">text/plain</span> <span style="color:#666;font-style:italic">text/css</span> <span style="color:#666;font-style:italic">text/xml</span> <span style="color:#666;font-style:italic">text/javascript</span> <span style="color:#666;font-style:italic">application/javascript</span> <span style="color:#666;font-style:italic">application/x-javascript</span> <span style="color:#666;font-style:italic">application/xml</span>; 
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">gzip_disable</span> <span style="color:#666;font-style:italic">&#34;MSIE</span> <span style="color:#666;font-style:italic">[1-6]\.&#34;</span>;
+</span></span></code></pre></div><p>注意不要忘记在gzip_types添加application/javascript</p>
+<p>如需更详细的配置，可至官网查看 <a href="http://nginx.org/en/docs/http/ngx_http_gzip_module.html">Module ngx_http_gzip_module</a></p>
+<p>这里也有一篇比较详细的文章，可以参考 <a href="http://www.yaohaixiao.com/blog/how-to-configure-gzip-compression-with-nginx/">如何在 Nginx 服务器中配置 GZip 压缩？
+</a></p>
+
+    
+  </div>
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+      </main>
+    </div>
+
+    <footer>
+      <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+
+
+    </footer>
+
+  </body>
+
+  <script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    document.body.classList.remove("auto");
+    let cls = "light";
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+  }
+
+  function invertBody() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invertBody);
+  }
+
+  setTheme();
+
+</script>
+
+</html>

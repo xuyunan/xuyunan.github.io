@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>JDK on Tommy&#39;s blog</title>
+    <link>http://localhost:1313/tags/jdk/</link>
+    <description>Recent content in JDK on Tommy&#39;s blog</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 30 Apr 2022 16:44:21 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/jdk/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>服务器软件备忘录--JDK8</title>
+      <link>http://localhost:1313/posts/2022-04-30-server-jdk8/</link>
+      <pubDate>Sat, 30 Apr 2022 16:44:21 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2022-04-30-server-jdk8/</guid>
+      <description>从JDK1.5版本开始，由于命名规则的变化，版本开始从JDK5.0开始递增。JDK5.0 即 JDK1.5, JDK6.0 即 JDK1.6, JDK7.0 即 JDK1.7, JDK8.0 即 JDK1.8&amp;hellip;&#xA;JDK8 也是JDK1.8, 是一个非常稳定的版本，以至于现在很多研发人员还在使用该版本。&#xA;下载地址 https://www.oracle.com/java/technologies/downloads/#java8&#xA;找到 jdk-8u333-linux-x64.tar.gz, 点击拷贝其下载链接&#xA;https://download.oracle.com/otn/java/jdk/8u333-b02/2dee051a5d0647d5be72a7c0abff270e/jdk-8u333-linux-x64.tar.gz&#xA;开始下载&#xA;cd /download wget https://download.oracle.com/otn/java/jdk/8u333-b02/2dee051a5d0647d5be72a7c0abff270e/jdk-8u333-linux-x64.tar.gz 解压缩至 java 目录&#xA;mkdir /usr/java/ tar -xvf jdk-8u333-linux-x64.tar.gz -C /usr/java/ 配置环境变量&#xA;vi /etc/profile 在文件最底部追加，注意在JAVA_HOME中替换为自己的版本号&#xA;#java environment export JAVA_HOME=/usr/java/jdk1.8.0_333 export CLASSPATH=.:${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/dt.jar:${JAVA_HOME}/lib/tools.jar export PATH=$PATH:${JAVA_HOME}/bin 使配置生效&#xA;source /etc/profile 检查是否安装成功&#xA;java -version 如果能显示如下出版本信息，就说明安装成功了.&#xA;java version &amp;#34;1.8.0_333&amp;#34; Java(TM) SE Runtime Environment (build 1.8.0_333-b02) Java HotSpot(TM) 64-Bit Server VM (build 25.</description>
+    </item>
+  </channel>
+</rss>

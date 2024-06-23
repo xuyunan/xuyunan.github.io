@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Home on Tommy&#39;s blog</title>
+    <link>http://localhost:1313/</link>
+    <description>Recent content in Home on Tommy&#39;s blog</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 18 May 2022 23:40:06 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>大前端领域下, 都是有哪些常用单位</title>
+      <link>http://localhost:1313/posts/2022-05-18-about-frontend-units/</link>
+      <pubDate>Wed, 18 May 2022 23:40:06 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2022-05-18-about-frontend-units/</guid>
+      <description>WEB端常用单位 web端常用的单位比较多，有px、em、rem、%、vw、wh、vmin、vmax等，可以将其分为两类，一类是绝对单位，一类是相对单位&#xA;绝对单位, px: (pixels), 即像素单位，如果元素是固定大小的，那么px无疑是最好的选择，常用于margin、padding、shadow&#xA;相对单位, 相对单位用来处理响应式网页很有帮助，em、rem常用于font size、width、height，%、vw、vh、vmin、vmax常用于布局.&#xA;em: (emeters), 相对于父级元素，默认font size = 16px rem: (root emeters) 相对于根元素(HTML tag)，默认font size = 16px %: 相对于父级元素 vw: 相对于浏览器窗口宽度(viewport&amp;rsquo;s width) vh: 相对于浏览器窗口高度(viewport&amp;rsquo;s height) vmin: 取vw和vh的最小值 vmax: 取vw和vh的最大值 举个例子&#xA;在大多数的浏览器中，默认字体大小是16px，那么em、rem就是相对这个值来做改变&#xA;1em = 16px (1 * 16) 2em = 32px (2 * 16) .5em = 8px (.5 * 16) 1rem = 16px 2rem = 32px .5rem = 8px 100% = 16px 200% = 32px 50% = 8px 如果我们把默认的大小改为14px，那么实际的值也会相应变化</description>
+    </item>
+    <item>
+      <title>关于 TypeScript，需要了解的几点知识</title>
+      <link>http://localhost:1313/posts/2022-05-01-about-typescript/</link>
+      <pubDate>Sun, 01 May 2022 16:43:33 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2022-05-01-about-typescript/</guid>
+      <description>为什么要用 TypeScript 类型检查: ts最最明显的一个特性就是给js添加了类型，方便在多人协作或者项目时间长了以后，能够清晰的识读代码;&#xA;IDE自动提示: 当我们在一个对象后敲入逗号时，IDE可以自动提示对应类型的属性、函数;&#xA;Vue3就是使用ts来重构的，这足以证明ts在前端生态中起着极其重要的作用，对于前端开发人员而言，很有必要去学习和使用。在使用的过程中，有些知识点易混淆，我们需要了解他们的区别，和各自使用的场景。&#xA;一些类型的区别 undefined和null的区别 都表示空，判断语句中都标示false，undefined 表示一个变量声明了，但是没有赋值，null 用来表明一个变量是空值&#xA;var testVar; alert(testVar); //shows undefined alert(typeof testVar); //shows undefined var testVar = null; alert(testVar); //shows null alert(typeof testVar); //shows object undefined是一个空类型，转为数值时为NaN，null是一个空对象，转为数值时为0.&#xA;any和unknown的区别 都表示未知类型，但是any是自由类型，unknown是类型安全的，unknown表示我暂时不知道这是什么类型，any表示我不关心这是什么类型 (unknown is I don&amp;rsquo;t know; any is I don&amp;rsquo;t care )。&#xA;当一个变量被赋值了any，在接下来的使用过程中不会有什么警告、报错、提示，但是如果变量被赋值了unknown类型，那么在真正使用之前必须确定类型，否则就会编译报错，例如:&#xA;let vAny: any = 10; // We can assign anything to any let vUnknown: unknown = 10; // We can assign anything to unknown just like any let s1: string = vAny; // Any is assignable to anything let s2: string = vUnknown; // 报错，在没有断言之前，我们不能将unknown类型赋值给其它类型 vAny.</description>
+    </item>
+    <item>
+      <title>服务器软件备忘录--Caddy</title>
+      <link>http://localhost:1313/posts/2022-04-30-server-caddy/</link>
+      <pubDate>Sat, 30 Apr 2022 16:44:21 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2022-04-30-server-caddy/</guid>
+      <description>Caddy是一个高性能的web服务器, 采用go语言编写, 类似nginx的, 一个显著的特性是默认启用 HTTPS. Caddy2相对于Caddy1在配置上有诸多变动. 以下内容，如无特殊说明，均指Caddy2版本.&#xA;安装 推荐使用社区提供的一键安装方法, 更多官方安装方式 https://caddyserver.com/docs/install&#xA;curl -sS https://webinstall.dev/caddy | bash 安装之后可以通过 whereis caddy 找到安装目录, 配置文件在/etc/caddy/Caddyfile&#xA;常用命令 caddy # 显示帮助信息 caddy run # 前台运行 caddy start # 后台运行 caddy stop # 停止服务 caddy reload # 重新加载服务 静态Web服务 最简单的配置&#xA;example.com respond &amp;#34;Hello, privacy!&amp;#34; 通过端口访问配置&#xA;:2015 { root * /var/www/www.website.com/ file_server }&#xA;反向代理服务 :2016 { reverse_proxy 127.0.0.1:9000 } HTTPS配置 默认为所有的站点开启https，默认使用Let’s Encrypt, 在配置文件中指定申请证书的邮箱 tls helloworld@gmail.com 也可以设置不自动获取ssl证书，通过tls指定ssl证书&#xA;example.com { root * /var/www/www.</description>
+    </item>
+    <item>
+      <title>服务器软件备忘录--JDK8</title>
+      <link>http://localhost:1313/posts/2022-04-30-server-jdk8/</link>
+      <pubDate>Sat, 30 Apr 2022 16:44:21 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2022-04-30-server-jdk8/</guid>
+      <description>从JDK1.5版本开始，由于命名规则的变化，版本开始从JDK5.0开始递增。JDK5.0 即 JDK1.5, JDK6.0 即 JDK1.6, JDK7.0 即 JDK1.7, JDK8.0 即 JDK1.8&amp;hellip;&#xA;JDK8 也是JDK1.8, 是一个非常稳定的版本，以至于现在很多研发人员还在使用该版本。&#xA;下载地址 https://www.oracle.com/java/technologies/downloads/#java8&#xA;找到 jdk-8u333-linux-x64.tar.gz, 点击拷贝其下载链接&#xA;https://download.oracle.com/otn/java/jdk/8u333-b02/2dee051a5d0647d5be72a7c0abff270e/jdk-8u333-linux-x64.tar.gz&#xA;开始下载&#xA;cd /download wget https://download.oracle.com/otn/java/jdk/8u333-b02/2dee051a5d0647d5be72a7c0abff270e/jdk-8u333-linux-x64.tar.gz 解压缩至 java 目录&#xA;mkdir /usr/java/ tar -xvf jdk-8u333-linux-x64.tar.gz -C /usr/java/ 配置环境变量&#xA;vi /etc/profile 在文件最底部追加，注意在JAVA_HOME中替换为自己的版本号&#xA;#java environment export JAVA_HOME=/usr/java/jdk1.8.0_333 export CLASSPATH=.:${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/dt.jar:${JAVA_HOME}/lib/tools.jar export PATH=$PATH:${JAVA_HOME}/bin 使配置生效&#xA;source /etc/profile 检查是否安装成功&#xA;java -version 如果能显示如下出版本信息，就说明安装成功了.&#xA;java version &amp;#34;1.8.0_333&amp;#34; Java(TM) SE Runtime Environment (build 1.8.0_333-b02) Java HotSpot(TM) 64-Bit Server VM (build 25.</description>
+    </item>
+    <item>
+      <title>服务器软件备忘录--Redis</title>
+      <link>http://localhost:1313/posts/2022-04-22-server-redis/</link>
+      <pubDate>Fri, 22 Apr 2022 22:55:04 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2022-04-22-server-redis/</guid>
+      <description>一个基于内存的key-value存储系统&#xA;Redis 官网：https://redis.io/&#xA;Redis 在线测试：http://try.redis.io/&#xA;Redis 命令参考：http://doc.redisfans.com/&#xA;常用命令 systemctl start redis # 启动服务 systemctl stop redis # 停止服务 systemctl restart redis # 重启服务 systemctl enable redis # 设置开机自启动 systemctl status redis # 查看服务状态 ps -ef | grep redis # 查看redis进程 netstat -lnp|grep 6379 # 查看端口 安装 yum install epel-release yum install redis 初始化配置 vi /etc/redis.conf&#xA;# 设置允许远程连接, 注释掉即可, 默认只允许本机连接 # bind 127.0.0.1 # 将保护模式关闭，默认是yes protected-mode no # 为了安全着想,可以设置密码 requirepass xxxx 安全组需要开放6379端口</description>
+    </item>
+    <item>
+      <title>服务器软件备忘录--MySQL</title>
+      <link>http://localhost:1313/posts/2022-04-22-server-mysql/</link>
+      <pubDate>Fri, 22 Apr 2022 20:53:01 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2022-04-22-server-mysql/</guid>
+      <description>有些项目是需要特定版本的 mysql 数据库，这里记下 mysql5.7 安装的过程和一些基础命令&#xA;推荐客户端 mac client: https://sequelpro.com/ windows client: https://www.heidisql.com/&#xA;常用命令 mysql -V # 查看mysql版本 systemctl start mysqld # 开启服务 systemctl restart mysqld # 重启服务&#x9;systemctl stop mysqld # 停止服务&#x9;systemctl enable mysqld # 开启启动&#x9;systemctl disable mysqld # 禁止开机启动&#x9;systemctl status mysqld # 查看mysql状态&#x9;卸载已安装的 mysql 卸载已安装的mysql&#xA;sudo yum remove mysql mysql-server # CentOS and RedHat systems&#xA;删除mysql数据目录并备份&#xA;mv /var/lib/mysql /var/lib/mysql_old_backup mv /etc/mysql /etc/mysql_old_backup 看看还有哪些mysql文件, 找出来删掉&#xA;find / -name mysql</description>
+    </item>
+    <item>
+      <title>对于NGINX的日志文件大小控制</title>
+      <link>http://localhost:1313/posts/2022-01-01-nginx-access-log-control/</link>
+      <pubDate>Sat, 01 Jan 2022 13:00:24 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2022-01-01-nginx-access-log-control/</guid>
+      <description>问题 新年伊始，系统就报起了磁盘即将被占满的警告，经排查是原因为nginx日志文件access.log文件太大了，临时先清空下文件 echo &amp;quot;&amp;quot; &amp;gt; access.log&#xA;nginx有两个日志文件，一个是access.log，会记录每次成功的请求信息，包括ip地址，时间，浏览器等信息，格式可以通过在nginx.conf中的log_format配置；一个是error.log，会记录异常的信息。 关于磁盘大小报警，如何排查，可以通过du命令，可以参考 How to Find Out Top Directories and Files (Disk Space) in Linux&#xA;解决方式:logrotate logrotate是一个可以分割、压缩日志文件的工具&#xA;使用方式是在特定目录建立(/etc/logrotate)一个配置配置文件，通过配置项来管理日志文件，比如: mysql日志配置文件 /etc/logrotate.d/mysql nginx日志配置文件 /etc/logrotate.d/nginx&#xA;例如ngxin而配置之后，产生的access日志文件&#xA;access.log access.log-20220217.gz access.log-20220218.gz access.log-20220219.gz access.log-20220220&#xA;常用的三个命令选项 -f、-d、-v&#xA;logrotate通常是要通过cron任务来执行的，但是如果你现在就想看看转存后的文件，可以通过-f来强制执行一次转存。 logrotate -f /etc/logrotate.d/nginx&#xA;如果你想测试下写的配置是否正常，可以使用-d来测试，它不会真的去切割文件，而是会以日志输出的形式，把过程打印出来。 logrotate -d /etc/logrotate.d/nginx&#xA;如果你好奇转存时logrotate都做了哪些工作，可以使用-v来输出详细过程 logrotate -v /etc/logrotate.d/nginx&#xA;触发logrotate的方式有多种：&#xA;配置了size，文件到达具体大小时会触发分割； daily、weekly等时间节点会触发分割； 通过-f强制执行分割；&#xA;配置文件关键点分两个部分，一个是日志文件的路径，一个是配置项。两个示例:&#xA;一个是nginx日志配置，每天检查日志文件，会保留7个分割的日志文件，然后会执行一个脚本(postrotate后面一行)，来通知nginx，重新写入日志，这样就不会写到旧的日志文件里去。&#xA;/usr/local/nginx/logs/*.log { daily rotate 7 size 5k missingok dateext compress delaycompress notifempty sharedscripts postrotate [ -e /usr/local/nginx/logs/nginx.pid ] &amp;amp;&amp;amp; kill -USR1 `cat /usr/local/nginx/logs/nginx.</description>
+    </item>
+    <item>
+      <title>React--使用Hook和Context创建全局提示框</title>
+      <link>http://localhost:1313/posts/2021-12-02-alert-by-hook-and-context/</link>
+      <pubDate>Thu, 02 Dec 2021 13:00:24 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2021-12-02-alert-by-hook-and-context/</guid>
+      <description>做一个全局的提示框，是非常有必要的，在使用的地方直接调用，而非在每个页面都插入一个提示框组件，可以使用这种技术的还有modal、notfication、dialog、spinner。&#xA;创建应用 环境准备，安装node、npm 或 yarn&#xA;npx create-react-app react-alert cd react-alert npm start 创建alert 创建context文件&#xA;mkdir src/context touch src/context/alert-context.js 创建完成之后的目录&#xA;src ├ ... ├── context │ └── alert-context.js 文件创建好了之后，接下来就要往里填充内容，修改alert-context.js, 先导入依赖&#xA;import React, { useState, createContext, useContext, useEffect } from &amp;#34;react&amp;#34;; 创建context对象&#xA;const AlertContext = createContext(); 定义alert组件&#xA;const Alert = ({ onClick }) =&amp;gt; { return ( &amp;lt;div className=&amp;#34;alert-wrapper&amp;#34;&amp;gt; &amp;lt;div className=&amp;#34;alert&amp;#34;&amp;gt; &amp;lt;div&amp;gt;提示信息&amp;lt;/div&amp;gt; &amp;lt;button onClick={onClick}&amp;gt;关闭&amp;lt;/button&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; ); }; 创建context provider&#xA;const AlertProvider = (props) =&amp;gt; { const [isDisplaying, setIsDisplaying] = useState(false); const show = () =&amp;gt; setIsDisplaying(true); const dismiss = () =&amp;gt; setIsDisplaying(false); const onClick = () =&amp;gt; setIsDisplaying(false); return ( &amp;lt;AlertContext.</description>
+    </item>
+    <item>
+      <title>Web优化加载速度，优化打包大小</title>
+      <link>http://localhost:1313/posts/2022-02-18-web-performance-optimization/</link>
+      <pubDate>Thu, 18 Feb 2021 13:00:24 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2022-02-18-web-performance-optimization/</guid>
+      <description>按需引入组件库, BizCharts 直接引入方式&#xA;import { Chart, Interval, Tooltip } from &amp;#34;bizcharts&amp;#34;; 按需引入方式&#xA;import { TooltipItem } from &amp;#34;bizcharts/lib/interface&amp;#34;; import Chart from &amp;#39;bizcharts/lib/components/Chart&amp;#39;; import Tooltip from &amp;#39;bizcharts/lib/components/Tooltip&amp;#39;; import Axis from &amp;#39;bizcharts/lib/components/Axis&amp;#39;; import Interval from &amp;#39;bizcharts/lib/geometry/Interval&amp;#39;; 由于项目中我只使用了柱状图和饼图两个组件, 所以大小由bizcharts 3.72M缩减至643KB. (其中没有计算data-set.js文件，data-set占619KB)&#xA;如果你也想分析下项目文件大小，也可以试试 Source map explorer&#xA;关闭sourcemap功能 将package.json中的 &amp;ldquo;build&amp;rdquo;: &amp;ldquo;react-scripts build&amp;rdquo;, 替换成 &amp;ldquo;build&amp;rdquo;: &amp;ldquo;GENERATE_SOURCEMAP=false react-scripts build&amp;rdquo;,&#xA;这样就避免生成类似2.feb6b4a0.chunk.js.map的map文件，2.9M的代码，map文件近10.9M, 关闭sourcemap功能，将大大缩减页面加载时间.&#xA;Nginx开启gzip压缩 开启之后，2.9M的代码，可压缩至796KB，压缩了近77%的大小&#xA;gzip配置示例如下&#xA;location / { try_files $uri $uri/ /index.html; # ... } gzip on; gzip_vary on; gzip_min_length 1024; gzip_proxied expired no-cache no-store private auth; gzip_types text/plain text/css text/xml text/javascript application/javascript application/x-javascript application/xml; gzip_disable &amp;#34;MSIE [1-6]\.</description>
+    </item>
+    <item>
+      <title>iOS中的锁(五)--OSSpinLock, os_unfair_lock</title>
+      <link>http://localhost:1313/posts/2019-06-23-ios-lock-osspinlock/</link>
+      <pubDate>Sun, 23 Jun 2019 13:00:24 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2019-06-23-ios-lock-osspinlock/</guid>
+      <description>OSSpinLock 是一种自旋锁, 和互斥锁类似，都是为了保证线程安全的锁。但二者的区别是不一样的，对于互斥锁，当一个线程获得这个锁之后，其他想要获得此锁的线程将会被阻塞，直到该锁被释放。但自旋锁不一样，当一个线程获得锁之后，其他线程将会一直循环在哪里查看是否该锁被释放。所以，此锁比较适用于锁的持有者保存时间较短的情况下。&#xA;spinLock = OS_SPINLOCK_INIT; OSSpinLockLock(&amp;amp;spinLock); sleep(4); OSSpinLockUnlock(&amp;amp;spinLock); 为什么说这种自旋锁不再安全了?&#xA;优先级翻转的问题&#xA;新版 iOS 中，系统维护了 5 个不同的线程优先级/QoS: background，utility，default，user-initiated，user-interactive。高优先级线程始终会在低优先级线程前执行，一个线程不会受到比它更低优先级线程的干扰。这种线程调度算法会产生潜在的优先级反转问题，从而破坏了 spin lock。&#xA;具体来说，如果一个低优先级的线程获得锁并访问共享资源，这时一个高优先级的线程也尝试获得这个锁，它会处于 spin lock 的忙等状态从而占用大量 CPU。此时低优先级线程无法与高优先级线程争夺 CPU 时间，从而导致任务迟迟完不成、无法释放 lock。这并不只是理论上的问题，libobjc 已经遇到了很多次这个问题了，于是苹果的工程师停用了 OSSpinLock。&#xA;iOS10以后，苹果给出了新的api, 当然也可以通过前面几章提到的各种锁&#xA;os_unfair_lock_t unfairLock = &amp;amp;(OS_UNFAIR_LOCK_INIT); os_unfair_lock_lock(unfairLock); sleep(4); os_unfair_lock_unlock(unfairLock); 参考&#xA;不再安全的 OSSpinLock</description>
+    </item>
+    <item>
+      <title>iOS中的锁(四)-NSLock, NSRecursiveLock, NSConditionLock</title>
+      <link>http://localhost:1313/posts/2019-06-22-ios-lock-nslock/</link>
+      <pubDate>Sat, 22 Jun 2019 13:00:24 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2019-06-22-ios-lock-nslock/</guid>
+      <description>这几种锁都是对pthread_mutex的封装&#xA;NSLock 遵循 NSLocking 协议. lock 加锁，unlock 解锁，tryLock 尝试加锁，如果失败的话返回 NO，lockBeforeDate: 是在指定Date之前尝试加锁，如果在指定时间之前都不能加锁，则返回NO&#xA;[self.lock lock]; // todo [self.lock unlock]; NSRecursiveLock 是通过pthread_mutex封装的递归锁, 同一个线程可以多次获取同一个递归锁，不会产生死锁，加锁锁解锁次数也必须相同.&#xA;- (void)recursiveFunc:(NSInteger)value { [theLock lock]; if (value != 0) { --value; [self recursiveFunc:value]; } [theLock unlock]; } NSConditionLock 即条件锁，可以设置自定义的条件来获得锁和释放锁. 比如&#xA;- (void)produce { while (1) { [theLock lockWhenCondition:NO_DATA]; // create data [theLock unlockWithCondition:HAS_DATA]; } } - (void)consume { while (1) { if ([theLock tryLockWhenCondition:HAS_DATA]) { // display data [theLock unlockWithCondition:NO_DATA]; } sleep(1.</description>
+    </item>
+    <item>
+      <title>iOS中的锁(三)--semaphore</title>
+      <link>http://localhost:1313/posts/2019-06-12-ios-lock-semaphore/</link>
+      <pubDate>Wed, 12 Jun 2019 13:00:24 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2019-06-12-ios-lock-semaphore/</guid>
+      <description>通过dispatch_semaphore控制并发, 实现锁机制。 dispatch_semaphore是用来控制并发数的，类似往篮子里放鸡蛋拿鸡蛋，停车场的车辆入库出库。 通过控制信号量值为0或者1，来实现锁。 dispatch_semaphore_wait会使信号量-1，dispatch_semaphore_signal会使信号量+1，信号量为0时线程等待，为1时方可继续执行。&#xA;dispatch_semaphore_t signal = dispatch_semaphore_create(1); // Thread 1 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{ NSLog(@&amp;#34;Thread 1 waiting&amp;#34;); dispatch_semaphore_wait(signal, DISPATCH_TIME_FOREVER); // 信号量 -1 NSLog(@&amp;#34;Thread 1 start doing something&amp;#34;); [NSThread sleepForTimeInterval:4]; NSLog(@&amp;#34;Thread 1 done&amp;#34;); dispatch_semaphore_signal(signal); // 信号量 +1 NSLog(@&amp;#34;Thread 1 signal&amp;#34;); }); // Thread 2 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{ NSLog(@&amp;#34;Thread 2 waiting&amp;#34;); dispatch_semaphore_wait(signal, DISPATCH_TIME_FOREVER); NSLog(@&amp;#34;Thread 2 start doing something&amp;#34;); [NSThread sleepForTimeInterval:5]; NSLog(@&amp;#34;Thread 2 done&amp;#34;); dispatch_semaphore_signal(signal); NSLog(@&amp;#34;Thread 2 signal&amp;#34;); }); 如果要控制一个事件的超时时间，可以通过dispatch_semaphore_wait的第二个参数来控制。</description>
+    </item>
+    <item>
+      <title>iOS中的锁(二)--synchronized</title>
+      <link>http://localhost:1313/posts/2019-06-11-ios-lock-synchronized/</link>
+      <pubDate>Tue, 11 Jun 2019 13:00:24 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2019-06-11-ios-lock-synchronized/</guid>
+      <description>11年刚入道的时候，只会用这么一种锁，简单方便&#xA;@synchronized (obj) { } 我们在main函数里写段简单的代码，然后用clang命令看看它的具体实现&#xA;id _rethrow = 0; id _sync_obj = (id)obj; objc_sync_enter(_sync_obj); try { struct _SYNC_EXIT { _SYNC_EXIT(id arg) : sync_exit(arg) {} ~_SYNC_EXIT() {objc_sync_exit(sync_exit);} id sync_exit; } _sync_exit(_sync_obj); // TODO: } catch (id e) { _rethrow = e; } 从上面我们可以看出&#xA;1、使用的是objc_sync_enter和objc_sync_exit来加锁和解锁&#xA;2、创建了一个结构体，充当了一个defer的角色, 当前代码块执行完之后会执行析构函数, 以释放锁资源&#xA;关于锁的两个函数声明我们可以在usr/include/objc/objc-sync.h中找到(cmd+shift+p搜索objc-sync.h)&#xA;/** * Begin synchronizing on &amp;#39;obj&amp;#39;. * Allocates recursive pthread_mutex associated with &amp;#39;obj&amp;#39; if needed. * * @param obj The object to begin synchronizing on.</description>
+    </item>
+    <item>
+      <title>iOS中的锁(一)--pthread_mutex_lock</title>
+      <link>http://localhost:1313/posts/2019-06-10-ios-lock-pthread_mutex/</link>
+      <pubDate>Mon, 10 Jun 2019 13:00:24 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2019-06-10-ios-lock-pthread_mutex/</guid>
+      <description>底层pthread级别加锁, 使用c语言的api, 可用作互斥锁、递归锁, 使用api前，需要导入头文件&#xA;#import &amp;lt;pthread.h&amp;gt; 互斥锁&#xA;static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; pthread_mutex_lock(&amp;amp;mutex); // TODO: pthread_mutex_unlock(&amp;amp;mutex); 递归锁，允许同一个线程多次递归访问被锁资源，加锁和解锁必须成对出现，使得最终锁能够被解开，其它线程能够访问资源.&#xA;pthread_mutexattr_t attr; pthread_mutex_t mutex; pthread_mutexattr_settype(&amp;amp;attr, PTHREAD_MUTEX_RECURSIVE); pthread_mutex_init(&amp;amp;mutex, &amp;amp;attr); // 下面一段有可能被通一个线程，在一个或多个方法中多次调用 pthread_mutex_lock(&amp;amp;mutex); // TODO: pthread_mutex_unlock(&amp;amp;mutex); 类似PTHREAD_MUTEX_RECURSIVE影响锁行为的总共有三种类型&#xA;// 如果相同的线程不尝试先解锁，而再次加锁互斥对象，会造成死锁 #define PTHREAD_MUTEX_NORMAL&#x9;0 // 如果相同的线程试图不先解锁互斥对象而再一次锁定同一个互斥对象，会返回一个非零值的错误，避免死锁 #define PTHREAD_MUTEX_ERRORCHECK&#x9;1 // 递归地使用pthread_mutex_lock加锁互斥对象，不会造成死锁 #define PTHREAD_MUTEX_RECURSIVE&#x9;2 #define PTHREAD_MUTEX_DEFAULT&#x9;PTHREAD_MUTEX_NORMAL </description>
+    </item>
+    <item>
+      <title>Objective-C Runtime Programming Guide</title>
+      <link>http://localhost:1313/posts/2019-06-07-oc-runtime/</link>
+      <pubDate>Fri, 07 Jun 2019 13:00:24 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2019-06-07-oc-runtime/</guid>
+      <description>以下内容根据官方文档和其他博客整理而得, 由于文档版本较旧, 有些api已经过时, 比如标记OBJC2_UNAVAILABLE的api, 此文档仅作了解, 在使用过程中, 还需多看代码注释和文档, 多动手测试.&#xA;运行时版本与平台 老版本对应Objective-C 1.0, 新版本随Objective-C 2.0一起发布. 两个版本有什么区别呢?&#xA;在老版本中，如果你改变了一个类的实例变量，就需要重新编译所有继承自它的类 在新版本中，则不需要重新编译继承自它的类 什么应用程序是运行在新版本中呢?&#xA;iPhone应用程序和Mac OS X 10.5以后的64位应用程序使用的是新版本. 其它(Mac OS X的32位应用程序)使用的是旧版本.&#xA;与运行时的交互 oc中我们时时刻刻在跟运行时打交道，可以通过以下三种形式和运行时接触.&#xA;Objective-C源代码 oc是个动态语言，要依托于运行时才能执行，当我们写源代码时，其实已经在和运行时打交道了，比如对象方法调用，在运行时会被解释成objc_msgSend.&#xA;NSObject的方法 - (BOOL)isKindOfClass:(Class)aClass; // 检测是否是某类的子类 - (BOOL)isMemberOfClass:(Class)aClass; // 检测是否是某类的成员 - (BOOL)conformsToProtocol:(Protocol *)aProtocol; // 检测是否实现了协议 - (BOOL)respondsToSelector:(SEL)aSelector; // 检测是否含有方法 - (IMP)methodForSelector:(SEL)aSelector; // 返回一个指向方法实现的指针 这些方法恰恰是运用了运行时的能力.&#xA;运行时方法 运行时系统是一个动态共享库，在头文件中，有很多的方法和数据结构，头文件位于/usr/include/objc&#xA;发送消息 objc_msgSend&#xA;方法调用[receiver message]在运行时会被解释成&#xA;objc_msgSend(receiver, selector) // 无参数情况下 objc_msgSend(receiver, selector, arg1, arg2, ...) // 有参数情况下 receiver是调用函数的对象，selector是message方法的选择器，通过它运行时可以找到对应的函数实现.&#xA;对象执行方法的具体过程</description>
+    </item>
+    <item>
+      <title>关于__block的实现</title>
+      <link>http://localhost:1313/posts/2019-05-30-__block/</link>
+      <pubDate>Thu, 30 May 2019 13:00:24 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2019-05-30-__block/</guid>
+      <description>我们都知道, 如果要在block中修改外部的变量, 要使用__block来修饰, 那么为什么这么做呢, 里面的原理是什么?&#xA;经过实践查阅源码后，我们可以了解到:&#xA;block底层是一个struct, block的参数对应着struct的构造函数参数, block代码块对应着一个函数. 这个函数的参数是当前block. 不加__block，外部变量copy到block内部，底层是通过struct构造函数将值传递进去，因为是值传递，所以修改不了外面的值. 加了__block，外面的变量的引用，通过struct的构造函数传递进去，内部持有了这个引用，是个引用传递，所以可以修改外面的值.&#xA;测试的原始block&#xA;// __block NSInteger num = 10; NSInteger num = 10;&#x9;void (^add)(void) = ^void(void) { NSLog(@&amp;#34;%ld&amp;#34;, num); }; 不加__block, clang rewrite之后的源码&#xA;struct __main_block_impl_0 { struct __block_impl impl; struct __main_block_desc_0* Desc; NSInteger num; __main_block_impl_0(void *fp, struct __main_block_desc_0 *desc, NSInteger _num, int flags=0) : num(_num) { impl.isa = &amp;amp;_NSConcreteStackBlock; impl.Flags = flags; impl.FuncPtr = fp; Desc = desc; } }; static void __main_block_func_0(struct __main_block_impl_0 *__cself) { NSInteger num = __cself-&amp;gt;num; // bound by copy NSLog((NSString *)&amp;amp;__NSConstantStringImpl__var_folders_bm_939gjfvj42b5bzxh93zwnxcm0000gn_T_main_db5d50_mi_0, num); } 加了__blcok, clang rewrite之后的源码</description>
+    </item>
+    <item>
+      <title>Block内存存放探究</title>
+      <link>http://localhost:1313/posts/2019-05-28-block/</link>
+      <pubDate>Tue, 28 May 2019 13:00:24 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2019-05-28-block/</guid>
+      <description>Block简介 block可以说是一种匿名函数，但是又以对象的形式存在，内部使用结构体实现，我们可以将一个block作为参数传给其它的函数或者block. 一个简单的block如下:&#xA;^(NSInteger param) { NSLog(@&amp;#34;%d&amp;#34;, param); }; 其它block写法参考: fuckingblocksyntax.com&#xA;Block类型 我们都知道block有三种类型&#xA;NSGlobalBlock, 全局block NSStackBlock, 栈区block NSMallocBlock, 堆区block 那么是什么条件决定了block的种类呢? 也就是说是什么条件决定了block存在的内存区域呢? 下面就通过实践来探索下结果.&#xA;:::tip iOS的内存存储区域: 栈区、堆区、全局/静态区、常量区、代码区 :::&#xA;Block实例 我们声明一个block，什么都不关联，看看默认情况下是什么类型&#xA;NSLog(@&amp;#34;%@&amp;#34;, ^(NSInteger a) { }); // TestBlockMemory[4885:374356] &amp;lt;__NSGlobalBlock__: 0x1000010c0&amp;gt; 通过实例我们可以看出，最最简单的block是NSGlobalBlock类型，存在全局区.&#xA;当block引用了外部变量&#xA;NSInteger num = 10; NSLog(@&amp;#34;%@&amp;#34;, ^(NSInteger a) { return a + num; }); // TestBlockMemory[4918:378440] &amp;lt;__NSStackBlock__: 0x7ffeefbff4b8&amp;gt; 首先测试的是引用了一个局部变量，结果为NSStackBlock, 在栈区, 如果引用全局变量呢?&#xA;static NSInteger num = 10; NSLog(@&amp;#34;%@&amp;#34;, ^(NSInteger a) { return a + num; }); // TestBlockMemory[4941:379770] &amp;lt;__NSGlobalBlock__: 0x1000010d8&amp;gt; 看的出，引用全局变量后并没有像局部变量那样改变了block原始类型，依然是NSGlobalBlock类型.</description>
+    </item>
+    <item>
+      <title>WKWebView(二)--和原生交互</title>
+      <link>http://localhost:1313/posts/2019-05-27-wkwebview-2/</link>
+      <pubDate>Mon, 27 May 2019 13:00:24 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2019-05-27-wkwebview-2/</guid>
+      <description>简介 随意移动互联网的飞速发展，移动应用技术的方案也变得丰富起来了&#xA;1、纯原生开发 Objective-C、Swift、Java、Kotlin 2、原生+跨平台混合开发 ReactNative、Flutter&#xA;3、原生+H5混合开发✔️&#xA;更是随着科技的发展，5G的到来，网速越来越快，H5页面在移动应用上表现的越来越优秀，很多时候我们不得不选择原生+H5的混合开发方案，以便能够快速适应产品需求。接下来我们就看看iOS最新的web组件WKWebView如何与原生交互共存的。&#xA;下面的场景需要我们加载一个简单的本地html文件来测试&#xA;let filePath = Bundle.main.path(forResource: &amp;#34;h5/index&amp;#34;, ofType: &amp;#34;html&amp;#34;)! let myURL = URL(fileURLWithPath: filePath) let myRequest = URLRequest(url: myURL) webView.load(myRequest) :::tip 当加载远程不安全的链接(http)时，需要在info.plist文件添加App Transport Security Settings-Allow Arbitrary Loads为YES :::&#xA;嵌入JavaScript代码 通过WKUserScript注入JavaScript代码&#xA;let contentController = WKUserContentController() let scriptSource = &amp;#34;document.body.style.backgroundColor = `red`;&amp;#34; let script = WKUserScript(source: scriptSource, injectionTime: .atDocumentEnd, forMainFrameOnly: true) contentController.addUserScript(script) let config = WKWebViewConfiguration() config.userContentController = contentController 初始化是有个三个参数&#xA;source: JavaScript代码字符串 injectionTime: 注入的时机，.atDocumentStart document元素刚创建，其他资源还未加载完成时；.atDocumentEnd 文档加载完成时(图片等附属资源有可能还没有加载完成) forMainFrameOnly: 是否只在main frame起作用 JavaScript调用Native 调用原生分三个步骤</description>
+    </item>
+    <item>
+      <title>WKWebView(一)--简介</title>
+      <link>http://localhost:1313/posts/2019-05-16-wkwebview-1/</link>
+      <pubDate>Thu, 16 May 2019 13:00:24 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2019-05-16-wkwebview-1/</guid>
+      <description>简介 UIWebView是我们从iOS2.0就开始使用的web组件, 但是从iOS8.0以后, 苹果建议我们使用WKWebView, 那么他们之间有什么不同呢? WKWebView又怎么使用呢?&#xA;UIWebView是UIKit组件, 由于在项目刚开始构建的时候就已经默认引入了UIKit组件, 所以你可以任何地方声明UIWebView来使用都可以, 包括IB; WKWebView是WebKit组件, 在使用的时候要提前引入import WebKit&#xA;关于scalesPageToFit WKWebView不再包含scalesPageToFit属性, 但是可以通过在header中添加meta属性来控制&#xA;// width=device-width &amp;lt;meta name=&amp;#34;viewport&amp;#34; content=&amp;#34;width=device-width,initial-scale=1, user-scalable=no&amp;#34; /&amp;gt; 如果HTML文件不是本地文件，我们也可以通过WKUserScript将meta注入进去&#xA;let javaScript = &amp;#34;&amp;#34;&amp;#34; var meta = document.createElement(&amp;#39;meta&amp;#39;); meta.setAttribute(&amp;#39;name&amp;#39;, &amp;#39;viewport&amp;#39;); meta.setAttribute(&amp;#39;content&amp;#39;, &amp;#39;width=device-width&amp;#39;); document.getElementsByTagName(&amp;#39;head&amp;#39;)[0].appendChild(meta); &amp;#34;&amp;#34;&amp;#34; let userScript = WKUserScript(source: javaScript, injectionTime: .atDocumentEnd, forMainFrameOnly: true) let userController = WKUserContentController() userController.addUserScript(userScript) let webConfiguration = WKWebViewConfiguration() webConfiguration.userContentController = userController webView = WKWebView(frame: .zero, configuration: webConfiguration) // let myURL = URL(fileURLWithPath: Bundle.</description>
+    </item>
+    <item>
+      <title>Swift和OC混用</title>
+      <link>http://localhost:1313/posts/2017-06-07-swift-oc-mix-and-match/</link>
+      <pubDate>Wed, 07 Jun 2017 13:00:24 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2017-06-07-swift-oc-mix-and-match/</guid>
+      <description>前言 你有一个使用Objective-c语言写的项目，想要混用部分Swift代码，于是你创建了一个Swift文件，就在此时，Xcode提示会生成一个跟你项目名称相关联的桥接文件ProductModuleName-Bridging-Header.h, 我们暂且叫它OC桥接文件, 其实Xcode还创建了另外一个桥接文件，叫ProductModuleName-Swift.h, 这个文件在列表里看不到而已, 我们暂且把它叫做Swift桥接文件。&#xA;Swift使用OC代码 想要在Swift中使用OC代码，我们只需要做两件事情&#xA;1、将要使用的OC文件, 在OC桥接文件导入&#xA;#import &amp;#34;XYZCustomCell.h&amp;#34; #import &amp;#34;XYZCustomView.h&amp;#34; #import &amp;#34;XYZCustomViewController.h&amp;#34; 2、确保Build Settings里, Objective-C Bridging Header这个选项里有正确的桥接文件相对地址, 一般系统都帮你填好了, 类似ProductModuleName/ProductModuleName-Bridging-Header.h&#xA;同一个target下不需要导入任何代码即可使用, 不用target, 要导入模块名.&#xA;OC使用Swift代码 1、Swift桥接文件是Xcode自动处理的，我们只需要在写Swift代码的时候稍微主要下就可以了，那么具体要注意什么?&#xA;使用public或者open标记的代码，将会无条件的引入到桥接文件中; 关于被internal标记的代码，只有在项目中有OC桥接文件的情况下，才会被引入到Swift桥接文件中，之后暴露给OC代码; private和fileprivate标记的代码是不会被OC代码所看到的。&#xA;:::tip 如果被private和fileprivate标记的代码块里含有@IBAction, @IBOutlet, or @objc, 那么这些代码也将会暴露给OC。 :::&#xA;2、如果不再一个模块里，需要确保Build Settings里, Defines Module这个选项的值为YES, 才能混用&#xA;使用Swift代码时, 需要导入Swift桥接文件&#xA;#import &amp;#34;ProductModuleName-Swift.h&amp;#34; 如果不在一个模块，怎么办?&#xA;如果混用时不再一个模块, 需要导入模块名&#xA;1、将模块引入Swift代码中&#xA;import FrameworkName 2、将模块引入OC代码中&#xA;@import FrameworkName; </description>
+    </item>
+    <item>
+      <title>创建私有POD</title>
+      <link>http://localhost:1313/posts/2017-04-04-create-private-pod/</link>
+      <pubDate>Tue, 04 Apr 2017 13:00:24 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2017-04-04-create-private-pod/</guid>
+      <description>为什么搭建私有库 私有库可以保证代码的安全性，亦可以将复用性强的代码、控件封装成模块，提供给部门或公司的人员用。&#xA;搭建过程 首先需要创建一个私有git仓库，用来存放描述文件，可以使用bitbucket，假设创建了一个名为REPO_NAME的私有仓库。然后创建一个可复用的项目叫HexColors, 是一个swift中使用十六进制颜色的扩展，放到了bitbucket上。并且打了tag，HexColors.podspec文件也已经创建好了，整个过程和创建开源库没有什么区别。&#xA;关联私有库地址&#xA;pod repo add REPO_NAME SOURCE_URL 验证是否配置正确&#xA;cd ~/.cocoapods/repos/REPO_NAME pod repo lint . 将刚刚创建好的pod描述文件，推至私有仓库&#xA;pod repo push REPO_NAME SPEC_NAME.podspec 此时，你的私有仓库应该是这个结构&#xA;. ├── Specs └── [SPEC_NAME] └── [VERSION] └── [SPEC_NAME].podspec 使用 切到要使用的项目，这里我还用我的YNPodDemo，在Podfile里加上这样一行，来指定私有和共开仓库&#xA;# Private Specs source &amp;#39;URL_TO_REPOSITORY&amp;#39; # Public Specs source &amp;#39;https://github.com/CocoaPods/Specs.git&amp;#39; 然后添加HexColors&#xA;pod &amp;#39;HexColors&amp;#39;, &amp;#39;~&amp;gt;0.0.1&amp;#39; 之后就跟使用开源库一样了&#xA;pod install YNPodDemo 这个Demo打了三个tag:&#xA;0.1 测试使用Cocoapods&#xA;0.2 测试使用自己创建的开源库&#xA;0.3 测试使用自己创建的私有库&#xA;使用下面这条命令可以检出特定Tag对应的代码&#xA;git clone --branch &amp;lt;tag_name&amp;gt; &amp;lt;repo_url&amp;gt; </description>
+    </item>
+    <item>
+      <title>创建开源POD</title>
+      <link>http://localhost:1313/posts/2017-04-03-create-opensource-pod/</link>
+      <pubDate>Mon, 03 Apr 2017 13:00:24 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2017-04-03-create-opensource-pod/</guid>
+      <description>准备内容 这里我使用YNWebViewController，一开始目录结构是这样的&#xA;├── Demo ├── LICENSE ├── README.md └── YNWebViewController 要分享的代码和资源文件都在YNWebViewController文件夹里了, 项目源代码在Github上。&#xA;先给项目打个tag，后面要用到&#xA;git tag 0.1.5 git push --tags Pod描述文件 pod spec create YNWebViewController create后面跟的是项目名，在项目主目录下执行该命令后，系统会自动在该目录下创建一个名为YNWebViewController.podspec的描述文件，用于记录项目信息。 在podspec文件里，写入相关的项目信息，如：作者，项目地址，要包含的源文件和资源文件路径，开源协议等，具体还是要看里面的注释。Podspec Syntax Reference pod spec lint YNWebViewController.podspec 然后我们该命令来验证这个描述文件有没有错误， 没问题的话，就把这个文件也push到项目git。 上传描述文件 pod trunk register xu_yunan@163.com &amp;lsquo;Tommy Xu&amp;rsquo; &amp;ndash;description=&amp;lsquo;macbook pro&amp;rsquo; 首先在你电脑上注册信息, 注册好之后可以用 pod trunk me 查看个人信息。 pod trunk push YNWebViewController.podspec 接下来使用这个命令，将pod描述文件推至cocoapods库。 成功之后就可以在cocoapods网站上看到你的库了YNWebViewController 经过以上几个步骤，一般情况下，别人就已经可以使用你的开源库了。如果在执行命令的时候总提示timeout，那就挂个梯子吧。&#xA;遇到的问题 以下是我在创建的过程遇到的几个问题及解决方法，希望对你有用:&#xA;明明已经提示上传好了，却还搜不到，这时就需要把本地缓存删掉 rm ~/Library/Caches/CocoaPods/search_index.json&#xA;搜到之后，在使用的过程中报错 Cannot call value of non-function type ‘module‘ 将class和需要开放出来的方法和属性声明为public</description>
+    </item>
+    <item>
+      <title>使用COCOAPODS</title>
+      <link>http://localhost:1313/posts/2017-04-02-cocoapods-usage/</link>
+      <pubDate>Sun, 02 Apr 2017 13:00:24 +0800</pubDate>
+      <guid>http://localhost:1313/posts/2017-04-02-cocoapods-usage/</guid>
+      <description>简介 可以说这是一个平台，因为它保存了无数的开源库。 可以说是一个工具，一个帮你管理第三方库的工具。&#xA;安装 pod 检查是否已经安装，如果出现pod COMMAND，说明你已经安装过了。 sudo gem install cocoapods 安装或者更新 pod search Alamofire 搜索&#xA;使用 首先我创建了个项目YNPodDemo 切到项目主目录，执行pod init，系统就会自动帮你创建一个名为Podfile的文件 将你要使用的库写进去 pod &amp;lsquo;Alamofire&amp;rsquo;, &amp;lsquo;~&amp;gt;4.3.0&amp;rsquo; 执行pod install，将使用的库安装到本地 之后就会在工程文件夹下多出一个类似YNPodDemo.xcworkspace这样的工程文件，以后用这个打开项目就可以了，不要在使用YNPodDemo.xcodeproj 导入&amp;amp;使用 在使用库时，如果有错误提示 Cannot load underlying module for ‘Alamofire’, clean然后build。issues441&#xA;卸载 sudo gem uninstall cocoapods 一般也用不到&#xA;参考 cocoapods.org&#xA;How to Use CocoaPods with Swift&#xA;Podfile示例 # Uncomment the next line to define a global platform for your project # platform :ios, &amp;#39;9.0&amp;#39; target &amp;#39;YNPodDemo&amp;#39; do # Comment the next line if you&amp;#39;re not using Swift and don&amp;#39;t want to use dynamic frameworks use_frameworks!</description>
+    </item>
+    <item>
+      <title>关于</title>
+      <link>http://localhost:1313/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/about/</guid>
+      <description>这里是我的技术小站，有时间就写写博客，没时间就去看看别的博客，哈哈哈</description>
+    </item>
+  </channel>
+</rss>

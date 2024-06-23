@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width"><meta name="description" content="" />
+
+<title>
+    
+    WKWebView(一)--简介 | Tommy&#39;s blog
+    
+</title>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.f69b4a5b91a9bc416804eda1f19d04210551b843d47318bf1913d7edce1504fb.css" media="all">
+
+
+
+  </head>
+
+  
+
+  
+  
+  
+
+  <body class="auto">
+
+    <div class="content">
+      <header>
+        
+
+<div class="header">
+    <h1 class="header-title">Tommy&#39;s blog</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/about">
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+      </header>
+
+      <main class="main">
+        
+
+
+
+
+
+<div >
+
+  <div class="single-intro-container">
+
+    
+
+    <h1 class="single-title">WKWebView(一)--简介</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2019-05-16T13:00:24&#43;08:00">May 16, 2019</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h2 id="简介">简介</h2>
+<p>UIWebView是我们从iOS2.0就开始使用的web组件, 但是从iOS8.0以后, 苹果建议我们使用WKWebView, 那么他们之间有什么不同呢? WKWebView又怎么使用呢?</p>
+<p>UIWebView是UIKit组件, 由于在项目刚开始构建的时候就已经默认引入了UIKit组件, 所以你可以任何地方声明UIWebView来使用都可以, 包括IB; WKWebView是WebKit组件, 在使用的时候要提前引入import WebKit</p>
+<!-- raw HTML omitted -->
+<h2 id="关于scalespagetofit">关于scalesPageToFit</h2>
+<p>WKWebView不再包含scalesPageToFit属性, 但是可以通过在header中添加meta属性来控制</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>// width=device-width
+</span></span><span style="display:flex;"><span>&lt;meta name=<span style="color:#666;font-style:italic">&#34;viewport&#34;</span> content=<span style="color:#666;font-style:italic">&#34;width=device-width,initial-scale=1, user-scalable=no&#34;</span> /&gt;
+</span></span></code></pre></div><p>如果HTML文件不是本地文件，我们也可以通过WKUserScript将meta注入进去</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-swift" data-lang="swift"><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">let</span> <span style="color:#666;font-weight:bold;font-style:italic">javaScript</span> = <span style="color:#666;font-style:italic">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#666;font-style:italic">    var meta = document.createElement(&#39;meta&#39;);
+</span></span></span><span style="display:flex;"><span><span style="color:#666;font-style:italic">    meta.setAttribute(&#39;name&#39;, &#39;viewport&#39;);
+</span></span></span><span style="display:flex;"><span><span style="color:#666;font-style:italic">    meta.setAttribute(&#39;content&#39;, &#39;width=device-width&#39;);
+</span></span></span><span style="display:flex;"><span><span style="color:#666;font-style:italic">    document.getElementsByTagName(&#39;head&#39;)[0].appendChild(meta);
+</span></span></span><span style="display:flex;"><span><span style="color:#666;font-style:italic">    &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">let</span> <span style="color:#666;font-weight:bold;font-style:italic">userScript</span> = WKUserScript(source: javaScript, injectionTime: .atDocumentEnd, forMainFrameOnly: <span style="font-weight:bold;text-decoration:underline">true</span>)
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">let</span> <span style="color:#666;font-weight:bold;font-style:italic">userController</span> = WKUserContentController()
+</span></span><span style="display:flex;"><span>userController.addUserScript(userScript)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">let</span> <span style="color:#666;font-weight:bold;font-style:italic">webConfiguration</span> = WKWebViewConfiguration()
+</span></span><span style="display:flex;"><span>webConfiguration.userContentController = userController
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>webView = WKWebView(frame: .zero, configuration: webConfiguration)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">// let myURL = URL(fileURLWithPath: Bundle.main.path(forResource: &#34;h5/index&#34;, ofType: &#34;html&#34;)!)</span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">let</span> <span style="color:#666;font-weight:bold;font-style:italic">myURL</span> = URL(string: <span style="color:#666;font-style:italic">&#34;https://github.com&#34;</span>)!
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">let</span> <span style="color:#666;font-weight:bold;font-style:italic">myRequest</span> = URLRequest(url: myURL)
+</span></span><span style="display:flex;"><span>webView.load(myRequest)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>view = webView
+</span></span></code></pre></div><h2 id="白屏问题">白屏问题</h2>
+<p>UIWebView内存过大，会导致app crash, 由于WKWebView是运行在另一个进程里，内存过大不会导致整个app crash, 但是会导致页面白屏, 庆幸的时候我们可以通过WKNavigationDelegate的回调方法来处理白屏事件，收到事件后, 我们可以弹框提示, 或者及时刷新页面.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-swift" data-lang="swift"><span style="display:flex;"><span>@available(iOS 9.0, *)
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">optional</span> <span style="font-weight:bold;font-style:italic;text-decoration:underline">public</span> <span style="font-weight:bold;font-style:italic;text-decoration:underline">func</span> <span style="color:#666;font-weight:bold;font-style:italic">webViewWebContentProcessDidTerminate</span>(<span style="font-weight:bold;text-decoration:underline">_</span> webView: WKWebView)
+</span></span></code></pre></div><h2 id="cookies问题">Cookies问题</h2>
+<p>网上流传一种说法: WKWebView加载网页得到的Cookie会同步到NSHTTPCookieStorage中, 但接下来的请求不会自动携带Cookie. 但是目前测试下来，cookie是会带上的，WKWebView中登录github.com，然后杀掉进程，再次进入，依然是登录状态，通过safari的develop菜单，可以看到cookie的信息. 如果说真的不自动携带cookie, 我们也可以通过setValue:forHTTPHeaderField:和WKUserScript注入的形式，将cookie写入进去.</p>
+<h2 id="参考资料">参考资料</h2>
+<p><a href="https://developer.apple.com/documentation/uikit/uiwebview">uiwebview</a> <a href="https://developer.apple.com/documentation/webkit/wkwebview">wkwebview</a><br>
+<a href="https://stackoverflow.com/questions/26295277/wkwebview-equivalent-for-uiwebviews-scalespagetofit">stackoverflow.com</a><br>
+<a href="https://medium.com/@FixieLabs/uiwebview-vs-wkwebview-migremos-8539b940f73b">medium.com</a><br>
+<a href="https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=2653578513&amp;idx=1&amp;sn=961bf5394eecde40a43060550b81b0bb&amp;chksm=84b3b716b3c43e00ee39de8cf12ff3f8d475096ffaa05de9c00ff65df62cd73aa1cff606057d&amp;mpshare=1&amp;scene=1&amp;srcid=0203vWJWfMGMWwf5NZ8N1ibS&amp;key=7986e1e970a89067a86106b2930c5f6fae92da1b552eeb4696133c44e4169fb458d9a94ff0469f97f76e0a87fcfb05a375902d563045184f88550caaca3d47f3ddb0004c0133e68eb0c719bcbe514460&amp;ascene=0&amp;uin=MTM2NTIyOTI0MA==&amp;devicetype=iMac+MacBookPro11,5+OSX+OSX+10.12.3+build(16D32)&amp;version=12010310&amp;nettype=WIFI&amp;fontScale=100&amp;pass_ticket=aq4MxrhuXuqAWgcklzpe0lU/Eo6zKVJheDZdgcMAeJaVUSaI3npVIEglSZC6GJg4">mp.weixin.qq.com</a></p>
+
+    
+  </div>
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+      </main>
+    </div>
+
+    <footer>
+      <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+
+
+    </footer>
+
+  </body>
+
+  <script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    document.body.classList.remove("auto");
+    let cls = "light";
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+  }
+
+  function invertBody() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invertBody);
+  }
+
+  setTheme();
+
+</script>
+
+</html>

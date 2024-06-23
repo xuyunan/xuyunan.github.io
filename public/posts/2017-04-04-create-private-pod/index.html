@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width"><meta name="description" content="" />
+
+<title>
+    
+    创建私有POD | Tommy&#39;s blog
+    
+</title>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.f69b4a5b91a9bc416804eda1f19d04210551b843d47318bf1913d7edce1504fb.css" media="all">
+
+
+
+  </head>
+
+  
+
+  
+  
+  
+
+  <body class="auto">
+
+    <div class="content">
+      <header>
+        
+
+<div class="header">
+    <h1 class="header-title">Tommy&#39;s blog</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/about">
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+      </header>
+
+      <main class="main">
+        
+
+
+
+
+
+<div >
+
+  <div class="single-intro-container">
+
+    
+
+    <h1 class="single-title">创建私有POD</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2017-04-04T13:00:24&#43;08:00">April 4, 2017</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h2 id="为什么搭建私有库">为什么搭建私有库</h2>
+<p>私有库可以保证代码的安全性，亦可以将复用性强的代码、控件封装成模块，提供给部门或公司的人员用。</p>
+<!-- raw HTML omitted -->
+<h2 id="搭建过程">搭建过程</h2>
+<p>首先需要创建一个私有git仓库，用来存放描述文件，可以使用bitbucket，假设创建了一个名为REPO_NAME的私有仓库。然后创建一个可复用的项目叫HexColors, 是一个swift中使用十六进制颜色的扩展，放到了bitbucket上。并且打了tag，HexColors.podspec文件也已经创建好了，整个过程和创建开源库没有什么区别。</p>
+<p>关联私有库地址</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pod repo add REPO_NAME SOURCE_URL
+</span></span></code></pre></div><p>验证是否配置正确</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic">cd</span> ~/.cocoapods/repos/REPO_NAME
+</span></span><span style="display:flex;"><span>pod repo lint .
+</span></span></code></pre></div><p>将刚刚创建好的pod描述文件，推至私有仓库</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pod repo push REPO_NAME SPEC_NAME.podspec
+</span></span></code></pre></div><p>此时，你的私有仓库应该是这个结构</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>.
+</span></span><span style="display:flex;"><span>├── Specs
+</span></span><span style="display:flex;"><span>    └── [SPEC_NAME]
+</span></span><span style="display:flex;"><span>        └── [VERSION]
+</span></span><span style="display:flex;"><span>            └── [SPEC_NAME].podspec
+</span></span></code></pre></div><h2 id="使用">使用</h2>
+<p>切到要使用的项目，这里我还用我的YNPodDemo，在Podfile里加上这样一行，来指定私有和共开仓库</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#888;font-style:italic"># Private Specs</span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic">source</span> <span style="color:#666;font-style:italic">&#39;URL_TO_REPOSITORY&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># Public Specs</span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic">source</span> <span style="color:#666;font-style:italic">&#39;https://github.com/CocoaPods/Specs.git&#39;</span>
+</span></span></code></pre></div><p>然后添加HexColors</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pod <span style="color:#666;font-style:italic">&#39;HexColors&#39;</span>, <span style="color:#666;font-style:italic">&#39;~&gt;0.0.1&#39;</span>
+</span></span></code></pre></div><p>之后就跟使用开源库一样了</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pod install
+</span></span></code></pre></div><h2 id="ynpoddemo">YNPodDemo</h2>
+<p>这个Demo打了三个tag:</p>
+<p>0.1 测试使用Cocoapods<br>
+0.2 测试使用自己创建的开源库<br>
+0.3 测试使用自己创建的私有库</p>
+<p>使用下面这条命令可以检出特定Tag对应的代码</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone --branch &lt;tag_name&gt; &lt;repo_url&gt;
+</span></span></code></pre></div>
+    
+  </div>
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+      </main>
+    </div>
+
+    <footer>
+      <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+
+
+    </footer>
+
+  </body>
+
+  <script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    document.body.classList.remove("auto");
+    let cls = "light";
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+  }
+
+  function invertBody() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invertBody);
+  }
+
+  setTheme();
+
+</script>
+
+</html>
