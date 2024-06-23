@@ -3,6 +3,9 @@ languageCode = 'en-us'
 title = "Tommy's blog"
 theme = 'Typo'
 
+# 用于 gp-pages 博客展示内容， 设置中，可以设置一个docs目录s
+publishDir =  'docs'
+
 [taxonomies]
 tag = 'tags'
 
