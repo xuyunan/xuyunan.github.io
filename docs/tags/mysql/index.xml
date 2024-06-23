@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>MySQL on Tommy&#39;s blog</title>
-    <link>https://xuyunan.github.io/tags/mysql/</link>
+    <link>http://localhost:1313/tags/mysql/</link>
     <description>Recent content in MySQL on Tommy&#39;s blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 22 Apr 2022 20:53:01 +0800</lastBuildDate>
-    <atom:link href="https://xuyunan.github.io/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>服务器软件备忘录--MySQL</title>
-      <link>https://xuyunan.github.io/posts/2022-04-22-server-mysql/</link>
+      <link>http://localhost:1313/posts/2022-04-22-server-mysql/</link>
       <pubDate>Fri, 22 Apr 2022 20:53:01 +0800</pubDate>
-      <guid>https://xuyunan.github.io/posts/2022-04-22-server-mysql/</guid>
+      <guid>http://localhost:1313/posts/2022-04-22-server-mysql/</guid>
       <description>有些项目是需要特定版本的 mysql 数据库，这里记下 mysql5.7 安装的过程和一些基础命令&#xA;推荐客户端 mac client: https://sequelpro.com/ windows client: https://www.heidisql.com/&#xA;常用命令 mysql -V # 查看mysql版本 systemctl start mysqld # 开启服务 systemctl restart mysqld # 重启服务&#x9;systemctl stop mysqld # 停止服务&#x9;systemctl enable mysqld # 开启启动&#x9;systemctl disable mysqld # 禁止开机启动&#x9;systemctl status mysqld # 查看mysql状态&#x9;卸载已安装的 mysql 卸载已安装的mysql&#xA;sudo yum remove mysql mysql-server # CentOS and RedHat systems&#xA;删除mysql数据目录并备份&#xA;mv /var/lib/mysql /var/lib/mysql_old_backup mv /etc/mysql /etc/mysql_old_backup 看看还有哪些mysql文件, 找出来删掉&#xA;find / -name mysql</description>
     </item>
   </channel>

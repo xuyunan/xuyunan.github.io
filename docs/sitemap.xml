@@ -2,122 +2,122 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://xuyunan.github.io/tags/android/</loc>
+    <loc>http://localhost:1313/tags/android/</loc>
     <lastmod>2022-05-18T23:40:06+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/</loc>
+    <loc>http://localhost:1313/</loc>
     <lastmod>2022-05-18T23:40:06+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/tags/ios/</loc>
+    <loc>http://localhost:1313/tags/ios/</loc>
     <lastmod>2022-05-18T23:40:06+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/</loc>
+    <loc>http://localhost:1313/posts/</loc>
     <lastmod>2022-05-18T23:40:06+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/tags/</loc>
+    <loc>http://localhost:1313/tags/</loc>
     <lastmod>2022-05-18T23:40:06+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/tags/web/</loc>
+    <loc>http://localhost:1313/tags/web/</loc>
     <lastmod>2022-05-18T23:40:06+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/tags/%E5%89%8D%E7%AB%AF/</loc>
+    <loc>http://localhost:1313/tags/%E5%89%8D%E7%AB%AF/</loc>
     <lastmod>2022-05-18T23:40:06+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/tags/%E5%A4%A7%E5%89%8D%E7%AB%AF/</loc>
+    <loc>http://localhost:1313/tags/%E5%A4%A7%E5%89%8D%E7%AB%AF/</loc>
     <lastmod>2022-05-18T23:40:06+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2022-05-18-about-frontend-units/</loc>
+    <loc>http://localhost:1313/posts/2022-05-18-about-frontend-units/</loc>
     <lastmod>2022-05-18T23:40:06+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/tags/typescript/</loc>
+    <loc>http://localhost:1313/tags/typescript/</loc>
     <lastmod>2022-05-01T16:43:33+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2022-05-01-about-typescript/</loc>
+    <loc>http://localhost:1313/posts/2022-05-01-about-typescript/</loc>
     <lastmod>2022-05-01T16:43:33+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/tags/caddy/</loc>
+    <loc>http://localhost:1313/tags/caddy/</loc>
     <lastmod>2022-04-30T16:44:21+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/tags/jdk/</loc>
+    <loc>http://localhost:1313/tags/jdk/</loc>
     <lastmod>2022-04-30T16:44:21+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2022-04-30-server-caddy/</loc>
+    <loc>http://localhost:1313/posts/2022-04-30-server-caddy/</loc>
     <lastmod>2022-04-30T16:44:21+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2022-04-30-server-jdk8/</loc>
+    <loc>http://localhost:1313/posts/2022-04-30-server-jdk8/</loc>
     <lastmod>2022-04-30T16:44:21+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/tags/redis/</loc>
+    <loc>http://localhost:1313/tags/redis/</loc>
     <lastmod>2022-04-22T22:55:04+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2022-04-22-server-redis/</loc>
+    <loc>http://localhost:1313/posts/2022-04-22-server-redis/</loc>
     <lastmod>2022-04-22T22:55:04+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/tags/mysql/</loc>
+    <loc>http://localhost:1313/tags/mysql/</loc>
     <lastmod>2022-04-22T20:53:01+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2022-04-22-server-mysql/</loc>
+    <loc>http://localhost:1313/posts/2022-04-22-server-mysql/</loc>
     <lastmod>2022-04-22T20:53:01+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/tags/nginx/</loc>
+    <loc>http://localhost:1313/tags/nginx/</loc>
     <lastmod>2022-01-01T13:00:24+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2022-01-01-nginx-access-log-control/</loc>
+    <loc>http://localhost:1313/posts/2022-01-01-nginx-access-log-control/</loc>
     <lastmod>2022-01-01T13:00:24+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/tags/react/</loc>
+    <loc>http://localhost:1313/tags/react/</loc>
     <lastmod>2021-12-02T13:00:24+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2021-12-02-alert-by-hook-and-context/</loc>
+    <loc>http://localhost:1313/posts/2021-12-02-alert-by-hook-and-context/</loc>
     <lastmod>2021-12-02T13:00:24+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2022-02-18-web-performance-optimization/</loc>
+    <loc>http://localhost:1313/posts/2022-02-18-web-performance-optimization/</loc>
     <lastmod>2021-02-18T13:00:24+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2019-06-23-ios-lock-osspinlock/</loc>
+    <loc>http://localhost:1313/posts/2019-06-23-ios-lock-osspinlock/</loc>
     <lastmod>2019-06-23T13:00:24+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2019-06-22-ios-lock-nslock/</loc>
+    <loc>http://localhost:1313/posts/2019-06-22-ios-lock-nslock/</loc>
     <lastmod>2019-06-22T13:00:24+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2019-06-12-ios-lock-semaphore/</loc>
+    <loc>http://localhost:1313/posts/2019-06-12-ios-lock-semaphore/</loc>
     <lastmod>2019-06-12T13:00:24+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2019-06-11-ios-lock-synchronized/</loc>
+    <loc>http://localhost:1313/posts/2019-06-11-ios-lock-synchronized/</loc>
     <lastmod>2019-06-11T13:00:24+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2019-06-10-ios-lock-pthread_mutex/</loc>
+    <loc>http://localhost:1313/posts/2019-06-10-ios-lock-pthread_mutex/</loc>
     <lastmod>2019-06-10T13:00:24+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2019-06-07-oc-runtime/</loc>
+    <loc>http://localhost:1313/posts/2019-06-07-oc-runtime/</loc>
     <lastmod>2019-06-07T13:00:24+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2019-05-30-__block/</loc>
+    <loc>http://localhost:1313/posts/2019-05-30-__block/</loc>
     <lastmod>2019-05-30T13:00:24+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2019-05-28-block/</loc>
+    <loc>http://localhost:1313/posts/2019-05-28-block/</loc>
     <lastmod>2019-05-28T13:00:24+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2019-05-27-wkwebview-2/</loc>
+    <loc>http://localhost:1313/posts/2019-05-27-wkwebview-2/</loc>
     <lastmod>2019-05-27T13:00:24+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2019-05-16-wkwebview-1/</loc>
+    <loc>http://localhost:1313/posts/2019-05-16-wkwebview-1/</loc>
     <lastmod>2019-05-16T13:00:24+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2017-06-07-swift-oc-mix-and-match/</loc>
+    <loc>http://localhost:1313/posts/2017-06-07-swift-oc-mix-and-match/</loc>
     <lastmod>2017-06-07T13:00:24+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2017-04-04-create-private-pod/</loc>
+    <loc>http://localhost:1313/posts/2017-04-04-create-private-pod/</loc>
     <lastmod>2017-04-04T13:00:24+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2017-04-03-create-opensource-pod/</loc>
+    <loc>http://localhost:1313/posts/2017-04-03-create-opensource-pod/</loc>
     <lastmod>2017-04-03T13:00:24+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/posts/2017-04-02-cocoapods-usage/</loc>
+    <loc>http://localhost:1313/posts/2017-04-02-cocoapods-usage/</loc>
     <lastmod>2017-04-02T13:00:24+08:00</lastmod>
   </url><url>
-    <loc>https://xuyunan.github.io/g-xxxxxxxxx/</loc>
+    <loc>http://localhost:1313/g-xxxxxxxxx/</loc>
   </url><url>
-    <loc>https://xuyunan.github.io/about/</loc>
+    <loc>http://localhost:1313/about/</loc>
   </url>
 </urlset>

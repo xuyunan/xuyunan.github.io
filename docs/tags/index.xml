@@ -2,94 +2,94 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Tommy&#39;s blog</title>
-    <link>https://xuyunan.github.io/tags/</link>
+    <link>http://localhost:1313/tags/</link>
     <description>Recent content in Tags on Tommy&#39;s blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 18 May 2022 23:40:06 +0800</lastBuildDate>
-    <atom:link href="https://xuyunan.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Android</title>
-      <link>https://xuyunan.github.io/tags/android/</link>
+      <link>http://localhost:1313/tags/android/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://xuyunan.github.io/tags/android/</guid>
+      <guid>http://localhost:1313/tags/android/</guid>
       <description></description>
     </item>
     <item>
       <title>IOS</title>
-      <link>https://xuyunan.github.io/tags/ios/</link>
+      <link>http://localhost:1313/tags/ios/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://xuyunan.github.io/tags/ios/</guid>
+      <guid>http://localhost:1313/tags/ios/</guid>
       <description></description>
     </item>
     <item>
       <title>Web</title>
-      <link>https://xuyunan.github.io/tags/web/</link>
+      <link>http://localhost:1313/tags/web/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://xuyunan.github.io/tags/web/</guid>
+      <guid>http://localhost:1313/tags/web/</guid>
       <description></description>
     </item>
     <item>
       <title>前端</title>
-      <link>https://xuyunan.github.io/tags/%E5%89%8D%E7%AB%AF/</link>
+      <link>http://localhost:1313/tags/%E5%89%8D%E7%AB%AF/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://xuyunan.github.io/tags/%E5%89%8D%E7%AB%AF/</guid>
+      <guid>http://localhost:1313/tags/%E5%89%8D%E7%AB%AF/</guid>
       <description></description>
     </item>
     <item>
       <title>大前端</title>
-      <link>https://xuyunan.github.io/tags/%E5%A4%A7%E5%89%8D%E7%AB%AF/</link>
+      <link>http://localhost:1313/tags/%E5%A4%A7%E5%89%8D%E7%AB%AF/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://xuyunan.github.io/tags/%E5%A4%A7%E5%89%8D%E7%AB%AF/</guid>
+      <guid>http://localhost:1313/tags/%E5%A4%A7%E5%89%8D%E7%AB%AF/</guid>
       <description></description>
     </item>
     <item>
       <title>TypeScript</title>
-      <link>https://xuyunan.github.io/tags/typescript/</link>
+      <link>http://localhost:1313/tags/typescript/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://xuyunan.github.io/tags/typescript/</guid>
+      <guid>http://localhost:1313/tags/typescript/</guid>
       <description></description>
     </item>
     <item>
       <title>Caddy</title>
-      <link>https://xuyunan.github.io/tags/caddy/</link>
+      <link>http://localhost:1313/tags/caddy/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://xuyunan.github.io/tags/caddy/</guid>
+      <guid>http://localhost:1313/tags/caddy/</guid>
       <description></description>
     </item>
     <item>
       <title>JDK</title>
-      <link>https://xuyunan.github.io/tags/jdk/</link>
+      <link>http://localhost:1313/tags/jdk/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://xuyunan.github.io/tags/jdk/</guid>
+      <guid>http://localhost:1313/tags/jdk/</guid>
       <description></description>
     </item>
     <item>
       <title>Redis</title>
-      <link>https://xuyunan.github.io/tags/redis/</link>
+      <link>http://localhost:1313/tags/redis/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://xuyunan.github.io/tags/redis/</guid>
+      <guid>http://localhost:1313/tags/redis/</guid>
       <description></description>
     </item>
     <item>
       <title>MySQL</title>
-      <link>https://xuyunan.github.io/tags/mysql/</link>
+      <link>http://localhost:1313/tags/mysql/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://xuyunan.github.io/tags/mysql/</guid>
+      <guid>http://localhost:1313/tags/mysql/</guid>
       <description></description>
     </item>
     <item>
       <title>Nginx</title>
-      <link>https://xuyunan.github.io/tags/nginx/</link>
+      <link>http://localhost:1313/tags/nginx/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://xuyunan.github.io/tags/nginx/</guid>
+      <guid>http://localhost:1313/tags/nginx/</guid>
       <description></description>
     </item>
     <item>
       <title>React</title>
-      <link>https://xuyunan.github.io/tags/react/</link>
+      <link>http://localhost:1313/tags/react/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://xuyunan.github.io/tags/react/</guid>
+      <guid>http://localhost:1313/tags/react/</guid>
       <description></description>
     </item>
   </channel>

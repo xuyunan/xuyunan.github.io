@@ -22,7 +22,7 @@ theme = 'auto'
 # Intro on main page, content is markdown
 homeIntroTitle = 'Hi!'
 homeIntroContent = """
-一名全栈开发者, 主要技术方向大前端方向, 涉及技术有, 移动端: iOS, Android, ReactNative, Web: React, Vue, 后端: Go.
+我是一名全栈开发者, 主要技术方向大前端, 涉及技术有, 移动端: iOS, Android, ReactNative, Web: React, Vue, 后端: Go. 后面更多的会在掘金社区写作, 那里有更多的开发者, 如果有兴趣, 可以点击这里查看: [https://juejin.cn/user/4051066776988712/posts](https://juejin.cn/user/4051066776988712/posts)
 """
 
 # Collection to display on home
